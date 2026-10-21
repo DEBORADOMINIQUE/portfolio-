@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SEU NOME | Criadora de Conteúdo UGC</title>
+<title>DÉBORA DOMINIQUE | PORTFÓLIO</title>
 <meta name="description" content="Portfólio de criadora de conteúdo UGC: vídeos autênticos que vendem para marcas de beleza, casa, comida, moda e fitness.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -467,7 +467,7 @@
   <!-- MENU FIXO -->
   <header class="topo" id="topo">
     <div class="container">
-      <a class="logo" href="#inicio" data-preencher="logo">SEU NOME</a>
+      <a class="logo" href="#inicio" data-preencher="logo">Débora Dominique</a>
       <button class="botao-menu" id="botaoMenu" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
         <span></span><span></span><span></span>
       </button>
@@ -600,7 +600,7 @@
   <!-- 8. RODAPÉ -->
   <footer class="rodape">
     <div class="container">
-      <a class="logo" href="#inicio" data-preencher="logo">SEU NOME</a>
+      <a class="logo" href="#inicio" data-preencher="logo">Débora Dominique</a>
       <ul class="redes" id="redesRodape" aria-label="Redes sociais"></ul>
       <p class="direitos" id="direitos"></p>
     </div>
@@ -633,7 +633,8 @@ const GRADIENTES = {
 const SITE = {
 
   // EDITE AQUI: seu nome, profissão e a frase de impacto da capa
-  nome: 'SEU NOME',
+  nome: 'Débora Dominique',
+  tituloAba: 'DÉBORA DOMINIQUE | PORTFÓLIO', // EDITE AQUI: o texto que aparece na aba do navegador
   profissao: 'Criadora de conteúdo UGC',
   fraseImpacto: 'Transformo o seu produto em vídeos autênticos que geram desejo, confiança e vendas. Conteúdo com cara de recomendação de amiga e acabamento de marca premium.',
 
@@ -654,14 +655,14 @@ const SITE = {
   // EDITE AQUI: seção Sobre mim
   sobre: {
     foto: { imagem: '', alt: 'A criadora gravando um vídeo em casa com luz natural', gradiente: GRADIENTES.dourado },
-    titulo: 'Prazer, eu sou <em>SEU NOME</em>',
+    titulo: 'Prazer, eu sou <em>Débora Dominique</em>',
     paragrafos: [
       'Sou criadora de conteúdo UGC e ajudo marcas a contar suas histórias do jeito que o público confia: com naturalidade, verdade e muito cuidado em cada detalhe.',
       'Gravo tudo com luz natural, cenário montado para o seu produto e roteiro pensado para os primeiros três segundos, que é onde a venda começa. Antes de ligar a câmera, estudo a sua marca, o seu público e o que os concorrentes já estão fazendo.',
       'Você não recebe só um vídeo. Recebe um conteúdo pronto para performar, com tudo o que precisa para subir em anúncio no mesmo dia.'
     ],
     entregas: ['Roteiro aprovado antes da gravação', 'Vídeo em alta resolução', 'Versões com e sem legenda', 'Ganchos alternativos para teste', 'Direitos de uso combinados', 'Ajustes inclusos no prazo'],
-    assinatura: 'Com carinho, SEU NOME'
+    assinatura: 'Com carinho, Débora Dominique'
   },
 
   // EDITE AQUI: seus três conteúdos de destaque
@@ -783,7 +784,7 @@ const linkWhatsapp = () => `https://wa.me/55${somenteNumeros(SITE.contato.whatsa
 const linkInstagram = () => `https://instagram.com/${SITE.contato.instagram.replace('@', '')}`;
 
 function montarSite() {
-  document.title = `${SITE.nome} | ${SITE.profissao}`;
+  document.title = SITE.tituloAba;
   document.querySelectorAll('[data-preencher="logo"]').forEach((el) => { el.textContent = SITE.nome; });
 
   // Capa
