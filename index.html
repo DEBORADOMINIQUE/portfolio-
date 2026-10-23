@@ -323,11 +323,32 @@
   }
   .filtro:hover { border-color: var(--vinho); background: rgba(110, 20, 35, .06); }
   .filtro[aria-pressed="true"] { background: var(--vinho); color: var(--creme); border-color: var(--vinho); box-shadow: 0 10px 24px -12px rgba(110, 20, 35, .7); }
-  .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 22px; }
+  .galeria { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 22px; }
   .trabalho {
     position: relative; border-radius: var(--raio-pequeno); overflow: hidden; box-shadow: var(--sombra-leve);
-    aspect-ratio: 4 / 5; animation: surgir .5s ease both;
+    aspect-ratio: 9 / 14; animation: surgir .5s ease both;
+    display: block; width: 100%; padding: 0; border: 0; cursor: pointer; text-align: left;
+    font: inherit; color: inherit; background: var(--marrom);
   }
+  .trabalho .play-pequeno { width: 56px; height: 56px; }
+  .trabalho .play-pequeno svg { width: 20px; height: 20px; }
+  .trabalho:hover .play-pequeno { background: var(--dourado); transform: translate(-50%, -50%) scale(1.08); }
+  .trabalho:hover .play-pequeno svg { fill: var(--marrom); }
+  .legenda-trabalho h3 { display: block; }
+
+  .player {
+    border: 0; padding: 0; background: transparent; width: min(420px, 92vw); max-height: 94vh; overflow: visible;
+  }
+  .player::backdrop { background: rgba(26, 16, 12, .88); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .player-topo { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; color: var(--creme); }
+  .player-topo p { font-family: var(--fonte-titulo); font-size: 1.1rem; }
+  .player-fechar {
+    flex-shrink: 0; width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(241, 230, 207, .4);
+    background: rgba(241, 230, 207, .1); color: var(--creme); font-size: 1.6rem; line-height: 1; cursor: pointer;
+  }
+  .player-fechar:hover { background: var(--dourado); color: var(--marrom); }
+  .player-video { aspect-ratio: 9 / 16; max-height: calc(94vh - 60px); margin: 0 auto; border-radius: var(--raio-pequeno); overflow: hidden; background: #000; box-shadow: var(--sombra); }
+  .player-video iframe { width: 100%; height: 100%; border: 0; display: block; }
   .trabalho[hidden] { display: none; }
   .trabalho > .midia { width: 100%; height: 100%; object-fit: cover; transition: transform .7s ease; }
   .trabalho:hover > .midia { transform: scale(1.05); }
@@ -613,6 +634,15 @@
     </div>
   </footer>
 
+  <!-- Janela do vídeo -->
+  <dialog class="player" id="player" aria-labelledby="playerTitulo">
+    <div class="player-topo">
+      <p id="playerTitulo"></p>
+      <button class="player-fechar" id="playerFechar" type="button" aria-label="Fechar vídeo">×</button>
+    </div>
+    <div class="player-video" id="playerVideo"></div>
+  </dialog>
+
 <script>
 /* ===================================================================
    CONFIGURAÇÃO DO SITE
@@ -733,16 +763,43 @@ const SITE = {
     }
   ],
 
-  // EDITE AQUI: trabalhos da galeria. "categoria" define em qual filtro ele aparece.
-  // Para criar um filtro novo, é só usar uma categoria nova em algum trabalho.
+  // EDITE AQUI: seus vídeos da galeria (YouTube).
+  // "youtube" é o código do vídeo: o pedaço do link depois de /shorts/
+  // Ex.: https://youtube.com/shorts/hnvOJXSc0QI  ->  youtube: 'hnvOJXSc0QI'
+  // "categoria" define em qual filtro ele aparece. Para criar um filtro novo, é só usar uma categoria nova.
   trabalhos: [
-    { categoria: 'Beleza',       titulo: '[TROCAR: título do vídeo]', marca: '[TROCAR: marca]', imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.rose },
-    { categoria: 'Fitness',      titulo: '[TROCAR: título do vídeo]', marca: 'Kaisan',          imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.terra },
-    { categoria: 'Fitness',      titulo: '[TROCAR: título do vídeo]', marca: 'Foco Fitness',    imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.noite },
-    { categoria: 'Bem-estar',    titulo: '[TROCAR: título do vídeo]', marca: 'Oásis da Vida Day Spa', imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.creme },
-    { categoria: 'Experiências', titulo: '[TROCAR: título do vídeo]', marca: 'Sushi Rão',       imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.vinho },
-    { categoria: 'Pet',          titulo: 'Três gatos, uma casa e muita personalidade', marca: 'Pedrita, Alemão e Dom', imagem: '', alt: '[TROCAR: foto ou vídeo real com os gatos]', gradiente: GRADIENTES.dourado },
-    { categoria: 'Apps e serviços', titulo: '[TROCAR: título do vídeo]', marca: 'Seu Influencer', imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.noite }
+    { categoria: 'Beleza', titulo: 'Comparativo de perfumes', marca: 'WePink', youtube: 'hnvOJXSc0QI' },
+    { categoria: 'Beleza', titulo: 'Comparativo de perfume', marca: 'WePink', youtube: 'MVcUDSwgCNU' },
+    { categoria: 'Beleza', titulo: 'Skincare pré-yoga com voiceover e aplicação', marca: 'Nature Face', youtube: 'r4JxEnoy7UI' },
+
+    { categoria: 'Casa e decoração', titulo: 'Luminária de chão', marca: '', youtube: '-QeGW8zUIPA' },
+    { categoria: 'Casa e decoração', titulo: 'Toalha', marca: 'Hoomy', youtube: 'adYP_45ZoYY' },
+
+    { categoria: 'Experiências', titulo: 'Restaurante', marca: 'Dom Juan', youtube: 'K8VOumu1UL4' },
+    { categoria: 'Experiências', titulo: 'Restaurante', marca: 'Escritório do Chef', youtube: '_uw77bzDcxc' },
+    { categoria: 'Experiências', titulo: 'Restaurante', marca: 'O Pescador', youtube: 'xkp8hMjhBew' },
+
+    { categoria: 'Moda e acessórios', titulo: 'Relógio', marca: 'Saint Germain', youtube: 'dYL8_a_19Xs' },
+    { categoria: 'Moda e acessórios', titulo: 'Loja de tênis', marca: '', youtube: 'LXOt1Km0l8U' },
+    { categoria: 'Moda e acessórios', titulo: 'Loja de tênis', marca: '', youtube: 'rdqfS2j1AFY' },
+
+    { categoria: 'Negócios', titulo: 'Plataforma de CRM', marca: '', youtube: 'jV5QCSwgoME' },
+    { categoria: 'Negócios', titulo: 'Máquina de cartão', marca: 'Liberty Pay', youtube: '0gr2WSWjvS8' },
+    { categoria: 'Negócios', titulo: 'Plataforma de cursos online', marca: 'Edune', youtube: 'Nq430QknurE' },
+    { categoria: 'Negócios', titulo: 'Artes e encartes para depósitos de material de construção', marca: 'DS Marketing', youtube: 'poU6Iwmuse8' },
+
+    { categoria: 'Saúde e bem-estar', titulo: 'Chá para TPM', marca: 'Leão', youtube: 'pk0FLv2-NYM' },
+    { categoria: 'Saúde e bem-estar', titulo: 'Absorvente interno: problema e solução', marca: 'Tampax', youtube: 'R3kA1pkbpXo' },
+    { categoria: 'Saúde e bem-estar', titulo: 'Beauty coffee', marca: 'DoseDay', youtube: 'MOTjN6gi-Pw' },
+    { categoria: 'Saúde e bem-estar', titulo: 'Beauty coffee', marca: 'DoseDay', youtube: 'sMExq3hlOH4' },
+
+    { categoria: 'Serviços e lifestyle', titulo: 'Clínica de estética', marca: '', youtube: 'JrArWvjbmLo' },
+    { categoria: 'Serviços e lifestyle', titulo: 'Regeneração de sobrancelhas', marca: 'Clínica de estética', youtube: 'kWBKeNaXdzs' },
+    { categoria: 'Serviços e lifestyle', titulo: 'Serviço de spa', marca: '', youtube: 'GOgV317TdoA' },
+    { categoria: 'Serviços e lifestyle', titulo: 'Experiência em salão de beleza', marca: '', youtube: 'jA84uStpzys' },
+
+    { categoria: 'Tecnologia', titulo: 'Monitor', marca: 'LG', youtube: 'YTOGsTocHqM' },
+    { categoria: 'Tecnologia', titulo: 'Iluminação para gravação', marca: 'Yongnuo', youtube: 'fzs24VEZWpM' }
   ],
 
   // EDITE AQUI: seus serviços
@@ -862,14 +919,19 @@ function montarSite() {
 
   // Trabalhos e filtros
   $('galeria').innerHTML = SITE.trabalhos.map((t) => `
-    <article class="trabalho revelar" data-categoria="${t.categoria}">
-      ${midia(t, '')}
-      <div class="legenda-trabalho">
+    <button class="trabalho revelar" type="button" data-categoria="${t.categoria}" data-video="${t.youtube}" data-titulo="${t.titulo}${t.marca ? ' · ' + t.marca : ''}" aria-label="Assistir: ${t.titulo}${t.marca ? ', ' + t.marca : ''}">
+      <img class="midia" src="https://i.ytimg.com/vi/${t.youtube}/oardefault.jpg" alt="" loading="lazy">
+      <span class="play play-pequeno" aria-hidden="true">${iconePlay}</span>
+      <span class="legenda-trabalho">
         <span>${t.categoria}</span>
         <h3>${t.titulo}</h3>
-        <p>${t.marca}</p>
-      </div>
-    </article>`).join('');
+        ${t.marca ? `<p>${t.marca}</p>` : ''}
+      </span>
+    </button>`).join('');
+  $('galeria').addEventListener('click', (e) => {
+    const card = e.target.closest('.trabalho');
+    if (card) abrirVideo(card.dataset.video, card.dataset.titulo, card);
+  });
   const categorias = ['Todos', ...new Set(SITE.trabalhos.map((t) => t.categoria))];
   $('filtros').innerHTML = categorias.map((c, i) =>
     `<button class="filtro" type="button" aria-pressed="${i === 0}" data-filtro="${c}">${c}</button>`).join('');
@@ -980,6 +1042,23 @@ function ativarAnimacoes() {
   elementos.forEach((el) => observador.observe(el));
 }
 
+// Abre o vídeo do YouTube numa janela por cima do site
+let ultimoCard = null;
+function abrirVideo(id, titulo, card) {
+  const janela = $('player');
+  ultimoCard = card;
+  $('playerTitulo').textContent = titulo;
+  $('playerVideo').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1&modestbranding=1" title="${titulo}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  janela.showModal();
+}
+function ativarPlayer() {
+  const janela = $('player');
+  const fechar = () => janela.close();
+  $('playerFechar').addEventListener('click', fechar);
+  janela.addEventListener('click', (e) => { if (e.target === janela) fechar(); });
+  janela.addEventListener('close', () => { $('playerVideo').innerHTML = ''; if (ultimoCard) ultimoCard.focus(); });
+}
+
 function ativarMenu() {
   const botao = $('botaoMenu');
   const menu = $('menu');
@@ -1023,6 +1102,7 @@ function ativarFormulario() {
 
 montarSite();
 ativarMenu();
+ativarPlayer();
 ativarFormulario();
 ativarAnimacoes();
 </script>
