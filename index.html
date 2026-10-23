@@ -275,7 +275,7 @@
      3. DESTAQUES
      ========================================================= */
   .destaques { background: linear-gradient(180deg, var(--marrom) 0%, var(--marrom-profundo) 100%); }
-  .grade-destaques { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 36px); }
+  .grade-destaques { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 380px)); justify-content: center; gap: clamp(28px, 6vw, 80px); }
   .card-destaque {
     display: block; text-decoration: none; color: var(--creme);
     border-radius: var(--raio); transition: transform .45s ease;
@@ -549,7 +549,7 @@
         <div class="cabecalho-secao revelar">
           <p class="sobretitulo">Conteúdos de destaque</p>
           <h2 class="titulo-secao" id="titulo-destaques">Vídeos que <em>pararam o scroll</em></h2>
-          <p class="intro-secao">Três conteúdos que mostram, na prática, o que acontece quando a sua marca aparece do jeito certo.</p>
+          <p class="intro-secao">Conteúdos que mostram, na prática, o que acontece quando a sua marca aparece do jeito certo.</p>
         </div>
         <div class="grade-destaques" id="gradeDestaques"></div>
       </div>
@@ -753,14 +753,15 @@ const SITE = {
       numero: '10,9 mil', rotulo: 'visualizações em collab com a marca',
       titulo: 'Plataforma de cursos online Edune',
       contexto: 'Publicado em collab com a Edune: 305 curtidas, 36 comentários e 46 compartilhamentos.'
-    },
-    {
-      youtube: 'vJAofkK9te0', capa: FOTOS.kaisan, alt: 'Débora em casa vestindo conjunto fitness vermelho',
-      tag: 'Moda fitness',
-      numero: '60', rotulo: 'comentários na publi',
-      titulo: 'Moda fitness Kaisan',
-      contexto: 'Publi com cupom DOMINIQUE gerando conversa real com a comunidade, além de 131 curtidas e 25 salvamentos.'
     }
+    // Guardado (vídeo com música bloqueada no YouTube). Para voltar, tire as barras e envie uma versão sem a música:
+    // {
+    //   youtube: 'vJAofkK9te0', capa: FOTOS.kaisan, alt: 'Débora em casa vestindo conjunto fitness vermelho',
+    //   tag: 'Moda fitness',
+    //   numero: '60', rotulo: 'comentários na publi',
+    //   titulo: 'Moda fitness Kaisan',
+    //   contexto: 'Publi com cupom DOMINIQUE gerando conversa real com a comunidade, além de 131 curtidas e 25 salvamentos.'
+    // }
   ],
 
   // EDITE AQUI: seus vídeos da galeria (YouTube).
