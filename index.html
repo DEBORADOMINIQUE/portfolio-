@@ -4,7 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DÉBORA DOMINIQUE | PORTFÓLIO</title>
-<meta name="description" content="Portfólio de criadora de conteúdo UGC: vídeos autênticos que vendem para marcas de beleza, casa, comida, moda e fitness.">
+<meta name="description" content="Portfólio de UGC da Débora Dominique: vídeos autênticos que vendem, para marcas de beleza, moda fitness, lifestyle e experiências.">
+<meta property="og:title" content="Débora Dominique · UGC Creator em Belo Horizonte">
+<meta property="og:description" content="Portfólio de UGC da Débora Dominique: vídeos autênticos que vendem, para marcas de beleza, moda fitness, lifestyle e experiências.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<!-- TROCAR: quando tiver uma foto sua, coloque aqui: <meta property="og:image" content="https://deboradominique.com/fotos/debora.jpg"> -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
@@ -389,6 +394,7 @@
   .depoimento blockquote { margin: 16px 0 0; font-family: var(--fonte-titulo); font-style: italic; font-size: 1.12rem; line-height: 1.6; color: var(--texto-escuro); flex: 1; }
   .depoimento figcaption { display: flex; align-items: center; gap: 14px; margin-top: 28px; padding-top: 22px; border-top: 1px solid rgba(110, 20, 35, .12); }
   .avatar { width: 46px; height: 46px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; color: var(--creme); font-weight: 600; font-size: .95rem; }
+  img.avatar { width: 52px; height: 52px; object-fit: cover; box-shadow: 0 6px 14px -8px rgba(26, 16, 12, .5); }
   .depoimento figcaption b { display: block; font-size: .95rem; }
   .depoimento figcaption span { font-size: .85rem; color: var(--texto-suave); }
   @media (max-width: 960px) {
@@ -531,7 +537,7 @@
         <div class="cabecalho-secao revelar">
           <p class="sobretitulo">Trabalhos por nicho</p>
           <h2 class="titulo-secao" id="titulo-trabalhos">Um olhar sob medida para <em>cada universo</em></h2>
-          <p class="intro-secao">Filtre por categoria e veja como cada produto ganha uma linguagem própria, sem perder a autenticidade.</p>
+          <p class="intro-secao">Filtre por categoria e veja como cada produto ganha uma linguagem própria, sem perder a autenticidade. Também já criei para apps, tecnologia e serviços.</p>
         </div>
         <div class="filtros revelar" id="filtros" role="group" aria-label="Filtrar trabalhos por nicho"></div>
         <p class="rotulo-faixa" id="avisoFiltro" aria-live="polite" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)"></p>
@@ -545,7 +551,7 @@
         <div class="cabecalho-secao revelar">
           <p class="sobretitulo">Como eu te ajudo</p>
           <h2 class="titulo-secao" id="titulo-servicos">Serviços pensados para <em>vender</em></h2>
-          <p class="intro-secao">Do roteiro à entrega final, cada formato é criado para gerar desejo, confiança e conversão.</p>
+          <p class="intro-secao">Do roteiro à entrega final, cada formato é criado para gerar desejo, confiança e conversão. E tudo é feito por mim, com equipamento próprio.</p>
         </div>
         <div class="grade-servicos" id="gradeServicos"></div>
       </div>
@@ -577,7 +583,7 @@
         </div>
         <form class="formulario revelar" id="formulario" novalidate>
           <h3>Me conte sobre o seu projeto</h3>
-          <p>Respondo em até 24 horas úteis.</p>
+          <p>Eu mesma leio e respondo cada mensagem.</p>
           <div class="campo">
             <label for="campoNome">Seu nome</label>
             <input id="campoNome" name="nome" type="text" autocomplete="name" required>
@@ -630,117 +636,122 @@ const GRADIENTES = {
   terra:    'linear-gradient(170deg, #b88a5a 0%, #7a4a30 50%, #2a1a14 100%)'
 };
 
+// Logos das marcas dos depoimentos (ficam dentro do arquivo, não precisa enviar imagem separada)
+const LOGOS = {
+  oasis: 'data:image/jpeg;base64,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',
+  glowden: 'data:image/jpeg;base64,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'
+};
+
 const SITE = {
 
   // EDITE AQUI: seu nome, profissão e a frase de impacto da capa
   nome: 'Débora Dominique',
   tituloAba: 'DÉBORA DOMINIQUE | PORTFÓLIO', // EDITE AQUI: o texto que aparece na aba do navegador
-  profissao: 'Criadora de conteúdo UGC',
-  fraseImpacto: 'Transformo o seu produto em vídeos autênticos que geram desejo, confiança e vendas. Conteúdo com cara de recomendação de amiga e acabamento de marca premium.',
+  profissao: 'UGC Creator · Belo Horizonte',
+  fraseImpacto: 'Transformo o seu produto em vídeos autênticos que geram desejo, confiança e vendas. Conteúdo com cara de recomendação de amiga e acabamento profissional, gravado dentro da minha vida real.',
 
   // EDITE AQUI: a foto principal da capa
-  fotoCapa: { imagem: '', alt: 'Retrato da criadora de conteúdo segurando um produto', gradiente: GRADIENTES.vinho },
-  seloCapa: { numero: '4,9', texto: 'nota média das marcas' },
+  fotoCapa: { imagem: '', alt: '[TROCAR: foto da Débora em casa ou na cidade, luz natural]', gradiente: GRADIENTES.vinho },
+  seloCapa: { numero: '+60', texto: 'seguidores novos para uma marca com um único vídeo' },
 
-  // EDITE AQUI: os três números curtos da capa
+  // EDITE AQUI: os três números curtos da capa (só números reais)
   numerosCapa: [
-    { valor: '+350', rotulo: 'vídeos entregues' },
-    { valor: '+60', rotulo: 'marcas atendidas' },
-    { valor: '+15M', rotulo: 'views somadas' }
+    { valor: '88,8%', rotulo: 'de público feminino' },
+    { valor: '62%', rotulo: 'entre 25 e 44 anos' },
+    { valor: '+1M', rotulo: 'views em uma série' }
   ],
 
   // EDITE AQUI: marcas com quem você já trabalhou (aparecem na faixa da capa)
-  marcas: ['Maison Vitta', 'Casa Lume', 'Bela Raiz', 'Nuvem Fit', 'Sabor da Serra', 'Atelier Flor', 'Vinha Nobre', 'Pele de Seda'],
+  // TROCAR: confirmar se entram também: Hardyn, Pink Cheeks, Escritório do Chef,
+  // Bondinho Aéreo de Canela, Liberty Pay, DoseDay, Vem Ser Pay
+  marcas: ['Kaisan', 'Sushi Rão', 'Foco Fitness', 'Saint Germain', 'Leão', 'Seu Influencer', 'Glowden', 'Oásis da Vida'],
 
   // EDITE AQUI: seção Sobre mim
   sobre: {
-    foto: { imagem: '', alt: 'A criadora gravando um vídeo em casa com luz natural', gradiente: GRADIENTES.dourado },
+    foto: { imagem: '', alt: '[TROCAR: foto da Débora em casa ou na cidade, luz natural, sorrindo ou em ação]', gradiente: GRADIENTES.dourado },
     titulo: 'Prazer, eu sou <em>Débora Dominique</em>',
     paragrafos: [
-      'Sou criadora de conteúdo UGC e ajudo marcas a contar suas histórias do jeito que o público confia: com naturalidade, verdade e muito cuidado em cada detalhe.',
-      'Gravo tudo com luz natural, cenário montado para o seu produto e roteiro pensado para os primeiros três segundos, que é onde a venda começa. Antes de ligar a câmera, estudo a sua marca, o seu público e o que os concorrentes já estão fazendo.',
-      'Você não recebe só um vídeo. Recebe um conteúdo pronto para performar, com tudo o que precisa para subir em anúncio no mesmo dia.'
+      'Sou UGC Creator em Belo Horizonte e ajudo marcas a contar suas histórias do jeito que o público confia: com naturalidade, verdade e muito cuidado em cada detalhe. Mineira, 32 anos, casada com o Pedro e dona de três gatos (Pedrita, Alemão e Dom), que adoram aparecer nos meus vídeos.',
+      'Passei mais de 10 anos trabalhando com beleza e, nesse tempo, já criava conteúdo: uma série minha passou de 1 milhão de visualizações. Hoje gravo com a minha rotina como cenário (casa, treino, autocuidado e a cidade) e com roteiro pensado para os primeiros três segundos, que é onde a venda começa.',
+      'Você não recebe só um vídeo. Recebe um conteúdo feito por mim do roteiro à edição, com equipamento próprio, falando com um público majoritariamente feminino, adulto e cheio de profissionais da beleza.'
     ],
-    entregas: ['Roteiro aprovado antes da gravação', 'Vídeo em alta resolução', 'Versões com e sem legenda', 'Ganchos alternativos para teste', 'Direitos de uso combinados', 'Ajustes inclusos no prazo'],
+    entregas: ['Roteiro aprovado antes da gravação', 'Vídeo em 4K', 'Fotos de produto', 'Edição com até 2 ajustes', 'Trilhas licenciadas', 'Entrega em até 10 dias corridos'],
     assinatura: 'Com carinho, Débora Dominique'
   },
 
-  // EDITE AQUI: seus três conteúdos de destaque
-  // "link" é o endereço do vídeo (Instagram, TikTok, YouTube ou Google Drive).
+  // EDITE AQUI: seus três conteúdos de destaque (um por nicho)
+  // "link" é o endereço do vídeo (Instagram, TikTok ou Google Drive).
   // "capa" é a imagem de capa vertical (formato 9:16). Deixe vazio para usar o gradiente.
   destaques: [
     {
-      link: 'https://www.instagram.com/deboradominique_/',
-      capa: '', alt: 'Capa do vídeo de rotina de skincare noturna', gradiente: GRADIENTES.rose,
-      tag: 'Reels',
-      numero: '+2,4M', rotulo: 'views no reels',
-      titulo: 'Rotina de skincare noturna',
-      contexto: 'Conteúdo orgânico para marca de dermocosméticos.'
+      link: 'https://www.instagram.com/deboradominique_/', // TROCAR: link do melhor vídeo da pasta Beleza do Drive
+      capa: '', alt: '[TROCAR: capa do melhor vídeo de beleza]', gradiente: GRADIENTES.rose,
+      tag: 'Beleza',
+      numero: '[TROCAR]', rotulo: 'resultado do vídeo escolhido',
+      titulo: 'Beleza e autocuidado',
+      contexto: 'Mais de 10 anos de beleza para mostrar o produto do jeito que a cliente entende.'
     },
     {
-      link: 'https://www.instagram.com/deboradominique_/',
-      capa: '', alt: 'Capa do vídeo de unboxing de kit de cafés especiais', gradiente: GRADIENTES.terra,
-      tag: 'Anúncio',
-      numero: '4,1x', rotulo: 'retorno sobre o investimento',
-      titulo: 'Unboxing de cafés especiais',
-      contexto: 'Criativo campeão em campanha de vendas.'
+      link: 'https://www.instagram.com/deboradominique_/', // TROCAR: link do melhor vídeo de moda fitness (ex.: Kaisan ou Hardyn)
+      capa: '', alt: '[TROCAR: capa do melhor vídeo de moda fitness]', gradiente: GRADIENTES.terra,
+      tag: 'Fitness',
+      numero: '[TROCAR]', rotulo: 'resultado do vídeo escolhido',
+      titulo: 'Moda, fitness e lifestyle',
+      contexto: 'Yoga, treino e rotina de verdade: o produto aparece dentro da vida, não numa vitrine.'
     },
     {
-      link: 'https://www.instagram.com/deboradominique_/',
-      capa: '', alt: 'Capa do vídeo de transformação de sala com decoração', gradiente: GRADIENTES.noite,
-      tag: 'TikTok',
-      numero: '+38 mil', rotulo: 'salvamentos',
-      titulo: 'Sala nova com pouco orçamento',
-      contexto: 'Série de decoração para loja de casa.'
+      link: 'https://www.instagram.com/deboradominique_/', // TROCAR: link do melhor vídeo da pasta Experiência
+      capa: '', alt: '[TROCAR: capa do melhor vídeo de experiência]', gradiente: GRADIENTES.noite,
+      tag: 'Experiências',
+      numero: '[TROCAR]', rotulo: 'resultado do vídeo escolhido',
+      titulo: 'Experiências e lugares',
+      contexto: 'Lugares contados como história: o caminho, o clima e o que fica na memória.'
     }
   ],
 
   // EDITE AQUI: trabalhos da galeria. "categoria" define em qual filtro ele aparece.
   // Para criar um filtro novo, é só usar uma categoria nova em algum trabalho.
   trabalhos: [
-    { categoria: 'Beleza',  titulo: 'Sérum vitamina C',      marca: 'Pele de Seda',   imagem: '', alt: 'Frasco de sérum sobre bancada de mármore', gradiente: GRADIENTES.rose },
-    { categoria: 'Casa',    titulo: 'Linha de velas',        marca: 'Casa Lume',      imagem: '', alt: 'Velas aromáticas acesas em mesa de madeira', gradiente: GRADIENTES.dourado },
-    { categoria: 'Comida',  titulo: 'Café da manhã gourmet', marca: 'Sabor da Serra', imagem: '', alt: 'Mesa de café da manhã com geleias artesanais', gradiente: GRADIENTES.terra },
-    { categoria: 'Moda',    titulo: 'Coleção outono',        marca: 'Atelier Flor',   imagem: '', alt: 'Look de outono com casaco cor vinho', gradiente: GRADIENTES.vinho },
-    { categoria: 'Fitness', titulo: 'Treino em casa',        marca: 'Nuvem Fit',      imagem: '', alt: 'Tapete de yoga e garrafa térmica', gradiente: GRADIENTES.noite },
-    { categoria: 'Beleza',  titulo: 'Make de cinco minutos', marca: 'Bela Raiz',      imagem: '', alt: 'Paleta de maquiagem aberta', gradiente: GRADIENTES.creme },
-    { categoria: 'Casa',    titulo: 'Jogo de cama premium',  marca: 'Maison Vitta',   imagem: '', alt: 'Cama arrumada com roupa de cama clara', gradiente: GRADIENTES.creme },
-    { categoria: 'Comida',  titulo: 'Harmonização de vinhos',marca: 'Vinha Nobre',    imagem: '', alt: 'Taças de vinho tinto e tábua de queijos', gradiente: GRADIENTES.vinho },
-    { categoria: 'Moda',    titulo: 'Acessórios dourados',   marca: 'Atelier Flor',   imagem: '', alt: 'Brincos e colares dourados sobre tecido', gradiente: GRADIENTES.dourado },
-    { categoria: 'Fitness', titulo: 'Suplemento vegano',     marca: 'Nuvem Fit',      imagem: '', alt: 'Pote de suplemento ao lado de frutas', gradiente: GRADIENTES.terra }
+    { categoria: 'Beleza',       titulo: '[TROCAR: título do vídeo]', marca: '[TROCAR: marca]', imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.rose },
+    { categoria: 'Fitness',      titulo: '[TROCAR: título do vídeo]', marca: 'Kaisan',          imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.terra },
+    { categoria: 'Fitness',      titulo: '[TROCAR: título do vídeo]', marca: 'Foco Fitness',    imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.noite },
+    { categoria: 'Bem-estar',    titulo: '[TROCAR: título do vídeo]', marca: 'Oásis da Vida Day Spa', imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.creme },
+    { categoria: 'Experiências', titulo: '[TROCAR: título do vídeo]', marca: 'Sushi Rão',       imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.vinho },
+    { categoria: 'Pet',          titulo: 'Três gatos, uma casa e muita personalidade', marca: 'Pedrita, Alemão e Dom', imagem: '', alt: '[TROCAR: foto ou vídeo real com os gatos]', gradiente: GRADIENTES.dourado },
+    { categoria: 'Apps e serviços', titulo: '[TROCAR: título do vídeo]', marca: 'Seu Influencer', imagem: '', alt: '[TROCAR: descrição da foto]', gradiente: GRADIENTES.noite }
   ],
 
   // EDITE AQUI: seus serviços
+  // TROCAR: preço ainda não definido ("valores sob consulta" ou "a partir de R$350 por vídeo")
   servicos: [
-    { titulo: 'Vídeo UGC', descricao: 'Vídeos autênticos de 15 a 60 segundos, com roteiro estratégico e gancho forte para prender a atenção logo no início.', detalhe: 'Mais pedido' },
-    { titulo: 'Corte para anúncio', descricao: 'Versões editadas com ganchos e chamadas diferentes, prontas para testar e escalar nas campanhas pagas.', detalhe: 'Ideal para tráfego pago' },
-    { titulo: 'Fotos de produto', descricao: 'Fotos lifestyle com luz natural e composição elegante, para site, catálogo, redes sociais e marketplace.', detalhe: 'Pacotes de 10 a 30 fotos' },
-    { titulo: 'Unboxing', descricao: 'A experiência de abrir o produto contada com emoção, valorizando embalagem, detalhes e a primeira impressão.', detalhe: 'Gera desejo imediato' },
-    { titulo: 'Publicação no perfil', descricao: 'Conteúdo publicado no meu perfil, com legenda estratégica e interação real com a minha comunidade.', detalhe: 'Alcance orgânico' },
-    { titulo: 'Pacote mensal', descricao: 'Produção recorrente com calendário fixo, para a sua marca ter conteúdo novo toda semana sem se preocupar.', detalhe: 'Melhor custo por vídeo' }
+    { titulo: 'Vídeo UGC', descricao: 'Vídeos autênticos com roteiro estratégico e gancho forte para prender a atenção logo nos primeiros segundos.', detalhe: 'Gravado em 4K' },
+    { titulo: 'Fotos de produto', descricao: 'Fotos lifestyle com luz natural, mostrando o produto dentro da vida real: casa, treino, autocuidado e a cidade.', detalhe: 'Para site e redes sociais' },
+    { titulo: 'Roteiro e estratégia', descricao: 'Eu proponho a ideia e o roteiro a partir do objetivo da sua marca. Se você já tiver um roteiro, eu gravo a partir dele.', detalhe: 'Aprovado antes de gravar' },
+    { titulo: 'Edição profissional', descricao: 'Edição no CapCut e no Premiere Pro, com trilhas licenciadas do Epidemic Sound e até 2 ajustes inclusos.', detalhe: 'Até 2 ajustes' },
+    { titulo: 'Publicação no perfil', descricao: 'Conteúdo publicado no meu perfil, com legenda estratégica e interação real com a minha comunidade, as Deusas.', detalhe: 'Público 88,8% feminino' },
+    { titulo: 'Entrega no prazo', descricao: 'Entrega em até 10 dias corridos depois de receber o produto, gravada com iPhone 17 Pro Max, microfone sem fio Hollyland e gimbal Hohem.', detalhe: 'Até 10 dias corridos' }
   ],
 
-  // EDITE AQUI: números com contador animado
-  // "valor" é o número final (use ponto para decimais: 4.9). "casas" é quantas casas decimais mostrar.
+  // EDITE AQUI: números com contador animado (só números reais)
+  // "valor" é o número final (use ponto para decimais: 88.8). "casas" é quantas casas decimais mostrar.
   contadores: [
-    { valor: 4.9, casas: 1, prefixo: '', sufixo: '/5', rotulo: 'nota média das marcas' },
-    { valor: 87, casas: 0, prefixo: '', sufixo: '%', rotulo: 'das marcas recontratam' },
-    { valor: 5, casas: 0, prefixo: '', sufixo: ' dias', rotulo: 'prazo médio de entrega' },
-    { valor: 2.4, casas: 1, prefixo: '+', sufixo: 'M', rotulo: 'maior alcance em um vídeo' }
+    { valor: 88.8, casas: 1, prefixo: '', sufixo: '%', rotulo: 'de público feminino' },
+    { valor: 62, casas: 0, prefixo: '', sufixo: '%', rotulo: 'do público entre 25 e 44 anos' },
+    { valor: 10, casas: 0, prefixo: '', sufixo: ' dias', rotulo: 'prazo máximo de entrega' },
+    { valor: 1, casas: 0, prefixo: '+', sufixo: 'M', rotulo: 'maior alcance em uma série' }
   ],
 
   // EDITE AQUI: resultados de campanhas
   resultados: [
-    { marca: 'Pele de Seda', numero: '+38% de CTR', descricao: 'Em comparação aos criativos de estúdio que a marca usava antes.' },
-    { marca: 'Sabor da Serra', numero: '4,1x de ROAS', descricao: 'Campanha de 30 dias com três variações de gancho.' },
-    { marca: 'Casa Lume', numero: '-42% no CPA', descricao: 'Redução no custo por compra com vídeos de unboxing.' }
+    { marca: 'Oásis da Vida Day Spa', numero: '+60 seguidores', descricao: 'Novos para a marca vindos de um único vídeo, impulsionado por uma noite nos stories.' },
+    { marca: 'Oásis da Vida Day Spa', numero: '2.993 views', descricao: 'E 2.829 pessoas alcançadas com o mesmo vídeo, em menos de um dia de anúncio.' },
+    { marca: 'Oásis da Vida Day Spa', numero: '178 visitas', descricao: 'Ao perfil da marca, geradas pelo vídeo com objetivo de visitas.' }
   ],
 
-  // EDITE AQUI: depoimentos de clientes
+  // EDITE AQUI: depoimentos reais (cole o texto exato que a marca enviou)
   depoimentos: [
-    { texto: 'Os vídeos chegaram antes do prazo e viraram nossos criativos campeões. Ela entende de marca e entende de venda.', nome: 'Mariana Alves', empresa: 'Pele de Seda', cor: GRADIENTES.rose },
-    { texto: 'Profissionalismo do briefing à entrega. Recebemos variações de gancho que fizeram toda a diferença nos testes.', nome: 'Rafael Costa', empresa: 'Sabor da Serra', cor: GRADIENTES.terra },
-    { texto: 'Conteúdo elegante, natural e com a nossa cara. Já estamos no terceiro pacote mensal e não pretendemos parar.', nome: 'Juliana Prado', empresa: 'Casa Lume', cor: GRADIENTES.dourado }
+    { texto: 'O impacto do seu trabalho pra gente foi super positivo! Seu conteúdo é muito bem feito, dá pra ver o cuidado na edição, na estética e principalmente no jeito que você comunica, tudo fica natural, leve e alinhado com a nossa marca. Além disso, seu comprometimento em cada entrega faz toda a diferença. Ficamos muito felizes com essa parceria e com os resultados que construímos juntas. É o tipo de colaboração que realmente agrega valor pra marca.', nome: 'Glowden', empresa: 'Parceria de UGC', logo: LOGOS.glowden, cor: GRADIENTES.rose },
+    { texto: 'Postei ele nos stories e impulsionei com objetivo de visitas no perfil... já ganhamos mais de 60 seguidores vindo do vídeo. Realmente, faz a diferença ter um vídeo profissional, chama mais atenção e todo mundo vem seguir!!! Ficou perfeito, maravilhoso seu trabalho! 🙌🏼🤎', nome: 'Oásis da Vida Day Spa', empresa: 'Vídeo impulsionado nos stories', logo: LOGOS.oasis, cor: GRADIENTES.dourado }
   ],
 
   // EDITE AQUI: seus contatos
@@ -748,7 +759,7 @@ const SITE = {
     texto: 'Me conte sobre a sua marca e o que você precisa. Eu monto uma proposta sob medida, com formatos, prazos e valores claros.',
     email: 'contato@deboradominique.net',
     whatsapp: '(31) 98404-2252',
-    mensagemWhatsapp: 'Olá! Vi o seu portfólio e quero conversar sobre um projeto de UGC.',
+    mensagemWhatsapp: 'Olá, Débora! Vi o seu portfólio e quero conversar sobre um projeto de UGC.',
     instagram: '@deboradominique_',
     // Como o formulário funciona:
     // 'email'    = abre o aplicativo de e-mail da pessoa com a mensagem já preenchida
@@ -756,7 +767,7 @@ const SITE = {
     modoFormulario: 'email'
   },
 
-  // EDITE AQUI: redes sociais do rodapé (troque os links pelos seus)
+  // EDITE AQUI: redes sociais do rodapé
   redes: [
     { nome: 'Instagram', link: 'https://www.instagram.com/deboradominique_/' },
     { nome: 'LinkedIn', link: 'https://www.linkedin.com/in/d%C3%A9bora-dominique-29b6443a8/' }
@@ -878,7 +889,7 @@ function montarSite() {
       <span class="aspas" aria-hidden="true">“</span>
       <blockquote>${d.texto}</blockquote>
       <figcaption>
-        <span class="avatar" style="background:${d.cor}" aria-hidden="true">${d.nome.split(' ').map((p) => p[0]).slice(0, 2).join('')}</span>
+        ${d.logo ? `<img class="avatar" src="${d.logo}" alt="Logo da ${d.nome}">` : `<span class="avatar" style="background:${d.cor}" aria-hidden="true">${d.nome.split(' ').map((p) => p[0]).slice(0, 2).join('')}</span>`}
         <span><b>${d.nome}</b><span>${d.empresa}</span></span>
       </figcaption>
     </figure>`).join('');
