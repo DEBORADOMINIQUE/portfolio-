@@ -428,6 +428,42 @@
   @media (max-width: 420px) { .contadores { grid-template-columns: 1fr; } }
 
   /* =========================================================
+     PERGUNTAS FREQUENTES
+     ========================================================= */
+  .duvidas { background: var(--creme-claro); }
+  .duvidas-grade { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(32px, 6vw, 80px); align-items: start; }
+  .duvidas .cabecalho-secao { margin-bottom: 0; }
+  .lista-duvidas { border-top: 1px solid rgba(110, 20, 35, .18); }
+  .duvida { border-bottom: 1px solid rgba(110, 20, 35, .18); }
+  .duvida summary {
+    list-style: none; cursor: pointer; display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center;
+    padding: 24px 4px; font-family: var(--fonte-titulo); font-size: clamp(1.1rem, 2vw, 1.3rem); color: var(--texto-escuro);
+  }
+  .duvida summary::-webkit-details-marker { display: none; }
+  .duvida summary .num { font-family: var(--fonte-corpo); font-size: .78rem; letter-spacing: .14em; color: var(--vinho); font-weight: 600; }
+  .duvida summary .seta {
+    width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(110, 20, 35, .3); display: grid; place-items: center;
+    color: var(--vinho); font-family: var(--fonte-corpo); font-size: 1.1rem; transition: transform .35s ease, background .3s ease, color .3s ease;
+  }
+  .duvida summary:hover .seta { background: var(--vinho); color: var(--creme); }
+  .duvida[open] summary .seta { transform: rotate(45deg); background: var(--vinho); color: var(--creme); }
+  .duvida p { color: var(--texto-suave); padding: 0 50px 26px 48px; max-width: 640px; }
+  @media (max-width: 860px) {
+    .duvidas-grade { grid-template-columns: 1fr; }
+    .duvida p { padding: 0 4px 24px; }
+  }
+
+  /* Orçamento rápido (dentro do contato) */
+  .orcamento-rapido {
+    margin-top: 32px; padding: 26px 24px; border-radius: var(--raio-pequeno);
+    border: 1px solid rgba(201, 168, 106, .3); background: rgba(241, 230, 207, .04);
+  }
+  .orcamento-titulo { font-family: var(--fonte-titulo); font-size: 1.3rem; color: var(--creme); }
+  .orcamento-texto { color: var(--texto-claro-suave); font-size: .92rem; margin-top: 4px; }
+  .orcamento-botoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .orcamento-botoes .botao { padding: 12px 20px; font-size: .9rem; }
+
+  /* =========================================================
      7. CONTATO
      ========================================================= */
   .contato {
@@ -596,6 +632,18 @@
       </div>
     </section>
 
+    <!-- PERGUNTAS FREQUENTES -->
+    <section class="duvidas" id="duvidas" aria-labelledby="titulo-duvidas">
+      <div class="container duvidas-grade">
+        <div class="cabecalho-secao revelar">
+          <p class="sobretitulo">Perguntas frequentes</p>
+          <h2 class="titulo-secao" id="titulo-duvidas">Antes da gente começar, <em>tire suas dúvidas</em></h2>
+          <p class="intro-secao">O que as marcas mais me perguntam antes de fechar. Não achou a sua? Me chama no WhatsApp.</p>
+        </div>
+        <div class="lista-duvidas revelar" id="listaDuvidas"></div>
+      </div>
+    </section>
+
     <!-- 7. BORA CRIAR JUNTOS -->
     <section class="escuro contato" id="contato" aria-labelledby="titulo-contato">
       <div class="container contato-grade">
@@ -603,6 +651,11 @@
           <p class="sobretitulo">Bora criar juntos</p>
           <h2 class="titulo-secao" id="titulo-contato">Vamos dar <em>voz</em> à sua marca?</h2>
           <p class="intro-secao" id="contatoTexto"></p>
+          <div class="orcamento-rapido">
+            <p class="orcamento-titulo">Orçamento rápido pelo WhatsApp</p>
+            <p class="orcamento-texto">Escolha o que você precisa e a conversa já começa com tudo explicado.</p>
+            <div class="orcamento-botoes" id="orcamentoBotoes"></div>
+          </div>
           <div class="canais" id="canais"></div>
         </div>
         <form class="formulario revelar" id="formulario" novalidate>
@@ -836,6 +889,26 @@ const SITE = {
     { texto: 'Postei ele nos stories e impulsionei com objetivo de visitas no perfil... já ganhamos mais de 60 seguidores vindo do vídeo. Realmente, faz a diferença ter um vídeo profissional, chama mais atenção e todo mundo vem seguir!!! Ficou perfeito, maravilhoso seu trabalho! 🙌🏼🤎', nome: 'Oásis da Vida Day Spa', empresa: 'Vídeo impulsionado nos stories', logo: LOGOS.oasis, cor: GRADIENTES.dourado }
   ],
 
+  // EDITE AQUI: botões de orçamento rápido (cada um abre o WhatsApp com a mensagem pronta)
+  orcamentoRapido: [
+    { texto: 'Vídeo UGC', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de vídeo UGC.' },
+    { texto: 'Fotos de produto', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de fotos de produto.' },
+    { texto: 'Vídeo + fotos', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de vídeo UGC com fotos de produto.' },
+    { texto: 'Publicação no seu perfil', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de publicação no seu perfil.' }
+  ],
+
+  // EDITE AQUI: perguntas frequentes
+  perguntas: [
+    { pergunta: 'Como funciona, do primeiro contato à entrega?', resposta: 'Em 3 passos. Primeiro a gente alinha o objetivo e eu proponho a ideia e o roteiro. Depois eu gravo, com a minha rotina como cenário. Por fim, você revisa e eu faço os ajustes.' },
+    { pergunta: 'Qual o prazo de entrega?', resposta: 'Até 10 dias corridos depois de receber o produto. Se a sua campanha tiver uma data específica, me avisa logo no início que a gente organiza o cronograma.' },
+    { pergunta: 'Você escreve o roteiro ou eu preciso mandar?', resposta: 'Os dois funcionam. Eu proponho a ideia e o roteiro a partir do objetivo da sua marca e você aprova antes de eu gravar. Se você já tiver um roteiro, eu gravo a partir dele.' },
+    { pergunta: 'E se eu quiser mudar alguma coisa no vídeo?', resposta: 'Você revisa o vídeo e tem até 2 ajustes inclusos no orçamento.' },
+    { pergunta: 'Posso usar o vídeo em anúncios?', resposta: 'Pode. O uso em anúncios e por quanto tempo o vídeo pode ser usado são combinados na proposta, antes de começar.' },
+    { pergunta: 'Você grava só em casa?', resposta: 'Não. Além da minha casa e da minha rotina, gravo em restaurantes, lojas, clínicas e passeios, em Belo Horizonte e também em viagens, como os vídeos que fiz em Gramado.' },
+    { pergunta: 'Qual a qualidade do material?', resposta: 'Gravo em 4K com iPhone 17 Pro Max, microfone sem fio Hollyland e gimbal Hohem. A edição é feita no CapCut e no Premiere Pro, com trilhas licenciadas do Epidemic Sound.' },
+    { pergunta: 'Quanto custa?', resposta: 'Depende do formato, da quantidade de vídeos e de onde o conteúdo vai ser usado. Escolha o tipo de conteúdo no orçamento rápido aqui embaixo e me chama no WhatsApp que eu te passo uma proposta sob medida.' }
+  ],
+
   // EDITE AQUI: seus contatos
   contato: {
     texto: 'Me conte sobre a sua marca e o que você precisa. Eu monto uma proposta sob medida, com formatos, prazos e valores claros.',
@@ -995,6 +1068,18 @@ function montarSite() {
     <a class="canal" href="${linkWhatsapp()}" target="_blank" rel="noopener"><span class="icone">${icones.whatsapp}</span><div><small>WhatsApp</small><span>${SITE.contato.whatsapp}</span></div></a>
     <a class="canal" href="mailto:${SITE.contato.email}"><span class="icone">${icones.email}</span><div><small>E-mail</small><span>${SITE.contato.email}</span></div></a>
     <a class="canal" href="${linkInstagram()}" target="_blank" rel="noopener"><span class="icone">${icones.instagram}</span><div><small>Instagram</small><span>${SITE.contato.instagram}</span></div></a>`;
+
+  // Orçamento rápido
+  const numeroWhats = '55' + somenteNumeros(SITE.contato.whatsapp);
+  $('orcamentoBotoes').innerHTML = SITE.orcamentoRapido.map((o) =>
+    `<a class="botao botao-contorno" href="https://wa.me/${numeroWhats}?text=${encodeURIComponent(o.mensagem)}" target="_blank" rel="noopener">${o.texto} <span aria-hidden="true">↗</span></a>`).join('');
+
+  // Perguntas frequentes
+  $('listaDuvidas').innerHTML = SITE.perguntas.map((q, i) => `
+    <details class="duvida">
+      <summary><span class="num">${String(i + 1).padStart(2, '0')}</span><span>${q.pergunta}</span><span class="seta" aria-hidden="true">+</span></summary>
+      <p>${q.resposta}</p>
+    </details>`).join('');
 
   // Rodapé
   $('redesRodape').innerHTML = SITE.redes.map((r) => `<li><a href="${r.link}" target="_blank" rel="noopener">${r.nome}</a></li>`).join('');
