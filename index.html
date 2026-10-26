@@ -50,7 +50,7 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-padding-top: 84px; }
+  html { scroll-behavior: smooth; scroll-padding-top: 110px; }
   body {
     margin: 0;
     font-family: var(--fonte-corpo);
@@ -127,16 +127,34 @@
      ========================================================= */
   .topo {
     position: fixed; inset: 0 0 auto 0; z-index: 100;
-    transition: background .4s ease, box-shadow .4s ease, padding .4s ease;
-    padding: 20px 0;
+    transition: background .4s ease, box-shadow .4s ease;
   }
   .topo.rolado {
     background: rgba(26, 16, 12, .92);
     backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
     box-shadow: 0 10px 30px -15px rgba(0, 0, 0, .6);
-    padding: 12px 0;
   }
-  .topo .container { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .topo .container { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-top: 18px; padding-bottom: 18px; transition: padding .4s ease; }
+  .topo.rolado .container { padding-top: 10px; padding-bottom: 10px; }
+
+  /* Faixa de aviso dos pacotes (topo da página) */
+  .aviso-pacotes {
+    display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: nowrap;
+    background: var(--dourado); color: var(--marrom); text-decoration: none; font-size: .88rem; font-weight: 500;
+    padding: 9px 16px; overflow: hidden; max-height: 60px; transition: max-height .4s ease, padding .4s ease, background .3s ease;
+  }
+  .aviso-pacotes:hover { background: #d8bb84; }
+  .aviso-pacotes:focus-visible { outline-offset: -4px; }
+  .aviso-tag { background: var(--vinho); color: var(--creme); font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; flex-shrink: 0; }
+  .aviso-link { font-weight: 600; white-space: nowrap; border-bottom: 1px solid currentColor; }
+  .aviso-curto { display: none; }
+  .topo.nos-pacotes .aviso-pacotes { max-height: 0; padding-top: 0; padding-bottom: 0; }
+  @media (max-width: 640px) {
+    .aviso-longo { display: none; }
+    .aviso-curto { display: inline; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .aviso-link { display: none; }
+    .aviso-pacotes { font-size: .82rem; gap: 10px; }
+  }
   .logo {
     font-family: var(--fonte-titulo); font-size: 1.45rem; font-weight: 600; color: var(--creme);
     text-decoration: none; letter-spacing: .02em; white-space: nowrap;
@@ -212,7 +230,7 @@
       radial-gradient(ellipse at 10% 90%, rgba(201, 168, 106, .12), transparent 50%),
       var(--marrom);
     color: var(--texto-claro);
-    padding: 150px 0 0;
+    padding: 180px 0 0;
     overflow: hidden;
   }
   .capa-grade {
@@ -267,7 +285,7 @@
   @keyframes deslizar { to { transform: translateX(-50%); } }
 
   @media (max-width: 900px) {
-    .capa { padding-top: 120px; }
+    .capa { padding-top: 150px; }
     .capa-grade { grid-template-columns: 1fr; }
     .foto-capa-moldura { max-width: 440px; width: 100%; margin: 0 auto; }
     .selo { left: 12px; }
@@ -677,6 +695,12 @@
 
   <!-- MENU FIXO -->
   <header class="topo" id="topo">
+    <a class="aviso-pacotes" id="avisoPacotes" href="#pacotes" data-pacotes>
+      <span class="aviso-tag">Novo</span>
+      <span class="aviso-longo">Monte o seu pacote e veja o valor na hora, sem esperar orçamento.</span>
+      <span class="aviso-curto">Monte seu pacote e veja o valor na hora</span>
+      <span class="aviso-link">Ver pacotes <span aria-hidden="true">→</span></span>
+    </a>
     <div class="container">
       <a class="logo" href="#inicio" data-preencher="logo">Débora Dominique</a>
       <button class="botao-menu" id="botaoMenu" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
@@ -1554,6 +1578,12 @@ function ativarWhatsFixo() {
   atualizar();
 }
 
+// A faixa de aviso some enquanto a marca está vendo os pacotes
+function ativarAvisoPacotes() {
+  if (!SITE.pacotes.mostrar || !('IntersectionObserver' in window)) return;
+  new IntersectionObserver((e) => { $('topo').classList.toggle('nos-pacotes', e[0].isIntersecting); }, { threshold: 0.05 }).observe($('pacotes'));
+}
+
 function ativarMenu() {
   const botao = $('botaoMenu');
   const menu = $('menu');
@@ -1597,6 +1627,7 @@ function ativarFormulario() {
 
 montarSite();
 ativarMenu();
+ativarAvisoPacotes();
 ativarWhatsFixo();
 ativarPlayer();
 ativarFormulario();
