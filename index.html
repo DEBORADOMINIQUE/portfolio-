@@ -910,6 +910,7 @@
             <label for="campoMensagem">Mensagem</label>
             <textarea id="campoMensagem" name="mensagem" required placeholder="Qual é a marca, o produto e o que você precisa?"></textarea>
           </div>
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
           <button class="botao botao-vinho" type="submit">Enviar mensagem</button>
           <p class="confirmacao" id="confirmacao" role="status" aria-live="polite"></p>
         </form>
@@ -1206,9 +1207,9 @@ const SITE = {
     instagram: '@deboradominique_',
     midiaKit: 'midia-kit-debora-dominique.pdf', // EDITE AQUI: arquivo do mídia kit
     // Como o formulário funciona:
-    // 'email'    = abre o aplicativo de e-mail da pessoa com a mensagem já preenchida
-    // 'mensagem' = só mostra uma mensagem de confirmação na tela
-    modoFormulario: 'email'
+    // 'direto' = a mensagem chega direto no seu e-mail (pelo FormSubmit), sem a pessoa sair do site
+    // 'email'  = abre o aplicativo de e-mail da pessoa com a mensagem já preenchida
+    modoFormulario: 'direto'
   },
 
   // EDITE AQUI: redes sociais do rodapé
@@ -1606,22 +1607,44 @@ function ativarMenu() {
 function ativarFormulario() {
   const form = $('formulario');
   const aviso = $('confirmacao');
-  form.addEventListener('submit', (e) => {
+  const botao = form.querySelector('button[type="submit"]');
+  const abrirEmail = (nome, email, mensagem) => {
+    const assunto = `Novo projeto UGC: ${nome}`;
+    const corpo = `Nome: ${nome}\nE-mail: ${email}\n\n${mensagem}`;
+    window.location.href = `mailto:${SITE.contato.email}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
+  };
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const nome = form.nome.value.trim();
     const email = form.email.value.trim();
     const mensagem = form.mensagem.value.trim();
     if (!nome || !email || !mensagem) { aviso.textContent = 'Preencha nome, e-mail e mensagem, por favor.'; return; }
     if (!form.email.checkValidity()) { aviso.textContent = 'Confira se o e-mail está escrito corretamente.'; form.email.focus(); return; }
-    if (SITE.contato.modoFormulario === 'email') {
-      const assunto = `Novo projeto UGC: ${nome}`;
-      const corpo = `Nome: ${nome}\nE-mail: ${email}\n\n${mensagem}`;
-      window.location.href = `mailto:${SITE.contato.email}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
-      aviso.textContent = 'Abrimos o seu e-mail com a mensagem pronta. É só clicar em enviar!';
-    } else {
-      aviso.textContent = `Obrigada, ${nome}! Recebi a sua mensagem e respondo em breve.`;
+    if (form._honey && form._honey.value) return; // proteção contra robôs
+    if (SITE.contato.modoFormulario !== 'direto') { abrirEmail(nome, email, mensagem); aviso.textContent = 'Abrimos o seu e-mail com a mensagem pronta. É só clicar em enviar!'; return; }
+    botao.disabled = true;
+    aviso.textContent = 'Enviando...';
+    try {
+      const resposta = await fetch(`https://formsubmit.co/ajax/${SITE.contato.email}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          nome, email, mensagem,
+          _subject: `Novo contato pelo portfólio: ${nome}`,
+          _replyto: email,
+          _template: 'table'
+        })
+      });
+      const dados = await resposta.json().catch(() => ({}));
+      if (!resposta.ok || String(dados.success) === 'false') throw new Error('falha');
+      aviso.textContent = `Obrigada, ${nome}! Recebi a sua mensagem e te respondo em breve.`;
+      form.reset();
+    } catch (erro) {
+      aviso.textContent = 'Não consegui enviar por aqui. Abri o seu e-mail com a mensagem pronta, ou me chama no WhatsApp.';
+      abrirEmail(nome, email, mensagem);
+    } finally {
+      botao.disabled = false;
     }
-    form.reset();
   });
 }
 
