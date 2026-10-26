@@ -693,6 +693,76 @@
   @media (max-width: 640px) { .whats-fixo { width: 58px; padding: 0; justify-content: center; } .whats-texto { display: none; } }
 
   /* =========================================================
+     CELULAR: VERSÃO MAIS ENXUTA
+     Carrosséis de deslizar e grades de 2 colunas para encurtar a página.
+     ========================================================= */
+  .dica-deslize { display: none; }
+  @media (max-width: 640px) {
+    section { padding: 56px 0; }
+    .cabecalho-secao { margin-bottom: 28px; }
+    .titulo-secao { font-size: 1.85rem; }
+    .intro-secao { font-size: .95rem; margin-top: 12px; }
+
+    /* Carrosséis: deslizar para o lado */
+    .carrossel {
+      display: flex !important; gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory;
+      margin: 0 -24px; padding: 4px 24px 8px; scroll-padding-left: 24px;
+      max-width: none !important; justify-content: flex-start !important; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    }
+    .carrossel::-webkit-scrollbar { display: none; }
+    .carrossel > * { flex: 0 0 82%; scroll-snap-align: start; }
+    .carrossel > .revelar { opacity: 1; transform: none; }
+    .dica-deslize {
+      display: flex; align-items: center; justify-content: flex-end; gap: 6px; margin-top: 10px;
+      font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; color: var(--dourado); font-weight: 600;
+    }
+    .claro .dica-deslize, .dica-deslize.escura { color: var(--vinho); }
+
+    /* Capa e Sobre: fotos menos altas */
+    .foto-capa, .foto-sobre { aspect-ratio: 1 / 1; }
+    .capa .frase { font-size: 1rem; }
+    .entregas { grid-template-columns: 1fr 1fr; gap: 8px; }
+    .entregas li { padding: 10px 12px; font-size: .8rem; gap: 8px; }
+    .sobre-texto p { font-size: .95rem; }
+
+    /* Destaques */
+    .grade-destaques.carrossel > * { flex-basis: 72%; }
+    .info-destaque { padding-top: 16px; }
+    .info-destaque .numero { font-size: 1.9rem; }
+
+    /* Fotos UGC: grade 2 x 2, só a etapa e o título */
+    .jornada-fotos { grid-template-columns: 1fr 1fr; gap: 12px; }
+    .etapa-foto figcaption { padding-top: 10px; }
+    .etapa-foto .num-etapa { font-size: .62rem; letter-spacing: .1em; }
+    .etapa-foto h3 { font-size: 1.05rem; margin-top: 4px; }
+    .etapa-foto p { display: none; }
+    .usos-fotos { margin-top: 32px; padding-top: 22px; }
+    .usos-lista li { padding: 7px 13px; font-size: .8rem; }
+    .cta-fotos { margin-top: 28px; }
+    .cta-fotos p { font-size: 1.15rem; }
+
+    /* Serviços, resultados, depoimentos e pacotes: carrossel */
+    .card-servico { padding: 26px 22px; }
+    .subtitulo-bloco { margin: 40px 0 16px; }
+    .depoimento { padding: 26px 22px; }
+    .depoimento blockquote { font-size: 1rem; }
+    .pacotes-prontos.carrossel { padding-top: 18px; }
+    .pacotes-prontos.carrossel { align-items: stretch; }
+    .pacotes-prontos.carrossel > * { flex-basis: 86%; }
+    .pacote ul { margin: 16px 0 20px; }
+    .montador { margin-top: 36px; }
+    .item-pacote { padding: 14px 16px; grid-template-columns: 1fr auto; }
+    .item-pacote .desc { display: none; }
+
+    /* Contato: canais em grade */
+    .canais { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 24px; }
+    .canal { flex-direction: column; align-items: flex-start; gap: 8px; padding: 14px; }
+    .canal .icone { width: 36px; height: 36px; }
+    .canal span { font-size: .8rem; }
+    .orcamento-rapido { margin-top: 24px; padding: 20px 18px; }
+  }
+
+  /* =========================================================
      ANIMAÇÃO DE ENTRADA AO ROLAR
      ========================================================= */
   .revelar { opacity: 0; transform: translateY(28px); transition: opacity .9s ease, transform .9s cubic-bezier(.2, .7, .2, 1); }
@@ -1675,6 +1745,17 @@ function ativarFormulario() {
 }
 
 montarSite();
+// No celular, algumas listas viram carrossel de deslizar
+function ativarCarrosseis() {
+  [['gradeDestaques', false], ['gradeServicos', false], ['resultados', true], ['depoimentos', true], ['pacotesProntos', false]].forEach(([id, escura]) => {
+    const el = $(id);
+    if (!el || el.children.length < 2) return;
+    el.classList.add('carrossel');
+    el.insertAdjacentHTML('afterend', `<p class="dica-deslize${escura ? ' escura' : ''}" aria-hidden="true">Deslize para ver mais <span>→</span></p>`);
+  });
+}
+ativarCarrosseis();
+
 ativarMenu();
 ativarAvisoPacotes();
 ativarWhatsFixo();
