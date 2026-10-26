@@ -531,7 +531,16 @@
   .resumo-botao[aria-disabled="true"] { opacity: .45; pointer-events: none; }
   .resumo-limpar { display: block; margin: 12px auto 0; background: none; border: 0; color: var(--texto-suave); font: inherit; font-size: .85rem; text-decoration: underline; cursor: pointer; }
   .resumo-nota { color: var(--texto-suave); font-size: .8rem; margin-top: 14px; text-align: center; }
+  .pacote .preco small { display: block; font-family: var(--fonte-corpo); font-size: .8rem; color: var(--texto-claro-suave); margin-bottom: 4px; }
+  .resumo-total strong small { font-family: var(--fonte-corpo); font-size: .8rem; color: var(--texto-suave); font-weight: 500; margin-right: 6px; }
+  .personalizado {
+    margin-top: 40px; padding: clamp(26px, 4vw, 40px); border-radius: var(--raio); border: 1px solid rgba(201, 168, 106, .3);
+    background: rgba(241, 230, 207, .05); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 22px;
+  }
+  .personalizado h3 { font-size: 1.5rem; }
+  .personalizado p { color: var(--texto-claro-suave); margin-top: 6px; max-width: 640px; }
   @media (max-width: 900px) { .montador { grid-template-columns: 1fr; } .resumo { position: static; } }
+  @media (max-width: 560px) { .personalizado .botao { width: 100%; } }
   @media (max-width: 480px) { .item-pacote { grid-template-columns: 1fr; } }
 
   /* =========================================================
@@ -753,7 +762,7 @@
         <div class="cabecalho-secao revelar">
           <p class="sobretitulo">Como eu te ajudo</p>
           <h2 class="titulo-secao" id="titulo-servicos">Serviços pensados para <em>vender</em></h2>
-          <p class="intro-secao">Do roteiro à entrega final, cada formato é criado para gerar desejo, confiança e conversão. E tudo é feito por mim, com equipamento próprio.</p>
+          <p class="intro-secao">Do roteiro à entrega final, cada formato é criado para gerar desejo, confiança e conversão. E vai além do conteúdo: com a collab e a automação, eu também levo o público até o link de compra.</p>
         </div>
         <div class="grade-servicos" id="gradeServicos"></div>
       </div>
@@ -780,7 +789,7 @@
         <div class="cabecalho-secao revelar">
           <p class="sobretitulo">Pacotes</p>
           <h2 class="titulo-secao" id="titulo-pacotes">Escolha um pacote pronto ou <em>monte o seu</em></h2>
-          <p class="intro-secao">Sem formulário, sem esperar orçamento. Você vê o valor na hora, ajusta do jeito que a sua marca precisa e me manda tudo pronto no WhatsApp.</p>
+          <p class="intro-secao">Sem formulário, sem esperar orçamento. Você vê o valor na hora, adiciona o que a sua marca precisa e me manda tudo pronto no WhatsApp. Os valores são de referência e podem mudar conforme a demanda.</p>
         </div>
         <div class="pacotes-prontos" id="pacotesProntos"></div>
 
@@ -799,6 +808,13 @@
             <button class="resumo-limpar" type="button" id="resumoLimpar">Limpar pacote</button>
             <p class="resumo-nota" id="resumoNota"></p>
           </aside>
+        </div>
+        <div class="personalizado revelar">
+          <div>
+            <h3 id="persTitulo"></h3>
+            <p id="persTexto"></p>
+          </div>
+          <a class="botao botao-dourado" id="persBotao" href="#contato" target="_blank" rel="noopener"></a>
         </div>
       </div>
     </section>
@@ -1048,15 +1064,14 @@ const SITE = {
   ],
   usosFotos: ['Anúncios', 'Página do produto', 'Marketplace', 'Feed e stories', 'Site', 'E-mail marketing'],
 
-  // EDITE AQUI: seus serviços
-  // TROCAR: preço ainda não definido ("valores sob consulta" ou "a partir de R$350 por vídeo")
+  // EDITE AQUI: seus serviços (aparecem na seção "Serviços pensados para vender")
   servicos: [
-    { titulo: 'Vídeo UGC', descricao: 'Vídeos autênticos com roteiro estratégico e gancho forte para prender a atenção logo nos primeiros segundos.', detalhe: 'Gravado em 4K' },
-    { titulo: 'Fotos de produto', descricao: 'Fotos lifestyle com luz natural, mostrando o produto dentro da vida real: casa, treino, autocuidado e a cidade.', detalhe: 'Para site e redes sociais' },
-    { titulo: 'Roteiro e estratégia', descricao: 'Eu proponho a ideia e o roteiro a partir do objetivo da sua marca. Se você já tiver um roteiro, eu gravo a partir dele.', detalhe: 'Aprovado antes de gravar' },
-    { titulo: 'Edição profissional', descricao: 'Edição no CapCut e no Premiere Pro, com trilhas licenciadas do Epidemic Sound e até 2 ajustes inclusos.', detalhe: 'Até 2 ajustes' },
-    { titulo: 'Publicação no perfil', descricao: 'Conteúdo publicado no meu perfil, com legenda estratégica e interação real com a minha comunidade, as Deusas.', detalhe: 'Público 88,8% feminino' },
-    { titulo: 'Entrega no prazo', descricao: 'Entrega em até 10 dias corridos depois de receber o produto, gravada com iPhone 17 Pro Max, microfone sem fio Hollyland e gimbal Hohem.', detalhe: 'Até 10 dias corridos' }
+    { titulo: 'Vídeo UGC', descricao: 'Vídeos verticais que apresentam o produto, mostram os benefícios e criam conexão com o público. Para campanhas, redes sociais, páginas de produto e anúncios.', detalhe: 'R$ 350 por vídeo' },
+    { titulo: 'Foto UGC', descricao: 'Fotos criativas e naturais que valorizam o produto, destacam os detalhes e ajudam a construir a identidade visual da marca.', detalhe: 'R$ 70 por foto' },
+    { titulo: 'Postagem em collab', descricao: 'Publicação colaborativa no Instagram, levando o conteúdo da sua marca para o meu perfil e para a minha audiência.', detalhe: 'R$ 700 por publicação' },
+    { titulo: 'Automação via ManyChat', descricao: 'Configuro no Instagram da sua marca o envio automático de links e informações para quem comenta uma palavra-chave.', detalhe: 'R$ 250 por configuração' },
+    { titulo: 'Collab + ManyChat', descricao: 'Vídeo, collab e automação numa entrega só: eu produzo o vídeo, a collab gera os comentários e a automação leva cada pessoa direto para o link de compra.', detalhe: 'R$ 1.000 por campanha (economia de R$ 300)' },
+    { titulo: 'Direito de uso estendido', descricao: 'Amplia o período de uso do conteúdo, conforme prazo, canais e finalidade combinados. Anúncios pagos e exclusividade são negociados à parte.', detalhe: 'A partir de R$ 200 por conteúdo' }
   ],
 
   // EDITE AQUI: números com contador animado (só números reais)
@@ -1082,33 +1097,41 @@ const SITE = {
   ],
 
   // EDITE AQUI: pacotes e preços
-  // "mostrar": deixe false enquanto os preços não estiverem definidos (a seção fica escondida).
   // "preco" é o valor por unidade, em reais, só o número (ex.: 350 ou 89.90).
+  // "aPartirDe: true" mostra "a partir de" antes do valor.
   // Nos pacotes prontos, "itens" diz quantas unidades de cada item entram.
-  // "preco" do pacote pronto é opcional: se preencher com um valor menor que a soma, aparece a economia.
+  // "preco" do pacote pronto é opcional: se for menor que a soma dos itens, aparece a economia.
+  // "inclui" (opcional) troca a lista automática por uma lista escrita por você.
   pacotes: {
-    mostrar: false, // TROCAR: mude para true quando os preços estiverem definidos
+    mostrar: true,
     itens: [
-      { id: 'video', nome: 'Vídeo UGC', descricao: 'Roteiro, gravação e edição, com até 2 ajustes.', preco: 0, unidade: 'vídeo', plural: 'vídeos' },
-      { id: 'foto', nome: 'Foto UGC', descricao: 'Produto em uso, com luz natural e cenário de vida real.', preco: 0, unidade: 'foto', plural: 'fotos' },
-      { id: 'reels', nome: 'Publicação no meu perfil', descricao: 'Reels no @deboradominique_, em collab com a sua marca.', preco: 0, unidade: 'publicação', plural: 'publicações' },
-      { id: 'stories', nome: 'Sequência de stories', descricao: 'Stories mostrando o produto na minha rotina, com link.', preco: 0, unidade: 'sequência', plural: 'sequências' },
-      { id: 'anuncio', nome: 'Uso em anúncios', descricao: 'Direito de usar os vídeos em anúncios pagos.', preco: 0, unidade: 'mês', plural: 'meses' }
+      { id: 'video', nome: 'Vídeo UGC', descricao: 'Vídeo vertical que apresenta o produto e mostra os benefícios.', preco: 350, unidade: 'vídeo', plural: 'vídeos' },
+      { id: 'foto', nome: 'Foto UGC', descricao: 'Foto natural que valoriza o produto e os detalhes.', preco: 70, unidade: 'foto', plural: 'fotos' },
+      { id: 'collab', nome: 'Postagem em collab', descricao: 'Publicação colaborativa no meu Instagram, para a minha audiência.', preco: 700, unidade: 'publicação', plural: 'publicações' },
+      { id: 'manychat', nome: 'Automação via ManyChat', descricao: 'Envio automático de link para quem comenta a palavra-chave, no perfil da marca.', preco: 250, unidade: 'configuração', plural: 'configurações' },
+      { id: 'uso', nome: 'Direito de uso estendido', descricao: 'Mais tempo de uso do conteúdo, conforme prazo, canais e finalidade.', preco: 200, unidade: 'conteúdo', plural: 'conteúdos', aPartirDe: true }
     ],
     prontos: [
-      { nome: 'Essencial', frase: 'Para testar UGC pela primeira vez.', itens: { video: 1 }, preco: 0 },
-      { nome: 'Conteúdo completo', frase: 'Vídeo e foto para usar em todos os canais.', itens: { video: 2, foto: 5 }, preco: 0, destaque: 'Mais escolhido' },
-      { nome: 'Campanha', frase: 'Para lançar ou escalar um produto.', itens: { video: 4, foto: 10, reels: 1 }, preco: 0 }
+      { nome: 'Essencial', frase: 'Para testar UGC pela primeira vez.', itens: { video: 1, foto: 3 } },
+      { nome: 'Conteúdo completo', frase: 'Vídeo e foto para o site, as redes e os anúncios.', itens: { video: 2, foto: 6 }, preco: 990, destaque: 'Mais escolhido' },
+      { nome: 'Venda no automático', frase: 'Collab + ManyChat: conteúdo, distribuição e link de compra numa campanha só.', itens: { video: 1, collab: 1, manychat: 1 }, preco: 1000,
+        inclui: ['Vídeo UGC produzido por mim', 'Publicação em collab no Instagram', 'Automação ManyChat vinculada à publicação', 'Mensagem automática com o link de compra', 'Teste do fluxo antes da divulgação'] }
     ],
-    nota: 'O valor final é confirmado na conversa, de acordo com o seu briefing.'
+    nota: 'Valores de referência. Podem mudar conforme a demanda, o volume e o briefing de cada marca, e o valor final é confirmado na nossa conversa.',
+    personalizado: {
+      titulo: 'Projetos personalizados',
+      texto: 'Cada marca tem objetivos e necessidades diferentes. Para entregas adicionais, campanhas especiais ou outras combinações de serviços, a gente desenvolve uma proposta sob medida.',
+      botao: 'Vamos criar algo estratégico para a sua marca?',
+      mensagem: 'Olá, Débora! Vi seu portfólio e quero uma proposta personalizada para a minha marca.'
+    }
   },
 
   // EDITE AQUI: botões de orçamento rápido (cada um abre o WhatsApp com a mensagem pronta)
   orcamentoRapido: [
     { texto: 'Vídeo UGC', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de vídeo UGC.' },
-    { texto: 'Fotos de produto', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de fotos de produto.' },
-    { texto: 'Vídeo + fotos', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de vídeo UGC com fotos de produto.' },
-    { texto: 'Publicação no seu perfil', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de publicação no seu perfil.' }
+    { texto: 'Foto UGC', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de fotos UGC.' },
+    { texto: 'Collab no seu perfil', mensagem: 'Olá, Débora! Vi seu portfólio e quero um orçamento de postagem em collab.' },
+    { texto: 'Collab + ManyChat', mensagem: 'Olá, Débora! Vi seu portfólio e quero saber mais sobre a campanha Collab + ManyChat.' }
   ],
 
   // EDITE AQUI: perguntas frequentes
@@ -1117,10 +1140,11 @@ const SITE = {
     { pergunta: 'Qual o prazo de entrega?', resposta: 'Até 10 dias corridos depois de receber o produto. Se a sua campanha tiver uma data específica, me avisa logo no início que a gente organiza o cronograma.' },
     { pergunta: 'Você escreve o roteiro ou eu preciso mandar?', resposta: 'Os dois funcionam. Eu proponho a ideia e o roteiro a partir do objetivo da sua marca e você aprova antes de eu gravar. Se você já tiver um roteiro, eu gravo a partir dele.' },
     { pergunta: 'E se eu quiser mudar alguma coisa no vídeo?', resposta: 'Você revisa o vídeo e tem até 2 ajustes inclusos no orçamento.' },
-    { pergunta: 'Posso usar o vídeo em anúncios?', resposta: 'Pode. O uso em anúncios e por quanto tempo o vídeo pode ser usado são combinados na proposta, antes de começar.' },
+    { pergunta: 'Posso usar o vídeo em anúncios?', resposta: 'Pode. Licenças para anúncios pagos, exclusividade e períodos específicos são combinadas na proposta, antes de começar. Para usar o conteúdo por mais tempo, existe o direito de uso estendido, a partir de R$ 200 por conteúdo.' },
+    { pergunta: 'Como funciona a automação via ManyChat?', resposta: 'Eu configuro no Instagram da sua marca uma automação que envia o link e as informações do produto, na hora, para quem comenta uma palavra-chave. Com a collab, a publicação gera os comentários e a automação leva cada pessoa direto para a compra. É feito no perfil da marca, com acesso autorizado e quando o recurso está disponível na conta.' },
     { pergunta: 'Você grava só em casa?', resposta: 'Não. Além da minha casa e da minha rotina, gravo em restaurantes, lojas, clínicas e passeios, em Belo Horizonte e também em viagens, como os vídeos que fiz em Gramado.' },
     { pergunta: 'Qual a qualidade do material?', resposta: 'Gravo em 4K com iPhone 17 Pro Max, microfone sem fio Hollyland e gimbal Hohem. A edição é feita no CapCut e no Premiere Pro, com trilhas licenciadas do Epidemic Sound.' },
-    { pergunta: 'Quanto custa?', resposta: 'Depende do formato, da quantidade de vídeos e de onde o conteúdo vai ser usado. Escolha o tipo de conteúdo no orçamento rápido aqui embaixo e me chama no WhatsApp que eu te passo uma proposta sob medida.' }
+    { pergunta: 'Os valores podem mudar?', resposta: 'Os valores da seção de pacotes são de referência. Eles podem mudar conforme a demanda, o volume de conteúdo e o briefing da sua marca, e o valor final é sempre confirmado na nossa conversa, antes de começar.' }
   ],
 
   // EDITE AQUI: seus contatos
@@ -1408,14 +1432,14 @@ function montarPacotes() {
       <h3>${pk.nome}</h3>
       <p class="frase-pacote">${pk.frase}</p>
       <p class="preco">${preco < soma ? `<span class="preco-de">${reais(soma)}</span>` : ''}${reais(preco)}</p>
-      <ul>${Object.entries(pk.itens).map(([id, n]) => `<li>${n}x ${itemPorId[id].nome}</li>`).join('')}</ul>
+      <ul>${(pk.inclui || Object.entries(pk.itens).map(([id, n]) => `${n}x ${itemPorId[id].nome}`)).map((x) => `<li>${x}</li>`).join('')}</ul>
       <button class="botao ${pk.destaque ? 'botao-vinho' : 'botao-contorno'}" type="button" data-pacote="${i}">Quero este pacote</button>
     </article>`;
   }).join('');
 
   $('listaItens').innerHTML = P.itens.map((it) => `
     <li class="item-pacote" data-item="${it.id}">
-      <span><strong>${it.nome}</strong><span class="desc">${it.descricao}</span><span class="unit">${reais(it.preco)} por ${it.unidade}</span></span>
+      <span><strong>${it.nome}</strong><span class="desc">${it.descricao}</span><span class="unit">${it.aPartirDe ? 'A partir de ' : ''}${reais(it.preco)} por ${it.unidade}</span></span>
       <span class="contador-qtd">
         <button type="button" data-menos="${it.id}" aria-label="Tirar 1 ${it.unidade} de ${it.nome}">−</button>
         <output id="qtd-${it.id}" aria-live="polite">0</output>
@@ -1423,6 +1447,10 @@ function montarPacotes() {
       </span>
     </li>`).join('');
   $('resumoNota').textContent = P.nota;
+  $('persTitulo').textContent = P.personalizado.titulo;
+  $('persTexto').textContent = P.personalizado.texto;
+  $('persBotao').innerHTML = `${P.personalizado.botao} <span aria-hidden="true">↗</span>`;
+  $('persBotao').href = `https://wa.me/55${somenteNumeros(SITE.contato.whatsapp)}?text=${encodeURIComponent(P.personalizado.mensagem)}`;
 
   function atualizar() {
     const escolhidos = P.itens.filter((it) => qtd[it.id] > 0);
@@ -1435,13 +1463,14 @@ function montarPacotes() {
       document.querySelector(`[data-item="${it.id}"]`).classList.toggle('ativo', qtd[it.id] > 0);
     });
     $('resumoLinhas').innerHTML = escolhidos.length
-      ? escolhidos.map((it) => `<li><span>${qtd[it.id]}x ${it.nome}</span><span>${reais(it.preco * qtd[it.id])}</span></li>`).join('')
+      ? escolhidos.map((it) => `<li><span>${qtd[it.id]}x ${it.nome}</span><span>${it.aPartirDe ? 'a partir de ' : ''}${reais(it.preco * qtd[it.id])}</span></li>`).join('')
       : '<li class="vazio">Nenhum item ainda. Escolha um pacote pronto ou use o +.</li>';
-    $('resumoTotal').textContent = reais(total);
+    const temAPartir = escolhidos.some((it) => it.aPartirDe);
+    $('resumoTotal').innerHTML = `${temAPartir ? '<small>a partir de</small>' : ''}${reais(total)}`;
     $('resumoEconomia').textContent = total < soma ? `Você economiza ${reais(soma - total)} com o pacote ${pk.nome}.` : '';
-    const linhas = escolhidos.map((it) => `• ${qtd[it.id]}x ${it.nome} (${reais(it.preco * qtd[it.id])})`).join('\n');
+    const linhas = escolhidos.map((it) => `• ${qtd[it.id]}x ${it.nome} (${it.aPartirDe ? 'a partir de ' : ''}${reais(it.preco * qtd[it.id])})`).join('\n');
     const titulo = igualAoPronto ? `o pacote ${pk.nome}` : 'um pacote personalizado';
-    const msg = `Olá, Débora! Vi seu portfólio e montei ${titulo}:\n\n${linhas}\n\nTotal: ${reais(total)}\n\nMarca:\nProduto:\nPrazo desejado:`;
+    const msg = `Olá, Débora! Vi seu portfólio e montei ${titulo}:\n\n${linhas}\n\nTotal estimado: ${temAPartir ? 'a partir de ' : ''}${reais(total)}\n\nSei que o valor pode mudar conforme a demanda e o briefing. Podemos conversar?\n\nMarca:\nProduto:\nPrazo desejado:`;
     const botao = $('resumoEnviar');
     botao.href = escolhidos.length ? `https://wa.me/55${somenteNumeros(SITE.contato.whatsapp)}?text=${encodeURIComponent(msg)}` : '#';
     botao.setAttribute('aria-disabled', escolhidos.length ? 'false' : 'true');
