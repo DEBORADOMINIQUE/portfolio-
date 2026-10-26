@@ -235,7 +235,7 @@
     font-family: var(--fonte-titulo); font-style: italic; font-size: 1.25rem; color: var(--texto-claro-suave);
     white-space: nowrap; display: flex; align-items: center; gap: 56px;
   }
-  .trilho li::after { content: "✦"; font-style: normal; font-size: .7rem; color: var(--dourado); }
+  .trilho li::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--dourado); flex-shrink: 0; }
   .logo-marca { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; box-shadow: 0 10px 22px -12px rgba(0, 0, 0, .7); }
   @keyframes deslizar { to { transform: translateX(-50%); } }
 
