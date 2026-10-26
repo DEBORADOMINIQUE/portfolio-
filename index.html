@@ -907,6 +907,10 @@
             <input id="campoEmail" name="email" type="email" autocomplete="email" required>
           </div>
           <div class="campo">
+            <label for="campoTelefone">Seu WhatsApp ou telefone</label>
+            <input id="campoTelefone" name="telefone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(00) 00000-0000" required>
+          </div>
+          <div class="campo">
             <label for="campoMensagem">Mensagem</label>
             <textarea id="campoMensagem" name="mensagem" required placeholder="Qual é a marca, o produto e o que você precisa?"></textarea>
           </div>
@@ -1608,20 +1612,22 @@ function ativarFormulario() {
   const form = $('formulario');
   const aviso = $('confirmacao');
   const botao = form.querySelector('button[type="submit"]');
-  const abrirEmail = (nome, email, mensagem) => {
+  const abrirEmail = (nome, email, telefone, mensagem) => {
     const assunto = `Novo projeto UGC: ${nome}`;
-    const corpo = `Nome: ${nome}\nE-mail: ${email}\n\n${mensagem}`;
+    const corpo = `Nome: ${nome}\nE-mail: ${email}\nTelefone: ${telefone}\n\n${mensagem}`;
     window.location.href = `mailto:${SITE.contato.email}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(corpo)}`;
   };
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     const nome = form.nome.value.trim();
     const email = form.email.value.trim();
+    const telefone = form.telefone.value.trim();
     const mensagem = form.mensagem.value.trim();
-    if (!nome || !email || !mensagem) { aviso.textContent = 'Preencha nome, e-mail e mensagem, por favor.'; return; }
+    if (!nome || !email || !telefone || !mensagem) { aviso.textContent = 'Preencha nome, e-mail, telefone e mensagem, por favor.'; return; }
+    if (telefone.replace(/\D/g, '').length < 10) { aviso.textContent = 'Confira o telefone, com DDD.'; form.telefone.focus(); return; }
     if (!form.email.checkValidity()) { aviso.textContent = 'Confira se o e-mail está escrito corretamente.'; form.email.focus(); return; }
     if (form._honey && form._honey.value) return; // proteção contra robôs
-    if (SITE.contato.modoFormulario !== 'direto') { abrirEmail(nome, email, mensagem); aviso.textContent = 'Abrimos o seu e-mail com a mensagem pronta. É só clicar em enviar!'; return; }
+    if (SITE.contato.modoFormulario !== 'direto') { abrirEmail(nome, email, telefone, mensagem); aviso.textContent = 'Abrimos o seu e-mail com a mensagem pronta. É só clicar em enviar!'; return; }
     botao.disabled = true;
     aviso.textContent = 'Enviando...';
     try {
@@ -1629,7 +1635,7 @@ function ativarFormulario() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify({
-          nome, email, mensagem,
+          nome, email, telefone, mensagem,
           _subject: `Novo contato pelo portfólio: ${nome}`,
           _replyto: email,
           _template: 'table'
@@ -1641,7 +1647,7 @@ function ativarFormulario() {
       form.reset();
     } catch (erro) {
       aviso.textContent = 'Não consegui enviar por aqui. Abri o seu e-mail com a mensagem pronta, ou me chama no WhatsApp.';
-      abrirEmail(nome, email, mensagem);
+      abrirEmail(nome, email, telefone, mensagem);
     } finally {
       botao.disabled = false;
     }
