@@ -692,6 +692,18 @@
   .whats-fixo.escondido { opacity: 0; visibility: hidden; transform: translateY(12px); }
   @media (max-width: 640px) { .whats-fixo { width: 58px; padding: 0; justify-content: center; } .whats-texto { display: none; } }
 
+  /* Botão fixo "Personalize seu orçamento": leva ao montador de pacotes */
+  .orcamento-fixo {
+    position: fixed; left: 20px; bottom: 20px; z-index: 90; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    height: 58px; padding: 0 22px; border-radius: 999px; background: var(--vinho); color: var(--creme-claro);
+    border: 1px solid var(--dourado); text-decoration: none; font-weight: 600; font-size: .92rem;
+    box-shadow: 0 16px 34px -12px rgba(26, 16, 12, .7); transition: transform .3s ease, opacity .3s ease, visibility .3s;
+  }
+  .orcamento-fixo:hover { transform: translateY(-3px); }
+  .orcamento-fixo svg { width: 20px; height: 20px; fill: none; stroke: var(--dourado); stroke-width: 2; flex-shrink: 0; }
+  .orcamento-fixo.escondido { opacity: 0; visibility: hidden; transform: translateY(12px); }
+  @media (max-width: 640px) { .orcamento-fixo { left: 16px; right: 90px; padding: 0 14px; font-size: .88rem; } }
+
   /* =========================================================
      CELULAR: VERSÃO MAIS ENXUTA
      Carrosséis de deslizar e grades de 2 colunas para encurtar a página.
@@ -848,7 +860,7 @@
         <div class="cta-faixa revelar" data-pacotes>
           <div>
             <p class="cta-faixa-titulo">Agora imagina isso com o <em>seu produto.</em></p>
-            <p class="cta-faixa-texto">Os pacotes começam em <strong data-preco-minimo>R$ 560</strong> e você vê o valor exato na hora, sem esperar orçamento.</p>
+            <p class="cta-faixa-texto">Os pacotes começam em <strong data-preco-minimo>R$ 499</strong> e você vê o valor exato na hora, sem esperar orçamento.</p>
           </div>
           <a class="botao botao-dourado" href="#pacotes">Montar meu pacote agora <span aria-hidden="true">↓</span></a>
         </div>
@@ -1015,6 +1027,12 @@
       <p class="direitos" id="direitos"></p>
     </div>
   </footer>
+
+  <!-- Botão fixo de orçamento -->
+  <a class="orcamento-fixo escondido" id="orcamentoFixo" href="#montador">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h10M4 12h6M4 18h10M17 4v4M17 10v10M20 16h-6" stroke-linecap="round"/></svg>
+    Personalize seu orçamento
+  </a>
 
   <!-- Botão fixo de WhatsApp -->
   <a class="whats-fixo" id="whatsFixo" href="#contato" target="_blank" rel="noopener" aria-label="Falar comigo no WhatsApp">
@@ -1252,7 +1270,7 @@ const SITE = {
       { id: 'uso', nome: 'Direito de uso estendido', descricao: 'Mais tempo de uso do conteúdo, conforme prazo, canais e finalidade.', preco: 200, unidade: 'conteúdo', plural: 'conteúdos', aPartirDe: true }
     ],
     prontos: [
-      { nome: 'Essencial', frase: 'Para testar UGC pela primeira vez.', itens: { video: 1, foto: 3 } },
+      { nome: 'Essencial', frase: 'Para testar UGC pela primeira vez.', itens: { video: 1, foto: 3 }, preco: 499 },
       { nome: 'Conteúdo completo', frase: 'Vídeo e foto para o site, as redes e os anúncios.', itens: { video: 2, foto: 6 }, preco: 990, destaque: 'Mais escolhido' },
       { nome: 'Venda no automático', frase: 'Collab + ManyChat: conteúdo, distribuição e link de compra numa campanha só.', itens: { video: 1, collab: 1, manychat: 1 }, preco: 1000,
         inclui: ['Vídeo UGC produzido por mim', 'Publicação em collab no Instagram', 'Automação ManyChat vinculada à publicação', 'Mensagem automática com o link de compra', 'Teste do fluxo antes da divulgação'] }
@@ -1673,6 +1691,21 @@ function ativarWhatsFixo() {
   atualizar();
 }
 
+// Botão fixo de orçamento: aparece depois do topo e some quando os pacotes ou o contato estão na tela
+function ativarOrcamentoFixo() {
+  const botao = $('orcamentoFixo');
+  if (!SITE.pacotes.mostrar) { botao.remove(); return; }
+  let pacotesVisiveis = false;
+  let contatoVisivel = false;
+  const atualizar = () => botao.classList.toggle('escondido', window.scrollY < 500 || pacotesVisiveis || contatoVisivel);
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver((e) => { pacotesVisiveis = e[0].isIntersecting; atualizar(); }, { threshold: 0.05 }).observe($('pacotes'));
+    new IntersectionObserver((e) => { contatoVisivel = e[0].isIntersecting; atualizar(); }, { threshold: 0.25 }).observe($('contato'));
+  }
+  window.addEventListener('scroll', atualizar, { passive: true });
+  atualizar();
+}
+
 // A faixa de aviso some enquanto a marca está vendo os pacotes
 function ativarAvisoPacotes() {
   if (!SITE.pacotes.mostrar || !('IntersectionObserver' in window)) return;
@@ -1759,6 +1792,7 @@ ativarCarrosseis();
 ativarMenu();
 ativarAvisoPacotes();
 ativarWhatsFixo();
+ativarOrcamentoFixo();
 ativarPlayer();
 ativarFormulario();
 ativarAnimacoes();
