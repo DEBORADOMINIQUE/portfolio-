@@ -207,6 +207,16 @@
   /* Chamadas para os pacotes */
   [data-pacotes][hidden] { display: none !important; }
   .capa-apoio { color: var(--texto-claro-suave); font-size: .9rem; margin-top: 16px; }
+  .capa-email {
+    display: inline-flex; align-items: center; gap: 12px; margin-top: 18px; padding: 10px 18px 10px 12px; border-radius: 16px;
+    border: 1px solid rgba(201, 168, 106, .55); background: rgba(201, 168, 106, .08); color: var(--creme-claro); text-decoration: none;
+    transition: background .2s ease, border-color .2s ease; max-width: 100%;
+  }
+  .capa-email:hover { background: rgba(201, 168, 106, .16); border-color: var(--dourado); }
+  .capa-email svg { width: 22px; height: 22px; fill: var(--dourado); flex-shrink: 0; }
+  .capa-email span { display: flex; flex-direction: column; min-width: 0; }
+  .capa-email small { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--dourado); }
+  .capa-email b { font-weight: 600; font-size: 1rem; overflow-wrap: anywhere; }
   .menu .menu-destaque { color: var(--marrom); background: var(--dourado); padding: 9px 16px; border-radius: 999px; font-weight: 600; }
   .menu .menu-destaque::after { display: none; }
   .menu .menu-destaque:hover { color: var(--marrom); background: #d8bb84; }
@@ -829,6 +839,10 @@
             <a class="botao botao-dourado" href="#pacotes" data-pacotes>Ver pacotes e valores <span aria-hidden="true">↓</span></a>
             <a class="botao botao-contorno" href="#contato">Falar comigo</a>
           </div>
+          <a class="capa-email revelar" id="capaEmail" href="#contato">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.4 7H4v.6l8 5.6 8-5.6V7h-.4L12 12.2z"/></svg>
+            <span><small>Propostas e briefings</small><b id="capaEmailTexto"></b></span>
+          </a>
           <p class="capa-apoio revelar" data-pacotes>Sem esperar orçamento: monte o seu pacote, veja o valor na hora e feche pelo WhatsApp.</p>
           <dl class="numeros-capa revelar" id="capaNumeros"></dl>
         </div>
@@ -1350,6 +1364,8 @@ function montarSite() {
   $('capaProfissao').textContent = SITE.profissao;
   $('titulo-capa').textContent = SITE.nome;
   $('capaFrase').textContent = SITE.fraseImpacto;
+  $('capaEmail').href = `mailto:${SITE.contato.email}?subject=${encodeURIComponent('Proposta de parceria UGC')}`;
+  $('capaEmailTexto').textContent = SITE.contato.email;
   $('capaNumeros').innerHTML = SITE.numerosCapa.map((n) => `<div><dt class="rotulo-faixa" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">${n.rotulo}</dt><dd style="margin:0"><strong>${n.valor}</strong><span aria-hidden="true">${n.rotulo}</span></dd></div>`).join('');
   $('capaFoto').innerHTML = midia(SITE.fotoCapa, 'foto-capa') +
     `<div class="selo"><b>${SITE.seloCapa.numero}</b> ${SITE.seloCapa.texto}</div>`;
