@@ -8,7 +8,7 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
 
   <!-- Guarda se a página abriu pelo link de "esqueci minha senha" antes do Supabase limpar o endereço -->
   <script>window.__abriuRecuperacao = /type=recovery/.test(window.location.hash);</script>
@@ -18,20 +18,22 @@
   <style>
     /* ===== Design system ===== */
     :root {
-      --coral: #D4572A;
-      --coral-escuro: #B8461F;
-      --creme: #F5F3EF;
-      --branco: #FFFFFF;
-      --grafite: #1A1816;
-      --suave: #6B645C;
-      --borda: #DDD8D0;
-      --verde: #2D7A4F;
-      --vermelho: #C4453C;
+      --vinho: #6e1423;
+      --vinho-escuro: #3d0b14;
+      --creme: #f1e6cf;
+      --creme-claro: #f7f0e1;
+      --dourado: #c9a86a;
+      --branco: #fcf8f0;
+      --grafite: #2a1a14;
+      --suave: #5b463b;
+      --borda: #e3d4b8;
+      --verde: #2D6A45;
+      --vermelho: #A8322B;
       --raio: 16px;
       --raio-g: 24px;
-      --sombra: 0 1px 2px rgba(26,24,22,.04), 0 12px 32px rgba(26,24,22,.08);
-      --titulo: 'Fraunces', Georgia, serif;
-      --texto: 'Outfit', system-ui, sans-serif;
+      --sombra: 0 1px 2px rgba(42,26,20,.04), 0 12px 32px rgba(42,26,20,.08);
+      --titulo: 'Playfair Display', Georgia, serif;
+      --texto: 'Inter', system-ui, sans-serif;
     }
     * { box-sizing: border-box; }
     body {
@@ -45,7 +47,7 @@
       box-shadow: var(--sombra); padding: 40px 32px;
     }
     .logo { font-family: var(--titulo); font-weight: 600; font-size: 20px; margin-bottom: 28px; }
-    .logo span { color: var(--coral); }
+    .logo span { color: var(--dourado); }
     h1 { font-family: var(--titulo); font-weight: 500; font-size: 30px; line-height: 1.15; margin: 0 0 8px; }
     .sub { color: var(--suave); margin: 0 0 28px; }
 
@@ -59,17 +61,17 @@
       border: 1px solid var(--borda); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px;
       transition: border-color .15s, box-shadow .15s;
     }
-    input:focus { outline: none; border-color: var(--coral); box-shadow: 0 0 0 3px rgba(212,87,42,.15); background: var(--branco); }
+    input:focus { outline: none; border-color: var(--vinho); box-shadow: 0 0 0 3px rgba(110,20,35,.15); background: var(--branco); }
 
     .linha { display: flex; justify-content: flex-end; margin: -6px 0 20px; }
-    .link { background: none; border: 0; padding: 0; font: inherit; font-size: 14px; color: var(--coral); cursor: pointer; }
-    .link:hover { color: var(--coral-escuro); text-decoration: underline; }
+    .link { background: none; border: 0; padding: 0; font: inherit; font-size: 14px; color: var(--vinho); cursor: pointer; }
+    .link:hover { color: var(--vinho-escuro); text-decoration: underline; }
 
     .botao {
-      width: 100%; font: inherit; font-weight: 600; color: #fff; background: var(--coral);
+      width: 100%; font: inherit; font-weight: 600; color: #fff; background: var(--vinho);
       border: 0; border-radius: 12px; padding: 13px; cursor: pointer; transition: background .15s;
     }
-    .botao:hover { background: var(--coral-escuro); }
+    .botao:hover { background: var(--vinho-escuro); }
     .botao:disabled { opacity: .65; cursor: wait; }
     .voltar { display: block; margin: 18px auto 0; }
     [hidden] { display: none !important; }
