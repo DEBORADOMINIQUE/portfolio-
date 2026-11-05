@@ -566,11 +566,7 @@
   .pacote h3 { font-size: 1.6rem; }
   .pacote .frase-pacote { color: var(--texto-claro-suave); font-size: .94rem; margin-top: 6px; }
   .pacote.destaque .frase-pacote { color: var(--texto-suave); }
-  .pacote .preco { font-family: var(--fonte-titulo); font-size: 2.4rem; color: var(--dourado); margin-top: 22px; line-height: 1; }
-  .pacote.destaque .preco { color: var(--vinho); }
-  .pacote .preco-de { display: block; font-family: var(--fonte-corpo); font-size: .85rem; color: var(--texto-claro-suave); text-decoration: line-through; margin-bottom: 6px; }
-  .pacote.destaque .preco-de { color: var(--texto-suave); }
-  .pacote ul { list-style: none; padding: 0; margin: 22px 0 26px; display: grid; gap: 10px; }
+  .pacote ul { list-style: none; padding: 0; margin: 20px 0 26px; display: grid; gap: 10px; }
   .pacote li { display: flex; gap: 10px; font-size: .95rem; }
   .pacote li::before { content: "✓"; color: var(--dourado); font-weight: 700; }
   .pacote.destaque li::before { color: var(--vinho); }
@@ -590,7 +586,6 @@
   .item-pacote.ativo { border-color: var(--dourado); background: rgba(201, 168, 106, .08); }
   .item-pacote strong { display: block; font-family: var(--fonte-titulo); font-size: 1.15rem; font-weight: 600; }
   .item-pacote .desc { display: block; color: var(--texto-claro-suave); font-size: .88rem; margin-top: 2px; }
-  .item-pacote .unit { display: block; color: var(--dourado); font-size: .85rem; font-weight: 600; margin-top: 6px; }
   .contador-qtd { display: inline-flex; align-items: center; gap: 4px; }
   .contador-qtd button {
     width: 40px; height: 40px; border-radius: 50%; border: 1px solid rgba(241, 230, 207, .35); background: transparent;
@@ -604,16 +599,10 @@
   .resumo-linhas { list-style: none; padding: 0; margin: 18px 0 0; display: grid; gap: 10px; min-height: 24px; }
   .resumo-linhas li { display: flex; justify-content: space-between; gap: 12px; font-size: .94rem; color: var(--texto-suave); }
   .resumo-linhas li.vazio { color: var(--texto-suave); font-style: italic; }
-  .resumo-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(110, 20, 35, .18); }
-  .resumo-total span { font-weight: 600; }
-  .resumo-total strong { font-family: var(--fonte-titulo); font-size: 2.2rem; color: var(--vinho); font-variant-numeric: tabular-nums; }
-  .resumo-economia { color: var(--vinho); font-size: .88rem; font-weight: 600; min-height: 1.3em; margin-top: 4px; }
-  .resumo-botao { width: 100%; margin-top: 14px; }
+  .resumo-botao { width: 100%; margin-top: 22px; }
   .resumo-botao[aria-disabled="true"] { opacity: .45; pointer-events: none; }
   .resumo-limpar { display: block; margin: 12px auto 0; background: none; border: 0; color: var(--texto-suave); font: inherit; font-size: .85rem; text-decoration: underline; cursor: pointer; }
   .resumo-nota { color: var(--texto-suave); font-size: .8rem; margin-top: 14px; text-align: center; }
-  .pacote .preco small { display: block; font-family: var(--fonte-corpo); font-size: .8rem; color: var(--texto-claro-suave); margin-bottom: 4px; }
-  .resumo-total strong small { font-family: var(--fonte-corpo); font-size: .8rem; color: var(--texto-suave); font-weight: 500; margin-right: 6px; }
   .personalizado {
     margin-top: 40px; padding: clamp(26px, 4vw, 40px); border-radius: var(--raio); border: 1px solid rgba(201, 168, 106, .3);
     background: rgba(241, 230, 207, .05); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 22px;
@@ -794,7 +783,6 @@
     .pacote ul { margin: 16px 0 20px; }
     .montador { margin-top: 36px; }
     .item-pacote { padding: 14px 16px; grid-template-columns: 1fr auto; }
-    .item-pacote .desc { display: none; }
 
     /* Contato: canais em grade */
     .canais { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 24px; }
@@ -823,10 +811,10 @@
   <!-- MENU FIXO -->
   <header class="topo" id="topo">
     <a class="aviso-pacotes" id="avisoPacotes" href="#pacotes" data-pacotes>
-      <span class="aviso-tag">Novo</span>
-      <span class="aviso-longo">Monte o seu pacote e veja o valor na hora, sem esperar orçamento.</span>
-      <span class="aviso-curto">Monte seu pacote e veja o valor na hora</span>
-      <span class="aviso-link">Ver pacotes <span aria-hidden="true">→</span></span>
+      <span class="aviso-tag">Marcas</span>
+      <span class="aviso-longo">Me conta sobre a sua campanha e receba uma proposta sob medida.</span>
+      <span class="aviso-curto">Receba uma proposta sob medida</span>
+      <span class="aviso-link">Pedir proposta <span aria-hidden="true">→</span></span>
     </a>
     <div class="container">
       <a class="logo" href="#inicio" data-preencher="logo">Débora Dominique</a>
@@ -841,7 +829,7 @@
           <li><a href="#fotos">Fotos</a></li>
           <li><a href="#servicos">Serviços</a></li>
           <li><a href="#numeros">Números</a></li>
-          <li data-pacotes><a class="menu-destaque" href="#pacotes">Pacotes e valores</a></li>
+          <li data-pacotes><a class="menu-destaque" href="#pacotes">Pedir proposta</a></li>
           <li><a href="#contato">Contato</a></li>
         </ul>
       </nav>
@@ -857,14 +845,14 @@
           <h1 id="titulo-capa" class="revelar"></h1>
           <p class="frase revelar" id="capaFrase"></p>
           <div class="botoes revelar">
-            <a class="botao botao-dourado" href="#pacotes" data-pacotes>Ver pacotes e valores <span aria-hidden="true">↓</span></a>
+            <a class="botao botao-dourado" href="#pacotes" data-pacotes>Pedir uma proposta <span aria-hidden="true">↓</span></a>
             <a class="botao botao-contorno" href="#contato">Falar comigo</a>
           </div>
           <a class="capa-email revelar" id="capaEmail" href="#contato">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1zm9 7.2L4.4 7H4v.6l8 5.6 8-5.6V7h-.4L12 12.2z"/></svg>
             <span id="capaEmailTexto"></span>
           </a>
-          <p class="capa-apoio revelar" data-pacotes>Sem esperar orçamento: monte o seu pacote, veja o valor na hora e feche pelo WhatsApp.</p>
+          <p class="capa-apoio revelar" data-pacotes>Monte o seu pacote em poucos cliques e a nossa conversa no WhatsApp já começa com tudo explicado.</p>
           <dl class="numeros-capa revelar" id="capaNumeros"></dl>
         </div>
         <div class="foto-capa-moldura revelar" id="capaFoto"></div>
@@ -895,9 +883,9 @@
         <div class="cta-faixa revelar" data-pacotes>
           <div>
             <p class="cta-faixa-titulo">Agora imagina isso com o <em>seu produto.</em></p>
-            <p class="cta-faixa-texto">Os pacotes começam em <strong data-preco-minimo>R$ 499</strong> e você vê o valor exato na hora, sem esperar orçamento.</p>
+            <p class="cta-faixa-texto">Me conta qual é o produto e o objetivo da campanha, e eu monto uma proposta para o momento da sua marca.</p>
           </div>
-          <a class="botao botao-dourado" href="#pacotes">Montar meu pacote agora <span aria-hidden="true">↓</span></a>
+          <a class="botao botao-dourado" href="#pacotes">Montar minha proposta <span aria-hidden="true">↓</span></a>
         </div>
       </div>
     </section>
@@ -961,7 +949,7 @@
           <p class="intro-secao">Do roteiro à entrega final, cada formato é criado para gerar desejo, confiança e conversão. E vai além do conteúdo: com a collab e a automação, eu também levo o público até o link de compra.</p>
         </div>
         <div class="grade-servicos" id="gradeServicos"></div>
-        <div class="ver-mais revelar" data-pacotes><a class="botao botao-dourado" href="#pacotes">Ver pacotes e valores <span aria-hidden="true">↓</span></a></div>
+        <div class="ver-mais revelar" data-pacotes><a class="botao botao-dourado" href="#pacotes">Pedir uma proposta <span aria-hidden="true">↓</span></a></div>
       </div>
     </section>
 
@@ -969,9 +957,9 @@
     <section class="escuro pacotes" id="pacotes" aria-labelledby="titulo-pacotes">
       <div class="container">
         <div class="cabecalho-secao revelar">
-          <p class="sobretitulo">Pacotes</p>
-          <h2 class="titulo-secao" id="titulo-pacotes">Escolha um pacote pronto ou <em>monte o seu</em></h2>
-          <p class="intro-secao">Sem formulário e sem esperar orçamento. Escolha um pacote ou monte o seu, veja o total na hora e me mande tudo pronto no WhatsApp para garantir a sua data. Os valores são de referência e podem mudar conforme a demanda.</p>
+          <p class="sobretitulo">Como podemos trabalhar</p>
+          <h2 class="titulo-secao" id="titulo-pacotes">Escolha um ponto de partida ou <em>monte o seu</em></h2>
+          <p class="intro-secao">Cada campanha tem um objetivo, um prazo e uma verba. Escolha o que faz mais sentido, me mande pelo WhatsApp e a gente ajusta junto até ficar do tamanho certo para a sua marca.</p>
         </div>
         <div class="pacotes-prontos" id="pacotesProntos"></div>
 
@@ -984,9 +972,7 @@
           <aside class="resumo" aria-labelledby="tituloResumo">
             <h3 id="tituloResumo">Seu pacote</h3>
             <ul class="resumo-linhas" id="resumoLinhas"></ul>
-            <div class="resumo-total"><span>Total</span><strong id="resumoTotal" aria-live="polite">R$ 0</strong></div>
-            <p class="resumo-economia" id="resumoEconomia"></p>
-            <a class="botao botao-dourado resumo-botao" id="resumoEnviar" href="#" target="_blank" rel="noopener">Enviar meu pacote no WhatsApp <span aria-hidden="true">↗</span></a>
+            <a class="botao botao-dourado resumo-botao" id="resumoEnviar" href="#" target="_blank" rel="noopener">Pedir pelo WhatsApp <span aria-hidden="true">↗</span></a>
             <button class="resumo-limpar" type="button" id="resumoLimpar">Limpar pacote</button>
             <p class="resumo-nota" id="resumoNota"></p>
           </aside>
@@ -1278,7 +1264,7 @@ const SITE = {
     { titulo: 'Foto UGC', descricao: 'Fotos criativas e naturais que valorizam o produto, destacam os detalhes e ajudam a construir a identidade visual da marca.', detalhe: 'Produto em uso, na vida real' },
     { titulo: 'Postagem em collab', descricao: 'Publicação colaborativa no Instagram, levando o conteúdo da sua marca para o meu perfil e para a minha audiência.', detalhe: 'Alcance no meu perfil' },
     { titulo: 'Automação via ManyChat', descricao: 'Configuro no Instagram da sua marca o envio automático de links e informações para quem comenta uma palavra-chave.', detalhe: 'Link de compra no automático' },
-    { titulo: 'Collab + ManyChat', descricao: 'Vídeo, collab e automação numa entrega só: eu produzo o vídeo, a collab gera os comentários e a automação leva cada pessoa direto para o link de compra.', detalhe: 'Economia de R$ 300 no pacote' },
+    { titulo: 'Collab + ManyChat', descricao: 'Vídeo, collab e automação numa entrega só: eu produzo o vídeo, a collab gera os comentários e a automação leva cada pessoa direto para o link de compra.', detalhe: 'Conteúdo, alcance e venda juntos' },
     { titulo: 'Direito de uso estendido', descricao: 'Amplia o período de uso do conteúdo, conforme prazo, canais e finalidade combinados. Anúncios pagos e exclusividade são negociados à parte.', detalhe: 'Prazo e canais sob medida' }
   ],
 
@@ -1304,31 +1290,30 @@ const SITE = {
     { texto: 'Postei ele nos stories e impulsionei com objetivo de visitas no perfil... já ganhamos mais de 60 seguidores vindo do vídeo. Realmente, faz a diferença ter um vídeo profissional, chama mais atenção e todo mundo vem seguir!!! Ficou perfeito, maravilhoso seu trabalho! 🙌🏼🤎', nome: 'Oásis da Vida Day Spa', empresa: 'Vídeo impulsionado nos stories', logo: LOGOS.oasis, cor: GRADIENTES.dourado }
   ],
 
-  // EDITE AQUI: pacotes e preços
-  // "preco" é o valor por unidade, em reais, só o número (ex.: 350 ou 89.90).
-  // "aPartirDe: true" mostra "a partir de" antes do valor.
+  // EDITE AQUI: pacotes (sem preços: o valor é combinado na conversa com cada marca)
   // Nos pacotes prontos, "itens" diz quantas unidades de cada item entram.
-  // "preco" do pacote pronto é opcional: se for menor que a soma dos itens, aparece a economia.
   // "inclui" (opcional) troca a lista automática por uma lista escrita por você.
   pacotes: {
     mostrar: true,
     itens: [
-      { id: 'video', nome: 'Vídeo UGC', descricao: 'Vídeo vertical que apresenta o produto e mostra os benefícios.', preco: 350, unidade: 'vídeo', plural: 'vídeos' },
-      { id: 'foto', nome: 'Foto UGC', descricao: 'Foto natural que valoriza o produto e os detalhes.', preco: 70, unidade: 'foto', plural: 'fotos' },
-      { id: 'collab', nome: 'Postagem em collab', descricao: 'Publicação colaborativa no meu Instagram, para a minha audiência.', preco: 700, unidade: 'publicação', plural: 'publicações' },
-      { id: 'manychat', nome: 'Automação via ManyChat', descricao: 'Envio automático de link para quem comenta a palavra-chave, no perfil da marca.', preco: 250, unidade: 'configuração', plural: 'configurações' },
-      { id: 'uso', nome: 'Direito de uso estendido', descricao: 'Mais tempo de uso do conteúdo, conforme prazo, canais e finalidade.', preco: 200, unidade: 'conteúdo', plural: 'conteúdos', aPartirDe: true }
+      { id: 'video', nome: 'Vídeo UGC', descricao: 'Vídeo vertical que apresenta o produto e mostra os benefícios.', unidade: 'vídeo', plural: 'vídeos' },
+      { id: 'foto', nome: 'Foto UGC', descricao: 'Foto natural que valoriza o produto e os detalhes.', unidade: 'foto', plural: 'fotos' },
+      { id: 'collab', nome: 'Postagem em collab', descricao: 'Publicação colaborativa no meu Instagram, para a minha audiência.', unidade: 'publicação', plural: 'publicações' },
+      { id: 'manychat', nome: 'Automação via ManyChat', descricao: 'Envio automático de link para quem comenta a palavra-chave, no perfil da marca.', unidade: 'configuração', plural: 'configurações' },
+      { id: 'uso', nome: 'Direito de uso estendido', descricao: 'Mais tempo de uso do conteúdo, conforme prazo, canais e finalidade.', unidade: 'conteúdo', plural: 'conteúdos' }
     ],
     prontos: [
-      { nome: 'Essencial', frase: 'Para testar UGC pela primeira vez.', itens: { video: 1, foto: 3 }, preco: 499 },
-      { nome: 'Conteúdo completo', frase: 'Vídeo e foto para o site, as redes e os anúncios.', itens: { video: 2, foto: 6 }, preco: 990, destaque: 'Mais escolhido' },
-      { nome: 'Venda no automático', frase: 'Collab + ManyChat: conteúdo, distribuição e link de compra numa campanha só.', itens: { video: 1, collab: 1, manychat: 1 }, preco: 1000,
+      { nome: 'Essencial', frase: 'Para testar UGC pela primeira vez.', itens: { video: 1, foto: 3 },
+        inclui: ['1 vídeo UGC', '3 fotos UGC', 'Roteiro aprovado antes da gravação', 'Edição com até 2 ajustes', 'Entrega em até 10 dias corridos'] },
+      { nome: 'Conteúdo completo', frase: 'Vídeo e foto para o site, as redes e os anúncios.', itens: { video: 2, foto: 6 }, destaque: 'Mais escolhido',
+        inclui: ['2 vídeos UGC', '6 fotos UGC', 'Roteiro aprovado antes da gravação', 'Edição com até 2 ajustes', 'Entrega em até 10 dias corridos'] },
+      { nome: 'Venda no automático', frase: 'Collab + ManyChat: conteúdo, distribuição e link de compra numa campanha só.', itens: { video: 1, collab: 1, manychat: 1 },
         inclui: ['Vídeo UGC produzido por mim', 'Publicação em collab no Instagram', 'Automação ManyChat vinculada à publicação', 'Mensagem automática com o link de compra', 'Teste do fluxo antes da divulgação'] }
     ],
-    nota: 'Valores de referência. Podem mudar conforme a demanda, o volume e o briefing de cada marca, e o valor final é confirmado na nossa conversa.',
+    nota: 'Sem compromisso. Se já tiver uma verba em mente, me conta na mensagem: é a partir dela que eu ajusto a proposta.',
     personalizado: {
       titulo: 'Projetos personalizados',
-      texto: 'Cada marca tem objetivos e necessidades diferentes. Para entregas adicionais, campanhas especiais ou outras combinações de serviços, a gente desenvolve uma proposta sob medida.',
+      texto: 'Tem uma campanha especial, outra combinação de serviços ou uma verba definida? Me conta. A gente desenha uma proposta sob medida para o que a sua marca precisa agora.',
       botao: 'Vamos criar algo estratégico para a sua marca?',
       mensagem: 'Olá, Débora! Vi seu portfólio e quero uma proposta personalizada para a minha marca.'
     }
@@ -1345,15 +1330,15 @@ const SITE = {
   // EDITE AQUI: perguntas frequentes
   perguntas: [
     { pergunta: 'Como funciona, do primeiro contato à entrega?', resposta: 'Em 3 passos. Primeiro a gente alinha o objetivo e eu proponho a ideia e o roteiro. Depois eu gravo, com a minha rotina como cenário. Por fim, você revisa e eu faço os ajustes.' },
+    { pergunta: 'Quanto custa?', resposta: 'Depende do formato, da quantidade, do prazo e de como o conteúdo vai ser usado, por isso cada proposta é feita sob medida. Me conta o que a sua marca precisa e, se já tiver, a verba da campanha, que a gente encontra o melhor formato juntos.' },
     { pergunta: 'Qual o prazo de entrega?', resposta: 'Até 10 dias corridos depois de receber o produto. Se a sua campanha tiver uma data específica, me avisa logo no início que a gente organiza o cronograma.' },
     { pergunta: 'Você escreve o roteiro ou eu preciso mandar?', resposta: 'Os dois funcionam. Eu proponho a ideia e o roteiro a partir do objetivo da sua marca e você aprova antes de eu gravar. Se você já tiver um roteiro, eu gravo a partir dele.' },
     { pergunta: 'E se eu quiser mudar alguma coisa no vídeo?', resposta: 'Você revisa o vídeo e tem até 2 ajustes inclusos no orçamento.' },
-    { pergunta: 'Posso usar o vídeo em anúncios?', resposta: 'Pode. Licenças para anúncios pagos, exclusividade e períodos específicos são combinadas na proposta, antes de começar. Para usar o conteúdo por mais tempo, existe o direito de uso estendido, a partir de R$ 200 por conteúdo.' },
+    { pergunta: 'Posso usar o vídeo em anúncios?', resposta: 'Pode. Licenças para anúncios pagos, exclusividade e períodos específicos são combinadas na proposta, antes de começar. Para usar o conteúdo por mais tempo, existe o direito de uso estendido, que também entra na proposta.' },
     { pergunta: 'Como funciona a automação via ManyChat?', resposta: 'Eu configuro no Instagram da sua marca uma automação que envia o link e as informações do produto, na hora, para quem comenta uma palavra-chave. Com a collab, a publicação gera os comentários e a automação leva cada pessoa direto para a compra. É feito no perfil da marca, com acesso autorizado e quando o recurso está disponível na conta.' },
     { pergunta: 'Você grava só em casa?', resposta: 'Não. Além da minha casa e da minha rotina, gravo em restaurantes, lojas, clínicas e passeios, em Belo Horizonte e também em viagens, como os vídeos que fiz em Gramado.' },
     { pergunta: 'Seu marido também pode aparecer nos vídeos?', resposta: 'Pode. O Pedro já gravou comigo na parceria com a Minimal Club. Se o seu produto combina com um vídeo em casal, me avisa no primeiro contato que a gente combina como fica.' },
     { pergunta: 'Qual a qualidade do material?', resposta: 'Gravo em 4K com iPhone 17 Pro Max, microfone sem fio Hollyland e gimbal Hohem. A edição é feita no CapCut e no Premiere Pro, com trilhas licenciadas do Epidemic Sound.' },
-    { pergunta: 'Os valores podem mudar?', resposta: 'Os valores da seção de pacotes são de referência. Eles podem mudar conforme a demanda, o volume de conteúdo e o briefing da sua marca, e o valor final é sempre confirmado na nossa conversa, antes de começar.' }
   ],
 
   // EDITE AQUI: seus contatos
@@ -1643,8 +1628,7 @@ function ativarAnimacoes() {
   elementos.forEach((el) => observador.observe(el));
 }
 
-// Pacotes prontos + montador com total e mensagem para o WhatsApp
-const reais = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: v % 1 ? 2 : 0 });
+// Pacotes prontos + montador com mensagem pronta para o WhatsApp
 function montarPacotes() {
   const P = SITE.pacotes;
   if (!P.mostrar) {
@@ -1655,25 +1639,19 @@ function montarPacotes() {
   const itemPorId = Object.fromEntries(P.itens.map((i) => [i.id, i]));
   const qtd = Object.fromEntries(P.itens.map((i) => [i.id, 0]));
   let pacoteEscolhido = null;
-  const somaItens = (lista) => Object.entries(lista).reduce((s, [id, n]) => s + (itemPorId[id] ? itemPorId[id].preco * n : 0), 0);
 
-  $('pacotesProntos').innerHTML = P.prontos.map((pk, i) => {
-    const soma = somaItens(pk.itens);
-    const preco = pk.preco && pk.preco < soma ? pk.preco : soma;
-    return `
+  $('pacotesProntos').innerHTML = P.prontos.map((pk, i) => `
     <article class="pacote revelar${pk.destaque ? ' destaque' : ''}" style="transition-delay:${i * 0.1}s">
       ${pk.destaque ? `<span class="selo-pacote">${pk.destaque}</span>` : ''}
       <h3>${pk.nome}</h3>
       <p class="frase-pacote">${pk.frase}</p>
-      <p class="preco">${preco < soma ? `<span class="preco-de">${reais(soma)}</span>` : ''}${reais(preco)}</p>
       <ul>${(pk.inclui || Object.entries(pk.itens).map(([id, n]) => `${n}x ${itemPorId[id].nome}`)).map((x) => `<li>${x}</li>`).join('')}</ul>
       <button class="botao ${pk.destaque ? 'botao-vinho' : 'botao-contorno'}" type="button" data-pacote="${i}">Quero este pacote</button>
-    </article>`;
-  }).join('');
+    </article>`).join('');
 
   $('listaItens').innerHTML = P.itens.map((it) => `
     <li class="item-pacote" data-item="${it.id}">
-      <span><strong>${it.nome}</strong><span class="desc">${it.descricao}</span><span class="unit">${it.aPartirDe ? 'A partir de ' : ''}${reais(it.preco)} por ${it.unidade}</span></span>
+      <span><strong>${it.nome}</strong><span class="desc">${it.descricao}</span></span>
       <span class="contador-qtd">
         <button type="button" data-menos="${it.id}" aria-label="Tirar 1 ${it.unidade} de ${it.nome}">−</button>
         <output id="qtd-${it.id}" aria-live="polite">0</output>
@@ -1681,9 +1659,6 @@ function montarPacotes() {
       </span>
     </li>`).join('');
   $('resumoNota').textContent = P.nota;
-  // Atualiza o "a partir de" das chamadas com o pacote mais barato
-  const minimo = Math.min(...P.prontos.map((pk) => { const s = somaItens(pk.itens); return pk.preco && pk.preco < s ? pk.preco : s; }));
-  document.querySelectorAll('[data-preco-minimo]').forEach((el) => { el.textContent = reais(minimo); });
   $('persTitulo').textContent = P.personalizado.titulo;
   $('persTexto').textContent = P.personalizado.texto;
   $('persBotao').innerHTML = `${P.personalizado.botao} <span aria-hidden="true">↗</span>`;
@@ -1691,23 +1666,18 @@ function montarPacotes() {
 
   function atualizar() {
     const escolhidos = P.itens.filter((it) => qtd[it.id] > 0);
-    const soma = escolhidos.reduce((s, it) => s + it.preco * qtd[it.id], 0);
     const pk = pacoteEscolhido !== null ? P.prontos[pacoteEscolhido] : null;
     const igualAoPronto = pk && Object.keys(qtd).every((id) => (pk.itens[id] || 0) === qtd[id]);
-    const total = igualAoPronto && pk.preco && pk.preco < soma ? pk.preco : soma;
     P.itens.forEach((it) => {
       $('qtd-' + it.id).textContent = qtd[it.id];
       document.querySelector(`[data-item="${it.id}"]`).classList.toggle('ativo', qtd[it.id] > 0);
     });
     $('resumoLinhas').innerHTML = escolhidos.length
-      ? escolhidos.map((it) => `<li><span>${qtd[it.id]}x ${it.nome}</span><span>${it.aPartirDe ? 'a partir de ' : ''}${reais(it.preco * qtd[it.id])}</span></li>`).join('')
+      ? escolhidos.map((it) => `<li><span>${qtd[it.id]}x ${it.nome}</span></li>`).join('')
       : '<li class="vazio">Nenhum item ainda. Escolha um pacote pronto ou use o +.</li>';
-    const temAPartir = escolhidos.some((it) => it.aPartirDe);
-    $('resumoTotal').innerHTML = `${temAPartir ? '<small>a partir de</small>' : ''}${reais(total)}`;
-    $('resumoEconomia').textContent = total < soma ? `Você economiza ${reais(soma - total)} com o pacote ${pk.nome}.` : '';
-    const linhas = escolhidos.map((it) => `• ${qtd[it.id]}x ${it.nome} (${it.aPartirDe ? 'a partir de ' : ''}${reais(it.preco * qtd[it.id])})`).join('\n');
+    const linhas = escolhidos.map((it) => `• ${qtd[it.id]}x ${it.nome}`).join('\n');
     const titulo = igualAoPronto ? `o pacote ${pk.nome}` : 'um pacote personalizado';
-    const msg = `Olá, Débora! Vi seu portfólio e montei ${titulo}:\n\n${linhas}\n\nTotal estimado: ${temAPartir ? 'a partir de ' : ''}${reais(total)}\n\nSei que o valor pode mudar conforme a demanda e o briefing. Podemos conversar?\n\nMarca:\nProduto:\nPrazo desejado:`;
+    const msg = `Olá, Débora! Vi seu portfólio e quero uma proposta para ${titulo}:\n\n${linhas}\n\nMarca:\nProduto:\nPrazo desejado:\nVerba prevista (se já tiver):`;
     const botao = $('resumoEnviar');
     botao.href = escolhidos.length ? `https://wa.me/55${somenteNumeros(SITE.contato.whatsapp)}?text=${encodeURIComponent(msg)}` : '#';
     botao.setAttribute('aria-disabled', escolhidos.length ? 'false' : 'true');
