@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Roteiro Rejuv | Débora Dominique</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#2a1a14">
+<link rel="icon" type="image/svg+xml" href="img/icone.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vinho: #6e1423;
+    --vinho-escuro: #3d0b14;
+    --creme: #f1e6cf;
+    --creme-claro: #f7f0e1;
+    --dourado: #c9a86a;
+    --dourado-escuro: #8a6a2f;
+    --marrom: #2a1a14;
+    --marrom-profundo: #1a100c;
+    --texto: #2a1a14;
+    --texto-suave: #5b463b;
+    --texto-claro: #f1e6cf;
+    --texto-claro-suave: rgba(241, 230, 207, .78);
+    --verde: #2f7a52;
+    --titulo: "Playfair Display", Georgia, serif;
+    --corpo: "Inter", system-ui, -apple-system, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; font-family: var(--corpo); font-size: 1rem; line-height: 1.65; color: var(--texto); background: var(--creme); }
+  h1, h2, h3, p, blockquote, ul { margin: 0; }
+  .caixa { width: min(100% - 40px, 760px); margin-inline: auto; }
+  section { padding: 56px 0; }
+  .sobre { font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--dourado-escuro); margin-bottom: 10px; }
+  h2 { font-family: var(--titulo); font-weight: 600; font-size: clamp(1.7rem, 5vw, 2.3rem); line-height: 1.2; }
+
+  /* Abertura */
+  .abertura { background: var(--marrom-profundo); color: var(--texto-claro); padding: 64px 0 56px; }
+  .abertura .sobre { color: var(--dourado); }
+  h1 { font-family: var(--titulo); font-weight: 600; font-size: clamp(2.5rem, 9vw, 4.2rem); line-height: 1.08; margin-bottom: 20px; }
+  h1 em { color: var(--dourado); font-style: italic; }
+  .abertura .intro { color: var(--texto-claro-suave); font-size: 1.08rem; max-width: 34em; }
+  .fatos { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; margin: 26px 0 30px; }
+  .fatos li { border: 1px solid rgba(201, 168, 106, .45); border-radius: 999px; padding: 4px 13px; font-size: .84rem; }
+  .botao-claro { display: inline-block; background: var(--dourado); color: var(--marrom-profundo); font-weight: 600; text-decoration: none; padding: 13px 24px; border-radius: 999px; }
+
+  /* A ideia */
+  .conceito { font-family: var(--titulo); font-size: clamp(1.25rem, 3.6vw, 1.5rem); line-height: 1.45; margin-top: 14px; }
+  .pontos { display: grid; gap: 22px; margin-top: 30px; padding-top: 26px; border-top: 1px solid rgba(42, 26, 20, .18); }
+  .pontos h3 { font-size: .95rem; font-weight: 600; margin-bottom: 3px; }
+  .pontos p, .pontos li { color: var(--texto-suave); }
+  .pontos ul { padding-left: 18px; }
+
+  /* Cenas */
+  .bloco { padding: 44px 0; }
+  .cabeca-roteiro { padding-bottom: 8px; }
+  .cabeca-roteiro p:last-child { color: var(--texto-suave); margin-top: 12px; }
+  .bloco h3 { font-family: var(--titulo); font-size: 1.35rem; font-weight: 600; margin-bottom: 18px; }
+  .dia { background: var(--creme); padding-top: 24px; }
+  .noite { background: var(--vinho-escuro); color: var(--texto-claro); }
+  .manha { background: var(--creme-claro); }
+  .cena { display: grid; grid-template-columns: 74px 1fr; gap: 14px; padding: 18px 0; border-top: 1px solid rgba(42, 26, 20, .16); }
+  .noite .cena { border-color: rgba(241, 230, 207, .22); }
+  .tempo { font-weight: 600; font-size: .86rem; font-variant-numeric: tabular-nums; padding-top: 2px; }
+  .emocao { font-size: .82rem; color: var(--texto-suave); margin-bottom: 7px; }
+  .noite .emocao, .noite .direcao { color: var(--texto-claro-suave); }
+  .coracao { font-size: 1.05rem; margin-right: 6px; line-height: 1; }
+  .fala { font-family: var(--titulo); font-size: 1.2rem; line-height: 1.42; font-weight: 500; }
+  .real { display: inline; background: rgba(201, 168, 106, .3); box-decoration-break: clone; -webkit-box-decoration-break: clone; padding: 1px 5px; border-radius: 4px; font-family: var(--corpo); font-size: .92rem; font-weight: 500; }
+  .direcao { font-size: .92rem; color: var(--texto-suave); margin-top: 8px; }
+  .tela { font-size: .82rem; font-weight: 600; margin-top: 10px; }
+  .tela span { font-weight: 400; color: var(--texto-suave); margin-right: 5px; }
+  .noite .tela span { color: var(--texto-claro-suave); }
+  .aviso-real { font-size: .92rem; margin-top: 14px; padding: 12px 14px; border-left: 3px solid var(--dourado); background: rgba(201, 168, 106, .16); }
+
+  /* Ganchos, entregas e cuidados */
+  .extras { background: var(--creme); }
+  .gancho { padding: 16px 0; border-top: 1px solid rgba(42, 26, 20, .16); }
+  .gancho:first-of-type { margin-top: 20px; }
+  .gancho strong { display: block; font-size: .86rem; margin-bottom: 4px; }
+  .gancho .fala { font-size: 1.1rem; }
+  .gancho .direcao { margin-top: 4px; }
+  .duas { display: grid; gap: 30px; margin-top: 40px; }
+  .duas h3 { font-family: var(--titulo); font-size: 1.25rem; font-weight: 600; margin-bottom: 8px; }
+  .duas ul { padding-left: 18px; color: var(--texto-suave); font-size: .95rem; }
+  .duas li + li { margin-top: 5px; }
+  details { margin-top: 36px; border: 1px solid rgba(42, 26, 20, .22); border-radius: 12px; background: var(--creme-claro); }
+  summary { cursor: pointer; padding: 14px 18px; font-weight: 600; }
+  .legenda { padding: 0 18px 18px; font-size: .95rem; color: var(--texto-suave); }
+  .legenda p + p { margin-top: 10px; }
+
+  /* Resposta */
+  .resposta { background: var(--marrom-profundo); color: var(--texto-claro); scroll-margin-top: 0; }
+  .resposta .sobre { color: var(--dourado); }
+  .resposta > .caixa > p.apoio { color: var(--texto-claro-suave); margin-top: 10px; }
+  .cartao { background: var(--creme-claro); color: var(--texto); border-radius: 18px; padding: 26px 22px; margin-top: 26px; }
+  .cartao label, .rotulo { display: block; font-weight: 600; margin-bottom: 6px; }
+  .opcional { font-weight: 400; color: var(--texto-suave); font-size: .88rem; }
+  .perguntas { font-size: .9rem; color: var(--texto-suave); padding-left: 18px; margin-bottom: 10px; }
+  textarea, input[type=text] { width: 100%; font: inherit; color: var(--texto); background: #fff; border: 1px solid rgba(42, 26, 20, .3); border-radius: 10px; padding: 12px 13px; }
+  textarea { min-height: 104px; resize: vertical; }
+  :is(textarea, input, button, a, summary):focus-visible { outline: 3px solid var(--dourado-escuro); outline-offset: 2px; }
+  .campo { margin-top: 22px; }
+  .decisao { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .decisao button { font: inherit; font-weight: 600; cursor: pointer; min-height: 54px; border-radius: 12px; background: #fff; border: 2px solid; }
+  #aprovar { color: var(--verde); border-color: var(--verde); }
+  #reprovar { color: var(--vinho); border-color: var(--vinho); }
+  #aprovar[aria-pressed=true] { background: var(--verde); color: #fff; }
+  #reprovar[aria-pressed=true] { background: var(--vinho); color: #fff; }
+  [hidden] { display: none !important; }
+  #enviar { width: 100%; margin-top: 22px; font: inherit; font-weight: 600; cursor: pointer; min-height: 54px; border: 0; border-radius: 999px; background: var(--marrom); color: var(--creme-claro); }
+  #enviar:disabled { opacity: .6; cursor: wait; }
+  #aviso { margin-top: 12px; font-size: .92rem; color: var(--vinho); font-weight: 500; }
+  #aviso:empty { display: none; }
+  .obrigada h3 { font-family: var(--titulo); font-size: 1.6rem; font-weight: 600; margin-bottom: 8px; }
+  .obrigada p { color: var(--texto-suave); }
+
+  footer { background: var(--marrom-profundo); color: var(--texto-claro-suave); text-align: center; font-size: .86rem; padding: 0 20px 44px; }
+  footer a { color: var(--dourado); }
+
+  @media (min-width: 700px) {
+    .cena { grid-template-columns: 100px 1fr; }
+    .duas { grid-template-columns: 1fr 1fr; }
+    .pontos { grid-template-columns: 1fr 1fr; }
+    .cartao { padding: 34px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="abertura">
+  <div class="caixa">
+    <p class="sobre">Roteiro para aprovação · Rejuv</p>
+    <h1>Pele mais jovem <em>enquanto eu durmo?</em></h1>
+    <p class="intro">Oi, time Rejuv! Aqui está o roteiro do vídeo do Protocolo Renovação Noturna. Dá uma lida e me responde no final da página, em poucos cliques.</p>
+    <ul class="fatos">
+      <li>Reels e anúncio patrocinado</li>
+      <li>Vertical 9:16</li>
+      <li>Até 45s</li>
+      <li>Gravação solo</li>
+      <li>Texto na tela, entende sem som</li>
+    </ul>
+    <a class="botao-claro" href="#responder" id="irResposta">Ir direto para a resposta</a>
+  </div>
+</header>
+
+<main>
+  <section>
+    <div class="caixa">
+      <p class="sobre">A ideia</p>
+      <h2>A cética que testou</h2>
+      <p class="conceito">Começo duvidando da promessa e termino como a prova. Quem assiste pensa a mesma coisa no primeiro segundo: quando eu falo essa desconfiança em voz alta, ela baixa a guarda e fica para ver o resultado.</p>
+      <div class="pontos">
+        <div>
+          <h3>O recado</h3>
+          <p>Renovar a pele sem nada invasivo cabe numa rotina simples: um creme por noite, revezando dois.</p>
+          <h3 style="margin-top:18px">O objetivo</h3>
+          <p>Venda direta, com cara de depoimento real e não de publi.</p>
+        </div>
+        <div>
+          <h3>O que o vídeo responde</h3>
+          <ul>
+            <li>"Creme não faz milagre": eu duvido junto e mostro o teste.</li>
+            <li>"Não tenho tempo pra rotina longa": é só um creme por noite.</li>
+            <li>"Retinol irrita": o protocolo alterna com um creme de hidratação e reparação.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="caixa cabeca-roteiro">
+    <p class="sobre">O vídeo</p>
+    <h2>Cena a cena, da dúvida à manhã</h2>
+    <p>O coração marca a emoção de cada cena. O apagar da luz faz a passagem do tempo sem precisar explicar.</p>
+    <p class="aviso-real"><span class="real">Os trechos assim</span> eu só fecho depois de usar. Falo apenas do que senti de verdade, dentro do que a marca comunica.</p>
+  </div>
+
+  <div class="bloco dia">
+    <div class="caixa">
+      <h3>A dúvida</h3>
+      <article class="cena">
+        <div class="tempo">0 a 3s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#8a5a2b">&#9829;&#xFE0E;</span>Ceticismo, desconfiança</p>
+          <blockquote class="fala">"...renovar a pele enquanto você dorme." Pele mais jovem... enquanto eu durmo?</blockquote>
+          <p class="direcao">Tela do notebook no site da Rejuv. Leio em voz alta, com a sobrancelha levantando devagar.</p>
+          <p class="tela"><span>Na tela:</span>PELE MAIS JOVEM ENQUANTO EU DURMO?</p>
+        </div>
+      </article>
+      <article class="cena">
+        <div class="tempo">3 a 5s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#d9a400">&#9829;&#xFE0E;</span>Atenção, tom de fofoca</p>
+          <blockquote class="fala">Gente. Eu preciso testar isso.</blockquote>
+          <p class="direcao">Viro o rosto direto para a lente e me aproximo.</p>
+          <p class="tela"><span>Na tela:</span>eu preciso testar isso</p>
+        </div>
+      </article>
+      <article class="cena">
+        <div class="tempo">5 a 11s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#6d3fa0">&#9829;&#xFE0E;</span>Vulnerabilidade, confissão</p>
+          <blockquote class="fala">Fiz 32 e a minha pele mudou. <span class="real">o que eu notei de verdade: a textura, o viço, aquela linha que antes não tinha</span></blockquote>
+          <p class="direcao">Espelho do banheiro, luz natural. Passo a mão no rosto e olho de perto.</p>
+          <p class="tela"><span>Na tela:</span>32 chegaram...</p>
+        </div>
+      </article>
+      <article class="cena">
+        <div class="tempo">11 a 15s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#e07b1a">&#9829;&#xFE0E;</span>Fala acelerada, ansiedade</p>
+          <blockquote class="fala">E eu não queria agulha, não queria procedimento, não queria nada invasivo. Não agora.</blockquote>
+          <p class="direcao">Ainda no espelho, solto o rosto e respiro.</p>
+          <p class="tela"><span>Na tela:</span>nada invasivo</p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="bloco noite">
+    <div class="caixa">
+      <h3>A noite</h3>
+      <article class="cena">
+        <div class="tempo">15 a 24s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#5fc28d">&#9829;&#xFE0E;</span>Leveza e suavidade</p>
+          <blockquote class="fala">Aí eu comecei o Protocolo Renovação Noturna da Rejuv. São dois cremes que se revezam: uma noite o Retinal Max, na outra o Night Intense. Um por noite, e cama.</blockquote>
+          <p class="direcao">Banheiro com luz quente e baixa, cabelo preso, pijama. Mostro os dois frascos lado a lado e aplico um deles com calma.</p>
+          <p class="tela"><span>Na tela:</span>1 creme por noite</p>
+        </div>
+      </article>
+      <article class="cena">
+        <div class="tempo">24 a 26s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#ffffff">&#9829;&#xFE0E;</span>Pausa, silêncio</p>
+          <blockquote class="fala">Sem fala.</blockquote>
+          <p class="direcao">Deito e apago o abajur. Tela escura por 1 segundo.</p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <div class="bloco manha">
+    <div class="caixa">
+      <h3>A manhã</h3>
+      <article class="cena">
+        <div class="tempo">26 a 34s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#d9408f">&#9829;&#xFE0E;</span>Encantamento, carinho</p>
+          <blockquote class="fala">E de manhã... <span class="real">a minha reação real depois de X dias, só o que eu sentir de verdade: pele mais hidratada, mais viço, textura mais uniforme, mais firme</span></blockquote>
+          <p class="direcao">Janela, luz natural de frente, rosto sem maquiagem, close na pele.</p>
+          <p class="tela"><span>Na tela:</span>X dias depois</p>
+        </div>
+      </article>
+      <article class="cena">
+        <div class="tempo">34 a 40s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#2f6fd0">&#9829;&#xFE0E;</span>Confiança serena, certeza</p>
+          <blockquote class="fala">Eu prefiro cuidar enquanto durmo do que correr atrás depois.</blockquote>
+          <p class="direcao">Olho firme para a lente, segurando o frasco ao lado do rosto.</p>
+        </div>
+      </article>
+      <article class="cena">
+        <div class="tempo">40 a 45s</div>
+        <div>
+          <p class="emocao"><span class="coracao" style="color:#2f7a52">&#9829;&#xFE0E;</span>Leveza e suavidade</p>
+          <blockquote class="fala">Deixei o link aqui. <span class="real">condição ou cupom, se houver</span></blockquote>
+          <p class="direcao">Sorriso leve, apontando para baixo.</p>
+          <p class="tela"><span>Na tela:</span>link aqui embaixo</p>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <section class="extras">
+    <div class="caixa">
+      <p class="sobre">Para testar no anúncio</p>
+      <h2>Três formas de abrir o vídeo</h2>
+      <div class="gancho">
+        <strong>Gancho A · a dúvida (o do roteiro)</strong>
+        <p class="fala">"...renovar a pele enquanto você dorme." Pele mais jovem... enquanto eu durmo?</p>
+      </div>
+      <div class="gancho">
+        <strong>Gancho B · a dor primeiro</strong>
+        <p class="fala">"Ninguém me avisou que aos 32 a pele ia mudar assim."</p>
+        <p class="direcao">No espelho, puxando de leve a pele da bochecha.</p>
+      </div>
+      <div class="gancho">
+        <strong>Gancho C · a curiosidade</strong>
+        <p class="fala">"Dois cremes, um por noite, e eu preciso te contar o que aconteceu com a minha pele."</p>
+        <p class="direcao">Com os dois frascos na mão, quase cochichando.</p>
+      </div>
+
+      <div class="duas">
+        <div>
+          <h3>O que eu entrego</h3>
+          <ul>
+            <li>Vídeo completo em 9:16</li>
+            <li>Versão curta de 20s, sem o trecho do espelho</li>
+            <li>Uma versão com cada gancho (A, B e C), para testar no gerenciador</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Como eu cuido da marca</h3>
+          <ul>
+            <li>Nada de "elimina rugas" ou "tira X anos": nenhum resultado além do que o rótulo e a Rejuv comunicam</li>
+            <li>Rótulo sempre virado para a câmera</li>
+            <li>Nada importante no rodapé, respeitando a zona segura do anúncio</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Ver a legenda sugerida</summary>
+        <div class="legenda">
+          <p>Com quantos anos você olhou no espelho e pensou "ué, essa pele mudou"?</p>
+          <p>Comigo foi agora, aos 32. E junto veio aquela vontade de cuidar sem ter que partir pra nada invasivo.</p>
+          <p>Quando li que dava pra renovar a pele enquanto a gente dorme, eu duvidei, confesso. Então fiz o que eu sempre faço: testei.</p>
+          <p>São dois cremes que se revezam, um por noite: o Retinal Max e o Night Intense, da Rejuv.</p>
+          <p><span class="real">1 a 2 linhas sobre o que eu senti de verdade</span></p>
+          <p>Confessa: você já desistiu de um skincare antes de dar tempo dele funcionar?</p>
+          <p>Parceria com <span class="real">perfil da Rejuv</span> · <span class="real">cupom ou condição</span></p>
+          <p>Se o anúncio rodar só pela marca, a linha de parceria segue o briefing de vocês.</p>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="resposta" id="responder">
+    <div class="caixa">
+      <p class="sobre">Sua resposta</p>
+      <h2>O que achou do roteiro?</h2>
+      <p class="apoio">Sua resposta chega direto no meu e-mail.</p>
+
+      <div class="cartao">
+        <form id="formulario" novalidate>
+          <label for="detalhes">Algum detalhe para acrescentar ou mudar? <span class="opcional">(opcional)</span></label>
+          <p class="perguntas" style="padding:0;margin-bottom:4px">Se puder, já me conta:</p>
+          <ul class="perguntas">
+            <li>Qual creme começa e se tem noite de pausa</li>
+            <li>Se querem a frase "de dia, protetor sempre" no fim</li>
+            <li>Se tem cupom ou condição de Black Friday para o final</li>
+          </ul>
+          <textarea id="detalhes" name="detalhes"></textarea>
+
+          <div class="campo">
+            <span class="rotulo" id="rotuloDecisao">Este roteiro está:</span>
+            <div class="decisao" role="group" aria-labelledby="rotuloDecisao">
+              <button type="button" id="aprovar" aria-pressed="false">Aprovado</button>
+              <button type="button" id="reprovar" aria-pressed="false">Reprovado</button>
+            </div>
+          </div>
+
+          <div class="campo" id="campoMudar" hidden>
+            <label for="mudar">O que devo mudar?</label>
+            <textarea id="mudar" name="mudar"></textarea>
+          </div>
+
+          <div id="fim" hidden>
+            <div class="campo">
+              <label for="nome">Seu nome <span class="opcional">(opcional)</span></label>
+              <input type="text" id="nome" name="nome" autocomplete="name">
+            </div>
+            <input type="text" name="_honey" id="pote" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+            <button type="submit" id="enviar">Enviar resposta</button>
+          </div>
+          <p id="aviso" role="alert"></p>
+        </form>
+
+        <div class="obrigada" id="obrigada" tabindex="-1" hidden>
+          <h3 id="obrigadaTitulo"></h3>
+          <p id="obrigadaTexto"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <p>Débora Dominique · <a href="https://www.instagram.com/deboradominique_/" target="_blank" rel="noopener">@deboradominique_</a> · <a href="https://wa.me/5531984042252" target="_blank" rel="noopener">WhatsApp</a> · <a href="https://deboradominique.com/" target="_top">Portfólio</a></p>
+</footer>
+
+<script>
+  // EDITE AQUI quando reaproveitar a página para outro roteiro
+  const ROTEIRO = { nome: 'Rejuv · Protocolo Renovação Noturna', curto: 'Rejuv', email: 'contato@deboradominique.com' };
+
+  const $ = (id) => document.getElementById(id);
+  let decisao = '';
+
+  $('irResposta').addEventListener('click', (e) => {
+    e.preventDefault();
+    $('responder').scrollIntoView({ behavior: 'smooth' });
+  });
+
+  function escolher(valor) {
+    decisao = valor;
+    $('aprovar').setAttribute('aria-pressed', valor === 'APROVADO');
+    $('reprovar').setAttribute('aria-pressed', valor === 'REPROVADO');
+    $('campoMudar').hidden = valor !== 'REPROVADO';
+    $('fim').hidden = false;
+    $('enviar').textContent = valor === 'APROVADO' ? 'Enviar aprovação' : 'Enviar ajustes';
+    $('aviso').textContent = '';
+    if (valor === 'REPROVADO') $('mudar').focus();
+  }
+  $('aprovar').addEventListener('click', () => escolher('APROVADO'));
+  $('reprovar').addEventListener('click', () => escolher('REPROVADO'));
+
+  function abrirEmail(assunto, linhas) {
+    location.href = `mailto:${ROTEIRO.email}?subject=${encodeURIComponent(assunto)}&body=${encodeURIComponent(linhas.join('\n\n'))}`;
+  }
+
+  $('formulario').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if ($('pote').value) return; // proteção contra robôs
+    const mudar = $('mudar').value.trim();
+    if (decisao === 'REPROVADO' && !mudar) {
+      $('aviso').textContent = 'Me conta o que devo mudar, por favor.';
+      $('mudar').focus();
+      return;
+    }
+    const detalhes = $('detalhes').value.trim();
+    const nome = $('nome').value.trim();
+    const assunto = `Roteiro ${ROTEIRO.curto}: ${decisao}`;
+    const dados = {
+      Roteiro: ROTEIRO.nome,
+      Resposta: decisao,
+      'Detalhes para acrescentar ou mudar': detalhes || '(em branco)'
+    };
+    if (decisao === 'REPROVADO') dados['O que devo mudar'] = mudar;
+    dados.Nome = nome || '(em branco)';
+
+    $('enviar').disabled = true;
+    $('aviso').textContent = '';
+    const textoBotao = $('enviar').textContent;
+    $('enviar').textContent = 'Enviando...';
+    try {
+      const resposta = await fetch(`https://formsubmit.co/ajax/${ROTEIRO.email}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ ...dados, _subject: assunto, _template: 'table', _captcha: 'false' })
+      });
+      const retorno = await resposta.json().catch(() => ({}));
+      if (!resposta.ok || String(retorno.success) === 'false') throw new Error('falha');
+      $('formulario').hidden = true;
+      $('obrigada').hidden = false;
+      $('obrigadaTitulo').textContent = decisao === 'APROVADO' ? 'Aprovação recebida. Obrigada!' : 'Recebi seus ajustes. Obrigada!';
+      $('obrigadaTexto').textContent = decisao === 'APROVADO'
+        ? 'Já vou seguir com a gravação. Qualquer novidade, eu te chamo.'
+        : 'Vou ajustar o roteiro e te mando a nova versão.';
+      $('obrigada').focus();
+    } catch (erro) {
+      $('aviso').textContent = 'Não consegui enviar por aqui. Abri o seu e-mail com a resposta pronta. Se preferir, me chama no WhatsApp.';
+      abrirEmail(assunto, Object.entries(dados).map(([campo, valor]) => `${campo}: ${valor}`));
+    } finally {
+      $('enviar').disabled = false;
+      $('enviar').textContent = textoBotao;
+    }
+  });
+</script>
+<script data-goatcounter="https://deboradominique.goatcounter.com/count" data-goatcounter-settings='{"path":"/roteiro"}' async src="//gc.zgo.at/count.js"></script>
+</body>
+</html>
