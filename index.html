@@ -369,6 +369,27 @@
     .grade-destaques { grid-template-columns: 1fr; max-width: 400px; margin: 0 auto; gap: 56px; }
   }
 
+  /* Bloco "vídeo em casal" */
+  .faixa-casal {
+    display: grid; grid-template-columns: 250px 1fr; gap: clamp(28px, 5vw, 64px); align-items: center;
+    max-width: 920px; margin: clamp(56px, 8vw, 88px) auto 0; padding: clamp(24px, 4vw, 44px);
+    border: 1px solid rgba(201, 168, 106, .55); border-radius: var(--raio);
+    background: rgba(201, 168, 106, .08);
+  }
+  .casal-video { display: block; width: 100%; padding: 0; border: 0; background: none; cursor: pointer; font: inherit; color: var(--creme); border-radius: var(--raio); }
+  .casal-video .capa-video { display: block; }
+  .casal-video .play { width: 64px; height: 64px; }
+  .casal-video:hover .play { transform: translate(-50%, -50%) scale(1.1); background: var(--dourado); }
+  .casal-video:hover .play svg { fill: var(--marrom); }
+  .casal-texto h3 { font-size: clamp(1.7rem, 3.4vw, 2.5rem); line-height: 1.15; margin: 10px 0 16px; }
+  .casal-texto h3 em { color: var(--dourado); }
+  .casal-texto p:not(.sobretitulo) { color: var(--texto-claro-suave); margin-bottom: 26px; }
+  @media (max-width: 680px) {
+    .faixa-casal { grid-template-columns: 1fr; max-width: 400px; }
+    .casal-video { max-width: 240px; margin: 0 auto; }
+    .casal-texto .botao { width: 100%; justify-content: center; }
+  }
+
   /* =========================================================
      4. TRABALHOS
      ========================================================= */
@@ -870,6 +891,7 @@
           <p class="intro-secao">Conteúdos que mostram, na prática, o que acontece quando a sua marca aparece do jeito certo.</p>
         </div>
         <div class="grade-destaques" id="gradeDestaques"></div>
+        <div class="faixa-casal revelar" id="faixaCasal"></div>
         <div class="cta-faixa revelar" data-pacotes>
           <div>
             <p class="cta-faixa-titulo">Agora imagina isso com o <em>seu produto.</em></p>
@@ -1130,7 +1152,7 @@ const SITE = {
   ],
 
   // EDITE AQUI: marcas com quem você já trabalhou (aparecem na faixa da capa)
-  // Também já trabalhei com (ainda sem logo aqui): Sushi Rão, Foco Fitness, Saint Germain, Leão, Seu Influencer
+  // Também já trabalhei com (ainda sem logo aqui): Sushi Rão, Foco Fitness, Saint Germain, Leão, Seu Influencer, Minimal Club
   marcas: [
     { nome: 'Tampax', logo: LOGOS.tampax },
     { nome: 'Kaisan', logo: LOGOS.kaisan },
@@ -1185,11 +1207,25 @@ const SITE = {
     // }
   ],
 
+  // EDITE AQUI: bloco "vídeo em casal" (fica logo abaixo dos destaques)
+  videoCasal: {
+    youtube: 'Y6ZI7AHrTJY', alt: 'Débora na varanda mostrando a caixa da Minimal Club',
+    tag: 'Parceria Minimal Club',
+    sobretitulo: 'Vídeo em casal',
+    titulo: 'Sua marca também pode aparecer <em>a dois</em>',
+    texto: 'Na parceria com a Minimal Club, meu marido, o Pedro, gravou comigo. Se o seu produto combina com casal, presente ou rotina a dois, ele também pode participar do conteúdo da sua marca.',
+    botao: 'Quero um vídeo em casal',
+    mensagem: 'Olá, Débora! Vi seu portfólio e quero saber sobre um vídeo em casal, com você e o Pedro.'
+  },
+
   // EDITE AQUI: seus vídeos da galeria (YouTube).
   // "youtube" é o código do vídeo: o pedaço do link depois de /shorts/
   // Ex.: https://youtube.com/shorts/hnvOJXSc0QI  ->  youtube: 'hnvOJXSc0QI'
   // "categoria" define em qual filtro ele aparece. Para criar um filtro novo, é só usar uma categoria nova.
   trabalhos: [
+    // Mais recentes: os primeiros da lista aparecem antes de clicar em "ver mais"
+    { categoria: 'Moda e acessórios', titulo: 'Looks fitness para a Black Friday 2026', marca: 'Kaisan', youtube: 'c0vTg_vd7ls' },
+    { categoria: 'Moda e acessórios', titulo: 'Camiseta em vídeo de casal', marca: 'Minimal Club', youtube: 'Y6ZI7AHrTJY' },
     { categoria: 'Beleza', titulo: 'Comparativo de perfumes', marca: 'WePink', youtube: 'hnvOJXSc0QI' },
     { categoria: 'Beleza', titulo: 'Comparativo de perfume', marca: 'WePink', youtube: 'MVcUDSwgCNU' },
     { categoria: 'Beleza', titulo: 'Skincare pré-yoga com voiceover e aplicação', marca: 'Nature Face', youtube: 'r4JxEnoy7UI' },
@@ -1315,6 +1351,7 @@ const SITE = {
     { pergunta: 'Posso usar o vídeo em anúncios?', resposta: 'Pode. Licenças para anúncios pagos, exclusividade e períodos específicos são combinadas na proposta, antes de começar. Para usar o conteúdo por mais tempo, existe o direito de uso estendido, a partir de R$ 200 por conteúdo.' },
     { pergunta: 'Como funciona a automação via ManyChat?', resposta: 'Eu configuro no Instagram da sua marca uma automação que envia o link e as informações do produto, na hora, para quem comenta uma palavra-chave. Com a collab, a publicação gera os comentários e a automação leva cada pessoa direto para a compra. É feito no perfil da marca, com acesso autorizado e quando o recurso está disponível na conta.' },
     { pergunta: 'Você grava só em casa?', resposta: 'Não. Além da minha casa e da minha rotina, gravo em restaurantes, lojas, clínicas e passeios, em Belo Horizonte e também em viagens, como os vídeos que fiz em Gramado.' },
+    { pergunta: 'Seu marido também pode aparecer nos vídeos?', resposta: 'Pode. O Pedro já gravou comigo na parceria com a Minimal Club. Se o seu produto combina com um vídeo em casal, me avisa no primeiro contato que a gente combina como fica.' },
     { pergunta: 'Qual a qualidade do material?', resposta: 'Gravo em 4K com iPhone 17 Pro Max, microfone sem fio Hollyland e gimbal Hohem. A edição é feita no CapCut e no Premiere Pro, com trilhas licenciadas do Epidemic Sound.' },
     { pergunta: 'Os valores podem mudar?', resposta: 'Os valores da seção de pacotes são de referência. Eles podem mudar conforme a demanda, o volume de conteúdo e o briefing da sua marca, e o valor final é sempre confirmado na nossa conversa, antes de começar.' }
   ],
@@ -1407,6 +1444,24 @@ function montarSite() {
     if (card) abrirVideo(card.dataset.video, card.dataset.titulo, card);
   });
 
+  // Bloco vídeo em casal
+  const casal = SITE.videoCasal;
+  $('faixaCasal').innerHTML = `
+    <button class="casal-video" type="button" id="casalVideo" aria-label="Assistir: ${casal.tag}">
+      <span class="capa-video">
+        <img class="midia" src="img/videos/${casal.youtube}.jpg" alt="${casal.alt}" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${casal.youtube}/oardefault.jpg'">
+        <span class="tag-video">${casal.tag}</span>
+        <span class="play" aria-hidden="true">${iconePlay}</span>
+      </span>
+    </button>
+    <div class="casal-texto">
+      <p class="sobretitulo">${casal.sobretitulo}</p>
+      <h3>${casal.titulo}</h3>
+      <p>${casal.texto}</p>
+      <a class="botao botao-dourado" href="https://wa.me/55${somenteNumeros(SITE.contato.whatsapp)}?text=${encodeURIComponent(casal.mensagem)}" target="_blank" rel="noopener">${casal.botao} <span aria-hidden="true">↗</span></a>
+    </div>`;
+  $('casalVideo').addEventListener('click', (e) => abrirVideo(casal.youtube, casal.tag, e.currentTarget));
+
   // Trabalhos e filtros
   $('galeria').innerHTML = SITE.trabalhos.map((t) => `
     <button class="trabalho revelar" type="button" data-categoria="${t.categoria}" data-video="${t.youtube}" data-titulo="${t.titulo}${t.marca ? ' · ' + t.marca : ''}" aria-label="Assistir: ${t.titulo}${t.marca ? ', ' + t.marca : ''}">
@@ -1422,7 +1477,7 @@ function montarSite() {
     const card = e.target.closest('.trabalho');
     if (card) abrirVideo(card.dataset.video, card.dataset.titulo, card);
   });
-  const categorias = ['Todos', ...new Set(SITE.trabalhos.map((t) => t.categoria))];
+  const categorias = ['Todos', ...[...new Set(SITE.trabalhos.map((t) => t.categoria))].sort((a, b) => a.localeCompare(b, 'pt-BR'))];
   $('filtros').innerHTML = categorias.map((c, i) =>
     `<button class="filtro" type="button" aria-pressed="${i === 0}" data-filtro="${c}">${c}</button>`).join('');
   // Em "Todos", mostra só os primeiros vídeos até a marca pedir para ver mais
