@@ -22,7 +22,7 @@
   const saudacaoHora = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; };
   const DIAS_MIN_APRENDER = 5; // dias com tarefas concluídas para o ritmo começar a valer
 
-  let sb, raiz, uid, tarefas = [], prefs = null, visao = 'hoje', relogio = null, carregado = false;
+  let sb, raiz, uid, tarefas = [], prefs = null, visao = 'hoje', relogio = null, carregado = false, dadosBrutos = {};
 
   // ===== Utilidades =====
   const $ = (s, el) => (el || raiz).querySelector(s);
@@ -76,7 +76,8 @@
     tarefas = tudo;
     const { data: p, error: e2 } = await sb.from('preferencias').select('dados').eq('user_id', uid).maybeSingle();
     if (e2) throw e2;
-    prefs = p && p.dados && p.dados.dias ? { ...PREFS_PADRAO, ...p.dados } : null;
+    dadosBrutos = (p && p.dados) || {};
+    prefs = dadosBrutos.dias ? { ...PREFS_PADRAO, ...dadosBrutos } : null;
   }
 
   async function salvarTarefa(id, dados) {
@@ -91,7 +92,8 @@
   async function salvarPrefs(novas) {
     const { error } = await sb.from('preferencias').upsert({ user_id: uid, dados: novas, updated_at: new Date().toISOString() });
     if (error) throw error;
-    prefs = novas;
+    dadosBrutos = novas;
+    prefs = novas.dias ? { ...PREFS_PADRAO, ...novas } : null;
   }
 
   // ===== O "ritmo": aprende com o que você realmente conclui =====
@@ -396,7 +398,7 @@
       const erro = (m) => { const el = dlg.querySelector('#bv-erro'); el.textContent = m; el.hidden = false; };
       if (!dias.length) return erro('Escolha pelo menos um dia.');
       if (!f.inicio.value || !f.fim.value || minutos(f.fim.value) <= minutos(f.inicio.value)) return erro('O horário de término precisa ser depois do começo.');
-      const novas = { nome: f.nome.value.trim(), dias, inicio: f.inicio.value, fim: f.fim.value, horas: Number(f.horas.value), lembrete: Number(f.lembrete.value) };
+      const novas = { ...dadosBrutos, nome: f.nome.value.trim(), dias, inicio: f.inicio.value, fim: f.fim.value, horas: Number(f.horas.value), lembrete: Number(f.lembrete.value) };
       try { await salvarPrefs(novas); dlg.close(); desenhar(); toast(editar ? 'Rotina atualizada.' : `Prontinho, ${nomeDela()}! Agora é só reservar seus horários ✦`);
         document.dispatchEvent(new CustomEvent('oug:nome', { detail: nomeDela() })); }
       catch (err) { console.error(err); erro('Não consegui salvar agora. Tente de novo.'); }
@@ -682,6 +684,10 @@
     // Chamado quando a aba é aberta: na primeira vez, pergunta a rotina
     aoAbrir() { if (carregado) desenhar(); },
     nome: nomeDela,
+    prefs: () => ({ ...PREFS_PADRAO, ...dadosBrutos }),
+    // Guarda só alguns campos (ex.: meta de abordagens), sem apagar o resto nem pular as boas-vindas
+    async salvarPrefsParcial(parcial) { await salvarPrefs({ ...dadosBrutos, ...parcial }); },
+    pronto: () => carregado,
     saudacao: saudacaoHora
   };
 })();

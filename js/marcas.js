@@ -613,6 +613,13 @@
 
   window.Marcas = {
     lista: () => marcas, // usada pelas Tarefas (ligar tarefa a uma marca)
+    // Usada pela Prospecção: quando uma abordagem é aprovada, vira parceria no funil
+    async adicionar(dados) {
+      const etapa = dados.etapa || 'negociando';
+      const salvo = await salvar(null, { ...dados, etapa, historico: [{ etapa, em: new Date().toISOString() }] });
+      if (raiz) desenhar();
+      return salvo;
+    },
     async iniciar(cliente, secao) {
       sb = cliente; raiz = secao;
       montarEsqueleto();
