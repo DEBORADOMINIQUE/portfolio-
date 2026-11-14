@@ -17,49 +17,6 @@
     { id: 'ganchos', nome: 'Gancho extra', tipo: 'unidade', conteudo: false, ref: null, min: null },
     { id: 'brutos', nome: 'Arquivos brutos', tipo: 'unidade', conteudo: false, ref: null, min: null }
   ];
-  // ===== Níveis de UGC: valor sugerido de mercado (Brasil, pesquisa de nov/2026) =====
-  // Base = preço do vídeo UGC por nível; os outros itens são proporções do vídeo.
-  const NIVEIS = {
-    iniciante:     { nome: 'Iniciante',     desc: 'Até 5 trabalhos pagos, portfólio ainda em construção.', video: 200 },
-    intermediaria: { nome: 'Intermediária', desc: 'De 6 a 20 trabalhos, já tem marcas no portfólio.', video: 450 },
-    avancada:      { nome: 'Avançada',      desc: 'Mais de 20 trabalhos, marcas que voltam, vídeos rodando em anúncio.', video: 1000 },
-    referencia:    { nome: 'Referência',    desc: 'Trabalha com marcas grandes e tem resultados comprovados.', video: 1800 }
-  };
-  const PROPORCOES = [
-    { id: 'video', nome: 'Vídeo UGC', tipo: 'unidade', conteudo: true, x: 1 },
-    { id: 'foto', nome: 'Foto UGC', tipo: 'unidade', conteudo: true, x: 0.2 },
-    { id: 'collab', nome: 'Collab', tipo: 'unidade', conteudo: true, x: 2 },
-    { id: 'casal', nome: 'Vídeo em casal', tipo: 'unidade', conteudo: true, x: 1.75 },
-    { id: 'ganchos', nome: 'Gancho extra', tipo: 'unidade', conteudo: false, x: 0.15 },
-    { id: 'brutos', nome: 'Arquivos brutos', tipo: 'unidade', conteudo: false, x: 0.3 },
-    { id: 'uso', nome: 'Direito de uso estendido', tipo: 'por_conteudo', x: 0.5 },
-    { id: 'anuncio30', nome: 'Licença de anúncio 30 dias', tipo: 'por_conteudo', x: 0.5 },
-    { id: 'anuncio60', nome: 'Licença de anúncio 60 dias', tipo: 'por_conteudo', x: 0.75 },
-    { id: 'anuncio90', nome: 'Licença de anúncio 90 dias', tipo: 'por_conteudo', x: 1 },
-    { id: 'exclusividade', nome: 'Exclusividade', tipo: 'percentual', pct: 30 }
-  ];
-  const arred = (v) => v >= 100 ? Math.round(v / 10) * 10 : Math.max(5, Math.round(v / 5) * 5);
-  const nivel = () => (window.Tarefas && Tarefas.prefs().nivel_ugc) || null;
-  function sugerido(id) {
-    const n = NIVEIS[nivel()], p = PROPORCOES.find(x => x.id === id);
-    if (!n || !p) return null;
-    if (p.tipo === 'percentual') return { ref: p.pct, min: p.pct };
-    const ref = arred(n.video * p.x);
-    return { ref, min: arred(ref * 0.75) };
-  }
-  // Preço que entra na conta: o seu; se você não tem, o sugerido do seu nível
-  function efetivo(i) {
-    if (temPreco(i)) return i;
-    const sg = sugerido(i.id);
-    return sg ? { ...i, ref: sg.ref, min: sg.min, sugerido: true } : i;
-  }
-  // Lista completa: seus itens + os itens sugeridos que você ainda não tem
-  function itensComSugestoes() {
-    const meus = precos(), ids = new Set(meus.map(i => i.id));
-    const extras = nivel() ? PROPORCOES.filter(p => !ids.has(p.id)).map(p => ({ id: p.id, nome: p.nome, tipo: p.tipo, conteudo: p.conteudo, ref: null, min: null })) : [];
-    return meus.concat(extras).map(efetivo);
-  }
-
   let raiz, qtd = {}, proposta = '', verba = '';
 
   const $ = (s, el) => (el || raiz).querySelector(s);
@@ -79,7 +36,7 @@
 
   // Soma o orçamento: unidades, depois "por conteúdo", depois os percentuais
   function calcular(q) {
-    const itens = itensComSugestoes();
+    const itens = precos();
     let ref = 0, min = 0, conteudos = 0, linhas = [], faltaPreco = [];
     itens.filter(i => i.tipo === 'unidade').forEach(i => {
       const n = q[i.id] || 0; if (!n) return;
@@ -105,7 +62,7 @@
 
   // O que cabe na verba (pelo preço de referência): testa combinações dos conteúdos
   function cabeNaVerba(v) {
-    const base = itensComSugestoes().filter(i => i.tipo === 'unidade' && i.conteudo && temPreco(i) && Number(i.ref) > 0).slice(0, 4);
+    const base = precos().filter(i => i.tipo === 'unidade' && i.conteudo && temPreco(i) && Number(i.ref) > 0).slice(0, 4);
     if (!base.length) return [];
     const opcoes = [];
     const tentar = (idx, atual) => {
@@ -136,23 +93,12 @@
   }
 
   // ===== Desenho =====
-  function cartaoNivel() {
-    const n = nivel(), sv = sugerido('video');
-    return `<div class="cartao nivel-card">
-      <div class="nivel-topo"><div><h2>Seu nível de UGC</h2><p class="desc">Os valores sugeridos mudam conforme o nível que você se considera. Seus preços cadastrados sempre vêm primeiro.</p></div>
-      ${n ? '<button class="mini-btn" data-usar-sugeridos>Usar os sugeridos como meus preços</button>' : ''}</div>
-      <div class="nivel-chips">${Object.entries(NIVEIS).map(([k, v]) => `<button class="${n === k ? 'ativo' : ''}" data-nivel="${k}">${v.nome}</button>`).join('')}</div>
-      ${n ? `<p class="nivel-desc">${NIVEIS[n].desc} Vídeo UGC sugerido: <b>${moeda(sv.ref)}</b> (mínimo ${moeda(sv.min)}).</p>` : '<p class="nivel-desc">Escolha o nível que mais combina com você agora. Dá para mudar quando quiser.</p>'}
-      <small class="desc">Faixas de mercado do Brasil em 2026, pesquisadas em guias de preço de UGC. São referência, não regra: seu nicho, sua entrega e seus resultados também contam.</small>
-    </div>`;
-  }
-
   function desenhar() {
-    const itens = itensComSugestoes(), semPreco = itens.every(i => !temPreco(i));
+    const itens = precos(), semPreco = itens.every(i => !temPreco(i));
     if (semPreco) {
-      raiz.querySelector('#s-conteudo').innerHTML = cartaoNivel() + `<div class="cartao vazio-grande"><h2>Escolha seu nível ou cadastre seus preços ✦</h2>
-        <p>Com o nível, eu já sugiro valores de mercado. Se preferir, coloque os seus. Eles ficam guardados só para você, protegidos pelo seu login.</p>
-        <button class="btn-secundario" data-editar-precos>Cadastrar meus preços</button></div>`;
+      raiz.querySelector('#s-conteudo').innerHTML = `<div class="cartao vazio-grande"><h2>Primeiro, seus preços ✦</h2>
+        <p>Coloque o valor de referência e o seu mínimo de cada serviço. Eles ficam guardados só para você, protegidos pelo seu login.</p>
+        <button class="btn-primario" data-editar-precos>Cadastrar meus preços</button></div>`;
       return;
     }
     const c = calcular(qtd), p = lerValor(proposta), v = lerValor(verba);
@@ -163,17 +109,14 @@
       else situacao = `<div class="previa-prazo ok">Arrasou: no valor de referência ou acima ✦</div>`;
     }
     const grupos = [['unidade', 'Conteúdos e serviços'], ['por_conteudo', 'Licenças e uso de imagem'], ['percentual', 'Adicionais']];
-    raiz.querySelector('#s-conteudo').innerHTML = cartaoNivel() + `
+    raiz.querySelector('#s-conteudo').innerHTML = `
       <div class="simulador">
         <div class="cartao s-itens">
           ${grupos.map(([tipo, titulo]) => { const lista = itens.filter(i => i.tipo === tipo); if (!lista.length) return '';
             return `<h2>${titulo}</h2><div class="s-lista">${lista.map(i => {
-              const ativo = qtd[i.id] > 0, sg = sugerido(i.id);
-              let preco = temPreco(i) ? (tipo === 'percentual' ? `+${i.ref}%` : moeda(i.ref) + (tipo === 'por_conteudo' ? ' / conteúdo' : '')) : 'sem preço';
-              if (i.sugerido) preco += ' · sugerido p/ seu nível';
-              else if (sg && temPreco(i) && tipo !== 'percentual' && Math.abs(sg.ref - i.ref) >= 10) preco += ` · nível ${NIVEIS[nivel()].nome.toLowerCase()}: ${moeda(sg.ref)}`;
+              const ativo = qtd[i.id] > 0, preco = temPreco(i) ? (tipo === 'percentual' ? `+${i.ref}%` : moeda(i.ref) + (tipo === 'por_conteudo' ? ' / conteúdo' : '')) : 'sem preço';
               return `<div class="s-item ${ativo ? 'ativo' : ''} ${temPreco(i) ? '' : 'sem-preco'}">
-                <div><strong>${esc(i.nome)}</strong><small>${preco}${temPreco(i) && i.min != null && i.min !== i.ref && tipo !== 'percentual' && !i.sugerido ? ` · mín. ${moeda(i.min)}` : ''}</small></div>
+                <div><strong>${esc(i.nome)}</strong><small>${preco}${temPreco(i) && i.min != null && i.min !== i.ref && tipo !== 'percentual' ? ` · mín. ${moeda(i.min)}` : ''}</small></div>
                 ${tipo === 'unidade'
                   ? `<div class="stepper"><button data-menos="${i.id}" aria-label="Menos ${esc(i.nome)}">−</button><span>${qtd[i.id] || 0}</span><button data-mais="${i.id}" aria-label="Mais ${esc(i.nome)}">+</button></div>`
                   : `<label class="switch"><input type="checkbox" data-liga="${i.id}" ${ativo ? 'checked' : ''}><span></span></label>`}
@@ -250,27 +193,11 @@
     dlg.showModal();
   }
 
-  // Troca os seus preços pelos sugeridos do nível (pacotes e itens só seus continuam)
-  async function usarSugeridos() {
-    if (!confirm(`Trocar os seus preços pelos sugeridos do nível ${NIVEIS[nivel()].nome}? Pacotes e serviços que só você tem continuam como estão.`)) return;
-    // Sem preços salvos ainda (lista padrão): começa do zero; senão, parte dos seus
-    const meus = precos() === PADRAO ? [] : precos().map(i => ({ ...i }));
-    PROPORCOES.forEach(p => {
-      const sg = sugerido(p.id), j = meus.findIndex(i => i.id === p.id);
-      const item = { id: p.id, nome: p.nome, tipo: p.tipo, conteudo: p.conteudo, ref: sg.ref, min: sg.min };
-      if (j >= 0) meus[j] = { ...meus[j], ref: sg.ref, min: sg.min }; else meus.push(item);
-    });
-    try { await Tarefas.salvarPrefsParcial({ precos: meus }); qtd = {}; desenhar(); toast('Preços atualizados com os sugeridos ✦'); }
-    catch (e) { console.error(e); toast('Não consegui salvar agora.', true); }
-  }
-
   function montar() {
     raiz.innerHTML = `<div class="marcas-barra"><p class="saudacao">Preço certo, sem medo de cobrar.</p></div><div id="s-conteudo"><p class="carregando">Carregando seus preços...</p></div>`;
     raiz.addEventListener('click', (e) => {
-      const a = e.target.closest('[data-mais], [data-menos], [data-editar-precos], [data-copiar], [data-criar-marca], [data-limpar], [data-usar], [data-nivel], [data-usar-sugeridos]');
+      const a = e.target.closest('[data-mais], [data-menos], [data-editar-precos], [data-copiar], [data-criar-marca], [data-limpar], [data-usar]');
       if (!a) return;
-      if (a.matches('[data-nivel]')) return Tarefas.salvarPrefsParcial({ nivel_ugc: a.dataset.nivel }).then(() => { desenhar(); toast(`Nível: ${NIVEIS[a.dataset.nivel].nome} ✦`); }, () => toast('Não consegui salvar agora.', true));
-      if (a.matches('[data-usar-sugeridos]')) return usarSugeridos();
       if (a.matches('[data-mais]')) { qtd[a.dataset.mais] = (qtd[a.dataset.mais] || 0) + 1; return desenhar(); }
       if (a.matches('[data-menos]')) { qtd[a.dataset.menos] = Math.max(0, (qtd[a.dataset.menos] || 0) - 1); return desenhar(); }
       if (a.matches('[data-editar-precos]')) return abrirPrecos();

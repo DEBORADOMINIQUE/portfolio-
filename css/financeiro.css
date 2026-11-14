@@ -98,10 +98,3 @@
 .plano-base { margin-bottom: 12px; }
 .meta-plano { display: block; margin-top: 2px; }
 .meta-plano b { color: var(--vinho); }
-.nivel-card { margin-bottom: 16px; }
-.nivel-topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
-.nivel-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
-.nivel-chips button { border: 1.5px solid var(--borda); background: var(--branco); color: var(--suave); border-radius: 999px; padding: 9px 18px; font-weight: 700; font-size: .9rem; }
-.nivel-chips button.ativo { background: var(--gel); color: #fff; border-color: transparent; box-shadow: var(--gel-sombra); }
-.nivel-desc { font-size: .92rem; margin-bottom: 6px; }
-.nivel-desc b { color: var(--vinho); }
