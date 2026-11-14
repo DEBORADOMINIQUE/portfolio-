@@ -1,25 +1,25 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>Acesso restrito · meu.painel</title>
+  <title>Entrar · meu.painel</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 
-  <!-- Guarda se a página abriu pelo link de "esqueci minha senha" antes do Supabase limpar o endereço -->
-  <script>window.__abriuRecuperacao = /type=recovery/.test(window.location.hash);</script>
+  <!-- Supabase por CDN e depois a autenticação compartilhada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/auth.js"></script>
 
   <style>
-    /* ===== Design system ===== */
+    /* ===== Design system: as mesmas cores e fontes do portfólio ===== */
     :root {
       --vinho: #6e1423;
       --vinho-escuro: #3d0b14;
+      --vinho-claro: #f3e2dc;
       --creme: #f1e6cf;
       --creme-claro: #f7f0e1;
       --dourado: #c9a86a;
@@ -27,54 +27,63 @@
       --grafite: #2a1a14;
       --suave: #5b463b;
       --borda: #e3d4b8;
-      --verde: #2D6A45;
-      --vermelho: #A8322B;
+      --verde: #2d6a45;
+      --vermelho: #a8322b;
+      --raio-p: 12px;
       --raio: 16px;
       --raio-g: 24px;
-      --sombra: 0 1px 2px rgba(42,26,20,.04), 0 12px 32px rgba(42,26,20,.08);
+      --sombra: 0 1px 2px rgba(42,26,20,.05), 0 18px 40px -18px rgba(42,26,20,.35);
       --titulo: 'Playfair Display', Georgia, serif;
-      --texto: 'Inter', system-ui, sans-serif;
+      --texto: 'Inter', system-ui, -apple-system, sans-serif;
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0; min-height: 100vh; display: grid; place-items: center;
-      padding: 24px 16px; background: var(--creme); color: var(--grafite);
-      font-family: var(--texto); font-size: 15px; line-height: 1.5;
+      min-height: 100vh; display: grid; place-items: center; padding: 24px 16px;
+      font-family: var(--texto); color: var(--grafite);
+      background: radial-gradient(circle at 15% 10%, var(--creme-claro), var(--creme) 60%);
     }
+
     .cartao {
-      width: 100%; max-width: 400px; background: var(--branco);
+      width: 100%; max-width: 420px; background: var(--branco);
       border: 1px solid var(--borda); border-radius: var(--raio-g);
-      box-shadow: var(--sombra); padding: 40px 32px;
+      box-shadow: var(--sombra); padding: 40px 32px 32px;
+      border-top: 4px solid var(--vinho);
     }
-    .logo { font-family: var(--titulo); font-weight: 600; font-size: 20px; margin-bottom: 28px; }
-    .logo span { color: var(--dourado); }
-    h1 { font-family: var(--titulo); font-weight: 500; font-size: 30px; line-height: 1.15; margin: 0 0 8px; }
-    .sub { color: var(--suave); margin: 0 0 28px; }
+    .logo { font-family: var(--titulo); font-size: 1.5rem; font-weight: 700; color: var(--vinho-escuro); margin-bottom: 28px; }
+    .logo span { color: #b08a45; }
+    h1 { font-family: var(--titulo); font-weight: 600; font-size: 1.9rem; line-height: 1.15; color: var(--vinho); margin-bottom: 8px; }
+    .sub { color: var(--suave); font-size: .95rem; line-height: 1.5; margin-bottom: 24px; }
 
-    .aviso { display: none; border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-bottom: 18px; }
-    .aviso.erro { display: block; background: #FBECEA; color: var(--vermelho); border: 1px solid #F0C9C5; }
-    .aviso.ok { display: block; background: #E8F3EC; color: var(--verde); border: 1px solid #C3E0CE; }
+    /* Faixas de aviso */
+    .faixa { display: none; padding: 12px 14px; border-radius: var(--raio-p); font-size: .9rem; line-height: 1.4; margin-bottom: 18px; }
+    .faixa.ativa { display: block; }
+    .faixa.erro { background: #f8e4e1; color: var(--vermelho); border: 1px solid #ecc3bd; }
+    .faixa.ok { background: #e3efe6; color: var(--verde); border: 1px solid #c3dccb; }
 
-    label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; }
+    form { display: none; }
+    form.ativo { display: block; }
+    label { display: block; font-size: .85rem; font-weight: 500; margin-bottom: 6px; }
     input {
-      width: 100%; font: inherit; color: inherit; background: var(--creme);
-      border: 1px solid var(--borda); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px;
+      width: 100%; padding: 13px 14px; margin-bottom: 16px; font: inherit; font-size: 1rem;
+      color: var(--grafite); background: #fff; border: 1px solid var(--borda); border-radius: var(--raio-p);
       transition: border-color .15s, box-shadow .15s;
     }
-    input:focus { outline: none; border-color: var(--vinho); box-shadow: 0 0 0 3px rgba(110,20,35,.15); background: var(--branco); }
+    input:focus { outline: none; border-color: var(--vinho); box-shadow: 0 0 0 3px rgba(110,20,35,.12); }
 
     .linha { display: flex; justify-content: flex-end; margin: -6px 0 20px; }
-    .link { background: none; border: 0; padding: 0; font: inherit; font-size: 14px; color: var(--vinho); cursor: pointer; }
-    .link:hover { color: var(--vinho-escuro); text-decoration: underline; }
+    .link { background: none; border: 0; padding: 0; font: inherit; font-size: .88rem; color: var(--vinho); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+    .link:hover { color: var(--vinho-escuro); }
 
     .botao {
-      width: 100%; font: inherit; font-weight: 600; color: #fff; background: var(--vinho);
-      border: 0; border-radius: 12px; padding: 13px; cursor: pointer; transition: background .15s;
+      width: 100%; padding: 14px; font: inherit; font-weight: 600; font-size: 1rem;
+      color: var(--creme-claro); background: var(--vinho); border: 0; border-radius: var(--raio-p);
+      cursor: pointer; transition: background .15s, transform .05s;
     }
     .botao:hover { background: var(--vinho-escuro); }
-    .botao:disabled { opacity: .65; cursor: wait; }
+    .botao:active { transform: translateY(1px); }
+    .botao:disabled { opacity: .7; cursor: wait; }
     .voltar { display: block; margin: 18px auto 0; }
-    [hidden] { display: none !important; }
+    .rodape { text-align: center; color: var(--suave); font-size: .78rem; margin-top: 24px; }
   </style>
 </head>
 <body>
@@ -83,121 +92,131 @@
     <h1 id="titulo">Acesso restrito</h1>
     <p class="sub" id="subtitulo">Faça login para ver os números do seu portfólio.</p>
 
-    <div class="aviso" id="aviso" role="alert"></div>
+    <div class="faixa erro" id="erro" role="alert"></div>
+    <div class="faixa ok" id="ok" role="status"></div>
 
-    <!-- Login -->
-    <form id="form-login" novalidate>
+    <!-- 1. Login -->
+    <form id="form-login" class="ativo" novalidate>
       <label for="email">E-mail</label>
-      <input id="email" type="email" autocomplete="email" required>
+      <input id="email" type="email" autocomplete="email" required placeholder="voce@email.com">
       <label for="senha">Senha</label>
-      <input id="senha" type="password" autocomplete="current-password" required>
+      <input id="senha" type="password" autocomplete="current-password" required placeholder="Sua senha">
       <div class="linha"><button type="button" class="link" id="ir-recuperar">Esqueci minha senha</button></div>
-      <button class="botao" type="submit" id="btn-entrar">Entrar</button>
+      <button type="submit" class="botao" id="btn-entrar">Entrar</button>
     </form>
 
-    <!-- Esqueci minha senha -->
-    <form id="form-recuperar" novalidate hidden>
-      <label for="email-rec">E-mail</label>
-      <input id="email-rec" type="email" autocomplete="email" required>
-      <button class="botao" type="submit" id="btn-recuperar">Enviar link de recuperação</button>
+    <!-- 2. Esqueci minha senha -->
+    <form id="form-recuperar" novalidate>
+      <label for="email-rec">E-mail da sua conta</label>
+      <input id="email-rec" type="email" autocomplete="email" required placeholder="voce@email.com">
+      <button type="submit" class="botao" id="btn-recuperar">Enviar link de recuperação</button>
       <button type="button" class="link voltar" id="voltar-login">Voltar para o login</button>
     </form>
 
-    <!-- Nova senha (depois de clicar no link do e-mail) -->
-    <form id="form-nova" novalidate hidden>
+    <!-- 3. Nova senha (aparece quando você abre o link do e-mail) -->
+    <form id="form-nova" novalidate>
       <label for="nova-senha">Nova senha</label>
-      <input id="nova-senha" type="password" autocomplete="new-password" minlength="6" required>
-      <button class="botao" type="submit" id="btn-nova">Salvar nova senha</button>
+      <input id="nova-senha" type="password" autocomplete="new-password" minlength="6" required placeholder="Pelo menos 6 caracteres">
+      <button type="submit" class="botao" id="btn-nova">Salvar nova senha</button>
     </form>
+
+    <p class="rodape">Área privada. Só quem tem acesso consegue entrar.</p>
   </main>
 
   <script>
     const $ = (id) => document.getElementById(id);
-    const forms = { login: $('form-login'), recuperar: $('form-recuperar'), nova: $('form-nova') };
+    const textos = {
+      login: ['Acesso restrito', 'Faça login para ver os números do seu portfólio.'],
+      recuperar: ['Recuperar senha', 'Digite seu e-mail e enviaremos um link para criar uma senha nova.'],
+      nova: ['Crie uma senha nova', 'Escolha a nova senha para entrar no painel.']
+    };
 
-    function mostrarAviso(texto, tipo) {
-      const el = $('aviso');
-      el.textContent = texto;
-      el.className = 'aviso ' + tipo;
-    }
-    function limparAviso() { $('aviso').className = 'aviso'; }
-
-    function trocarTela(qual) {
-      Object.entries(forms).forEach(([nome, f]) => { f.hidden = nome !== qual; });
-      limparAviso();
-      const textos = {
-        login: ['Acesso restrito', 'Faça login para ver os números do seu portfólio.'],
-        recuperar: ['Recuperar senha', 'Digite seu e-mail e enviaremos um link para criar uma nova senha.'],
-        nova: ['Crie uma nova senha', 'Escolha uma senha com pelo menos 6 caracteres.']
-      };
-      $('titulo').textContent = textos[qual][0];
-      $('subtitulo').textContent = textos[qual][1];
+    function aviso(tipo, msg) {
+      $('erro').classList.remove('ativa'); $('ok').classList.remove('ativa');
+      if (msg) { $(tipo).textContent = msg; $(tipo).classList.add('ativa'); }
     }
 
-    // Botão em estado "carregando"
-    function carregando(botao, ativo, textoCarregando) {
-      if (ativo) { botao.dataset.original = botao.textContent; botao.textContent = textoCarregando; }
-      else if (botao.dataset.original) { botao.textContent = botao.dataset.original; }
-      botao.disabled = ativo;
+    // Troca qual formulário aparece no cartão
+    function trocarTela(nome) {
+      ['login', 'recuperar', 'nova'].forEach(n => $('form-' + n).classList.toggle('ativo', n === nome));
+      $('titulo').textContent = textos[nome][0];
+      $('subtitulo').textContent = textos[nome][1];
+      aviso();
     }
 
-    // Ao abrir: se veio do link de recuperação, pede a nova senha; se já está logada, vai pro painel
-    (async () => {
-      if (window.__abriuRecuperacao) { trocarTela('nova'); return; }
-      const usuario = await Auth.sessaoAtual();
-      if (usuario) window.location.replace('painel.html');
-    })();
+    // Deixa o botão em estado de carregando
+    function carregando(botao, ligado, texto) {
+      if (ligado) { botao.dataset.original = botao.textContent; botao.textContent = texto; botao.disabled = true; }
+      else { botao.textContent = botao.dataset.original || botao.textContent; botao.disabled = false; }
+    }
+
+    // Veio do link "esqueci minha senha"? Então mostra a tela de nova senha em vez de redirecionar.
+    const veioDaRecuperacao = /type=recovery/.test(window.location.hash);
     Auth.client.auth.onAuthStateChange((evento) => {
       if (evento === 'PASSWORD_RECOVERY') trocarTela('nova');
     });
 
+    (async () => {
+      if (veioDaRecuperacao) { trocarTela('nova'); return; }
+      // Já tem sessão ativa? Vai direto para o painel.
+      try {
+        if (await Auth.sessaoAtual()) window.location.replace('painel.html');
+      } catch (e) { /* sem conexão: continua na tela de login */ }
+    })();
+
     $('ir-recuperar').addEventListener('click', () => {
       trocarTela('recuperar');
       $('email-rec').value = $('email').value;
+      $('email-rec').focus();
     });
     $('voltar-login').addEventListener('click', () => trocarTela('login'));
 
-    forms.login.addEventListener('submit', async (e) => {
+    // Envio do login
+    $('form-login').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = $('email').value.trim();
       const senha = $('senha').value;
-      if (!email || !senha) return mostrarAviso('Preencha e-mail e senha.', 'erro');
-      limparAviso();
+      if (!email || !senha) return aviso('erro', 'Preencha o e-mail e a senha.');
+      aviso();
       carregando($('btn-entrar'), true, 'Entrando...');
       try {
         await Auth.login(email, senha);
         window.location.replace('painel.html');
       } catch (err) {
-        mostrarAviso(err.message, 'erro');
+        aviso('erro', err.message);
         carregando($('btn-entrar'), false);
       }
     });
 
-    forms.recuperar.addEventListener('submit', async (e) => {
+    // Envio do "esqueci minha senha"
+    $('form-recuperar').addEventListener('submit', async (e) => {
       e.preventDefault();
       const email = $('email-rec').value.trim();
-      if (!email) return mostrarAviso('Digite seu e-mail.', 'erro');
+      if (!email) return aviso('erro', 'Digite seu e-mail.');
+      aviso();
       carregando($('btn-recuperar'), true, 'Enviando...');
       try {
         await Auth.recuperarSenha(email);
-        mostrarAviso('Pronto! Se este e-mail tiver acesso, você vai receber um link em instantes.', 'ok');
+        aviso('ok', 'Pronto! Se esse e-mail tiver acesso, você vai receber um link em instantes. Confira também o spam.');
       } catch (err) {
-        mostrarAviso(err.message, 'erro');
+        aviso('erro', err.message);
       }
       carregando($('btn-recuperar'), false);
     });
 
-    forms.nova.addEventListener('submit', async (e) => {
+    // Envio da nova senha
+    $('form-nova').addEventListener('submit', async (e) => {
       e.preventDefault();
       const senha = $('nova-senha').value;
-      if (senha.length < 6) return mostrarAviso('A senha precisa ter pelo menos 6 caracteres.', 'erro');
+      if (senha.length < 6) return aviso('erro', 'A senha precisa ter pelo menos 6 caracteres.');
+      aviso();
       carregando($('btn-nova'), true, 'Salvando...');
       try {
         await Auth.definirNovaSenha(senha);
-        mostrarAviso('Senha salva! Abrindo seu painel...', 'ok');
+        aviso('ok', 'Senha salva! Abrindo o painel...');
         setTimeout(() => window.location.replace('painel.html'), 1200);
       } catch (err) {
-        mostrarAviso(err.message, 'erro');
+        aviso('erro', err.message);
         carregando($('btn-nova'), false);
       }
     });

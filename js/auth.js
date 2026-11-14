@@ -10,9 +10,8 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 // Cliente único, usado por todas as páginas
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-window.sb = sb;
 
-// Endereço da página de login, na mesma pasta desta página
+// Monta o endereço de outra página na mesma pasta (funciona no GitHub Pages, na Vercel e no localhost)
 function urlDaPagina(nome) {
   return new URL(nome, window.location.href).href;
 }
@@ -24,18 +23,14 @@ window.Auth = {
   async login(email, senha) {
     const { data, error } = await sb.auth.signInWithPassword({ email, password: senha });
     if (error) {
-      if (/invalid login credentials/i.test(error.message)) {
-        throw new Error('E-mail ou senha incorretos.');
-      }
-      if (/email not confirmed/i.test(error.message)) {
-        throw new Error('Este e-mail ainda não foi confirmado.');
-      }
+      if (/invalid login credentials/i.test(error.message)) throw new Error('E-mail ou senha incorretos.');
+      if (/email not confirmed/i.test(error.message)) throw new Error('Este e-mail ainda não foi confirmado.');
       throw new Error('Não foi possível entrar agora. Tente de novo em instantes.');
     }
     return data.user;
   },
 
-  // Guarda do painel: sem sessão, manda para o login.
+  // Guarda do painel: sem sessão, manda para o login e devolve null.
   async checkAuth() {
     const { data, error } = await sb.auth.getSession();
     const sessao = data && data.session;
@@ -46,22 +41,22 @@ window.Auth = {
     return sessao.user;
   },
 
-  // Só consulta, sem redirecionar (usado na tela de login)
+  // Só consulta a sessão, sem redirecionar (usado na tela de login)
   async sessaoAtual() {
     const { data } = await sb.auth.getSession();
     return data && data.session ? data.session.user : null;
   },
 
+  // Sai e volta para o login
   async logout() {
-    await sb.auth.signOut();
-    window.location.replace(urlDaPagina('login.html'));
+    try { await sb.auth.signOut(); } finally {
+      window.location.replace(urlDaPagina('login.html'));
+    }
   },
 
-  // Envia o e-mail de "esqueci minha senha". O link volta para o login.
+  // Envia o e-mail de "esqueci minha senha". O link do e-mail volta para o login.
   async recuperarSenha(email) {
-    const { error } = await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: urlDaPagina('login.html')
-    });
+    const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: urlDaPagina('login.html') });
     if (error) throw new Error('Não conseguimos enviar o e-mail. Confira o endereço e tente de novo.');
     return true;
   },
