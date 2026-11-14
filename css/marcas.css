@@ -193,3 +193,7 @@
   .dialogo-ficha { width: 100vw; max-height: 100dvh; border-radius: 0; }
   .ficha { max-height: 100dvh; }
 }
+.link-linha { display: flex; gap: 8px; align-items: center; }
+.link-linha input { flex: 1; }
+.licenca-rapida { margin-top: 12px; font-size: .8rem; color: var(--suave); }
+.legenda .licenca::before, .ev.licenca { background: #c77dff; }

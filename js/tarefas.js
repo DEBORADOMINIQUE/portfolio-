@@ -407,9 +407,10 @@
   }
 
   // ===== Ficha da tarefa: "qual horário você quer reservar?" =====
-  function abrirTarefa(t, diaSugerido) {
+  function abrirTarefa(t, diaSugerido, preenchido) {
     const nova = !t, p = prefs || PREFS_PADRAO, r = ritmo();
-    t = t || { categoria: 'gravar', duracao_min: r.tempoReal.gravar || CATEGORIAS.gravar.min, lembrete_min: p.lembrete, data: diaSugerido || null };
+    t = t || { categoria: 'gravar', duracao_min: r.tempoReal.gravar || CATEGORIAS.gravar.min, lembrete_min: p.lembrete, data: diaSugerido || null, ...(preenchido || {}) };
+    if (nova && preenchido && preenchido.categoria && !preenchido.duracao_min) t.duracao_min = r.tempoReal[preenchido.categoria] || (CATEGORIAS[preenchido.categoria] || CATEGORIAS.outro).min;
     const marcasAtivas = window.Marcas ? Marcas.lista().filter(m => !['concluida', 'perdida'].includes(m.etapa) || m.id === t.marca_id) : [];
     const dlg = document.getElementById('ficha-marca');
     dlg.innerHTML = `<form class="ficha" novalidate>
@@ -688,6 +689,8 @@
     // Guarda só alguns campos (ex.: meta de abordagens), sem apagar o resto nem pular as boas-vindas
     async salvarPrefsParcial(parcial) { await salvarPrefs({ ...dadosBrutos, ...parcial }); },
     pronto: () => carregado,
+    // Usada por Conteúdo: abre "nova tarefa" já preenchida (ex.: "Gravar: ...")
+    novaCom(dados) { document.querySelector('[data-tab="aba-tarefas"]').click(); if (prefs) abrirTarefa(null, null, dados); },
     saudacao: saudacaoHora
   };
 })();

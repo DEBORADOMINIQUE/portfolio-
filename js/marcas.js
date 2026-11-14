@@ -86,9 +86,10 @@
     cobrar:   (m) => `Oi, ${primeiroNome(m)}! Tudo certo por aí? Queria saber se o produto e o briefing da ${m.nome} já foram enviados. Assim que chegarem, começo a produção.`,
     entrega:  (m) => `Oi, ${primeiroNome(m)}! O conteúdo da ${m.nome} está pronto. Posso te enviar por aqui?`,
     feedback: (m) => `Oi, ${primeiroNome(m)}! Foi um prazer criar para a ${m.nome}. Você me conta o que achou do conteúdo? Seu feedback me ajuda muito.`,
-    pagamento:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? Passando para confirmar a previsão de pagamento do conteúdo da ${m.nome}.`
+    pagamento:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? Passando para confirmar a previsão de pagamento do conteúdo da ${m.nome}.`,
+    renovacao:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? A licença de uso do conteúdo da ${m.nome} ${m.uso_imagem_ate && m.uso_imagem_ate < hoje() ? 'venceu em' : 'vence em'} ${fmtLonga(m.uso_imagem_ate)}. Querem renovar para continuar usando? Te passo os valores.`
   };
-  const NOMES_MODELO = { followup: 'Follow-up da proposta', cobrar: 'Cobrar produto/briefing', entrega: 'Avisar entrega', feedback: 'Pedir feedback', pagamento: 'Lembrar pagamento' };
+  const NOMES_MODELO = { followup: 'Follow-up da proposta', cobrar: 'Cobrar produto/briefing', entrega: 'Avisar entrega', feedback: 'Pedir feedback', pagamento: 'Lembrar pagamento', renovacao: 'Renovar licença de uso' };
   function linkWhats(m, modelo) { return `https://wa.me/${soDigitos(m.contato_whatsapp)}?text=${encodeURIComponent(MODELOS[modelo](m))}`; }
   function linkEmail(m, modelo) { return `mailto:${encodeURIComponent(m.contato_email || '')}?subject=${encodeURIComponent(m.nome + ' · UGC')}&body=${encodeURIComponent(MODELOS[modelo](m))}`; }
   function modeloSugerido(m) {
@@ -181,6 +182,16 @@
       if (m.etapa === 'concluida' && !m.feedback_nota && !m.feedback_texto && diasEntre(desdeQuando(m), h) <= 45) {
         itens.push({ m, peso: 5, cor: 'neutro', txt: 'Pedir feedback', sub: 'Guarde o que a marca achou', modelo: 'feedback' });
       }
+      // Licença de uso perto de vencer (ou vencida há pouco): hora de vender a renovação
+      if (m.uso_imagem_ate && ['entregue', 'concluida'].includes(m.etapa)) {
+        const d = diasEntre(h, m.uso_imagem_ate);
+        if (d >= 0 && d <= 15) itens.push({ m, peso: 2.5, cor: 'alerta', txt: d === 0 ? 'Licença de uso vence hoje' : `Licença de uso vence em ${d} ${d === 1 ? 'dia' : 'dias'}`, sub: 'Ótima hora para oferecer a renovação', modelo: 'renovacao' });
+        else if (d < 0 && d >= -30) itens.push({ m, peso: 3.5, cor: 'neutro', txt: 'Licença de uso venceu', sub: `Venceu ${fmtLonga(m.uso_imagem_ate)}. Se ainda usam o conteúdo, cobre a renovação`, modelo: 'renovacao' });
+      }
+      if (m.exclusividade_ate) {
+        const d = diasEntre(h, m.exclusividade_ate);
+        if (d >= 0 && d <= 7) itens.push({ m, peso: 6, cor: 'neutro', txt: `Exclusividade termina ${d === 0 ? 'hoje' : `em ${d} ${d === 1 ? 'dia' : 'dias'}`}`, sub: 'Depois disso, você pode abordar concorrentes', modelo: null });
+      }
     });
     return itens.sort((a, b) => a.peso - b.peso);
   }
@@ -241,7 +252,7 @@
     }
     el.innerHTML = `<div class="hoje-cab"><h2>Hoje</h2><span class="hoje-qtd">${itens.length} ${itens.length === 1 ? 'coisa' : 'coisas'} para olhar</span></div>
       <div class="hoje-lista">${itens.map(p => {
-        const temZap = !!p.m.contato_whatsapp, temEmail = !!p.m.contato_email;
+        const temZap = !!p.modelo && !!p.m.contato_whatsapp, temEmail = !!p.modelo && !!p.m.contato_email;
         return `<div class="hoje-item ${p.cor}">
           <button class="hoje-abrir" data-abrir="${p.m.id}">
             <span class="ponto"></span>
@@ -267,6 +278,10 @@
       linhaExtra = `<div class="tag-data ${atrasado ? 'alerta' : ''}">Follow-up ${m.proximo_followup === hoje() ? 'hoje' : fmtCurta(m.proximo_followup)}</div>`;
     } else if (m.etapa === 'concluida' && m.feedback_nota) {
       linhaExtra = estrelas(m.feedback_nota);
+    }
+    if (['entregue', 'concluida'].includes(m.etapa) && m.uso_imagem_ate) {
+      const d = diasEntre(hoje(), m.uso_imagem_ate);
+      if (d <= 30) linhaExtra += `<div class="tag-data ${d <= 15 ? 'alerta' : ''}">${d < 0 ? 'Licença vencida' : `Licença até ${fmtCurta(m.uso_imagem_ate)}`}</div>`;
     }
     return `<article class="card-marca" draggable="true" data-id="${m.id}" tabindex="0">
       <div class="card-topo">
@@ -326,6 +341,7 @@
       if (m.data_entrega && !['perdida'].includes(m.etapa)) add(m.data_entrega, { m, tipo: m.data_entregue ? 'feito' : 'entrega', txt: m.nome });
       if (m.proximo_followup && ['contato', 'negociando'].includes(m.etapa)) add(m.proximo_followup, { m, tipo: 'followup', txt: m.nome });
       if (m.data_pagamento) add(m.data_pagamento, { m, tipo: 'pagamento', txt: m.nome });
+      if (m.uso_imagem_ate) add(m.uso_imagem_ate, { m, tipo: 'licenca', txt: m.nome });
     });
     const h = hoje();
     let celulas = '';
@@ -335,7 +351,7 @@
       const evs = eventos[iso] || [];
       celulas += `<div class="dia ${iso === h ? 'hoje' : ''} ${iso < h ? 'passado' : ''}">
         <span class="num">${d}</span>
-        ${evs.map(ev => `<button class="ev ${ev.tipo}" data-abrir="${ev.m.id}" title="${esc(({ entrega: 'Entrega', feito: 'Entregue', followup: 'Follow-up', pagamento: 'Pagamento' })[ev.tipo] + ': ' + ev.txt)}">${esc(ev.txt)}</button>`).join('')}
+        ${evs.map(ev => `<button class="ev ${ev.tipo}" data-abrir="${ev.m.id}" title="${esc(({ entrega: 'Entrega', feito: 'Entregue', followup: 'Follow-up', pagamento: 'Pagamento', licenca: 'Licença de uso vence' })[ev.tipo] + ': ' + ev.txt)}">${esc(ev.txt)}</button>`).join('')}
       </div>`;
     }
     const titulo = primeiro.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
@@ -345,7 +361,7 @@
         <h2>${titulo.charAt(0).toUpperCase() + titulo.slice(1)}</h2>
         <button class="cal-nav" data-mes="1" aria-label="Próximo mês">›</button>
       </div>
-      <div class="legenda"><span class="entrega">Entrega</span><span class="feito">Entregue</span><span class="followup">Follow-up</span><span class="pagamento">Pagamento</span></div>
+      <div class="legenda"><span class="entrega">Entrega</span><span class="feito">Entregue</span><span class="followup">Follow-up</span><span class="pagamento">Pagamento</span><span class="licenca">Licença vence</span></div>
       <div class="cal-grade">${['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'].map(s => `<div class="sem">${s}</div>`).join('')}${celulas}</div>
     </div>`;
   }
@@ -437,6 +453,18 @@
           </div>
         </fieldset>
 
+        <fieldset id="sec-contrato"><legend>Contrato e uso de imagem</legend>
+          <div class="grade-campos">
+            <label class="campo largo"><span>Link do contrato (Drive, PDF, DocuSign...)</span>
+              <div class="link-linha"><input name="contrato_link" type="url" value="${esc(m.contrato_link || '')}" placeholder="https://...">${m.contrato_link ? `<a class="mini-btn" href="${esc(m.contrato_link)}" target="_blank" rel="noopener">Abrir</a>` : ''}</div></label>
+            <label class="campo"><span>Uso de imagem</span><select name="uso_imagem_tipo"><option value="">Não combinado</option>${[['organico', 'Só orgânico (perfil da marca)'], ['anuncio', 'Anúncio (tráfego pago)'], ['ambos', 'Orgânico e anúncio']].map(([v, n]) => `<option value="${v}" ${m.uso_imagem_tipo === v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+            ${campo('uso_imagem_ate', 'Licença de uso até', m.uso_imagem_ate, { attrs: 'type="date"' })}
+          </div>
+          <div class="dur-escolha licenca-rapida"><span>Licença de</span>${[30, 60, 90, 180, 365].map(d => `<button type="button" data-licenca="${d}">${d === 365 ? '1 ano' : d + ' dias'}</button>`).join('')}<span>a partir da entrega</span></div>
+          <div class="grade-campos" style="margin-top:12px">${campo('exclusividade_ate', 'Exclusividade até (opcional)', m.exclusividade_ate, { attrs: 'type="date"' })}</div>
+          <div class="previa-prazo" id="previa-licenca"></div>
+        </fieldset>
+
         <fieldset id="sec-feedback"><legend>Feedback da marca</legend>
           <div class="nota-estrelas" role="radiogroup" aria-label="Nota da marca">
             ${[1, 2, 3, 4, 5].map(n => `<button type="button" class="estrela ${m.feedback_nota >= n ? 'on' : ''}" data-nota="${n}" aria-label="${n} de 5">★</button>`).join('')}
@@ -498,6 +526,19 @@
       }
     }));
     form.pago.addEventListener('change', () => { if (form.pago.checked && !form.data_pagamento.value) form.data_pagamento.value = hoje(); });
+    // Licença de uso: atalhos de 30/60/90 dias a partir da entrega (ou de hoje)
+    function previaLicenca() {
+      const el = dlg.querySelector('#previa-licenca'), ate = form.uso_imagem_ate.value;
+      if (!ate) { el.className = 'previa-prazo'; el.textContent = 'Combine por quanto tempo a marca pode usar o conteúdo. Eu te aviso antes de vencer para você oferecer a renovação.'; return; }
+      const d = diasEntre(hoje(), ate);
+      el.className = 'previa-prazo ' + (d < 0 ? 'atraso' : d <= 15 ? 'alerta' : 'ok');
+      el.innerHTML = d < 0 ? `Licença venceu ${fmtLonga(ate)}. Se ainda usam, cobre a renovação.` : `Licença vale até <strong>${fmtLonga(ate)}</strong> (${d === 0 ? 'vence hoje' : `faltam ${d} ${d === 1 ? 'dia' : 'dias'}`}).`;
+    }
+    dlg.querySelectorAll('[data-licenca]').forEach(b => b.addEventListener('click', () => {
+      form.uso_imagem_ate.value = somarPrazo(form.data_entregue.value || form.data_entrega.value || hoje(), Number(b.dataset.licenca), 'corridos'); previaLicenca();
+    }));
+    form.uso_imagem_ate.addEventListener('input', previaLicenca);
+    previaLicenca();
     recalcular();
 
     // Estrelas
@@ -547,6 +588,7 @@
         data_recebimento: txt('data_recebimento'), prazo_dias: f.prazo_dias.value === '' ? null : Math.max(0, Math.min(365, parseInt(f.prazo_dias.value, 10))),
         prazo_tipo: f.prazo_tipo.value, data_entrega: txt('data_entrega'), data_entregue: txt('data_entregue'),
         pago: f.pago.checked, data_pagamento: txt('data_pagamento'), nf_emitida: f.nf_emitida.checked, nf_numero: txt('nf_numero'),
+        contrato_link: txt('contrato_link'), uso_imagem_tipo: f.uso_imagem_tipo.value || null, uso_imagem_ate: txt('uso_imagem_ate'), exclusividade_ate: txt('exclusividade_ate'),
         feedback_nota: f.feedback_nota.value ? Number(f.feedback_nota.value) : null, feedback_texto: txt('feedback_texto'),
         trabalharia_de_novo: tdn ? tdn.value === 'sim' : null, notas: txt('notas')
       };

@@ -1,0 +1,7 @@
+/* conteudo.css · Planner e Roteiros */
+.numeros.quatro { grid-template-columns: repeat(4, 1fr); }
+.roteiro-card .gancho { font-family: var(--titulo); font-size: 1.02rem; color: var(--vinho); margin: 10px 0 4px; line-height: 1.4; word-break: break-word; }
+.roteiro-card .fb-topo .p-status { font-size: .72rem; padding: 3px 10px; }
+.dia[data-cdia] { cursor: pointer; }
+.dia[data-cdia]:hover { background: #fff; }
+@media (max-width: 900px) { .numeros.quatro { grid-template-columns: repeat(2, 1fr); } }

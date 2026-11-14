@@ -119,3 +119,47 @@ input:focus, .campo input:focus, .campo select:focus, .campo textarea:focus { bo
   0%   { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
   100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.2) rotate(var(--giro)); }
 }
+
+/* =========================================================
+   MODO ESCURO · rosa neon na noite (liga pelo botão da barra lateral)
+   ========================================================= */
+:root[data-theme="dark"] {
+  --vinho: #ff4fa3;
+  --vinho-escuro: #ff7cbf;
+  --vinho-claro: #3a1430;
+  --creme: #2c1024;
+  --creme-claro: #170910;
+  --dourado: #ff8fc7;
+  --dourado-claro: #3b2a12;
+  --branco: #221019;
+  --grafite: #ffe4f1;
+  --suave: #d9a3c2;
+  --borda: #4d2140;
+  --verde: #5fd59a;
+  --vermelho: #ff6b7d;
+  --sombra: 0 1px 2px rgba(0,0,0,.4), 0 14px 30px -14px rgba(255,20,147,.25);
+  color-scheme: dark;
+}
+:root[data-theme="dark"] body { background-color: var(--creme-claro); background-image: radial-gradient(rgba(255,79,163,.12) 1.4px, transparent 1.6px); }
+:root[data-theme="dark"] .sidebar { background: linear-gradient(170deg, #3d0b2a 0%, #2a0820 50%, #16040f 100%); box-shadow: inset -1px 0 0 rgba(255,79,163,.35), 6px 0 30px -12px rgba(255,20,147,.35); }
+:root[data-theme="dark"] .aba.ativa { background: var(--gel); color: #fff; }
+:root[data-theme="dark"] .sidebar .logo b { color: #ff8fc7; }
+/* Tudo que era branco fixo vira "cartão escuro" */
+:root[data-theme="dark"] :is(.cartao, .tarefa, .p-item, .f-item, .s-item, .card-marca, .t-chip, .check, .passo, .s-opcao, .lead, .dia-sem, .hoje-item, .busca, .periodos, .visoes, .filtros button, .p-status, .dias-escolha span, .cat-escolha span, .dur-escolha button, .sug, .btn-menu, .cal-nav, .plano-passos > div, .t-check, .coluna .qtd, .p-dia h3 span, .stepper button:first-child, .contato-destaque, .plano-meta, .feedback-resumo) { background-color: var(--branco); background-image: none; color: var(--grafite); border-color: var(--borda); }
+:root[data-theme="dark"] :is(input, select, textarea, .campo input, .campo select, .campo textarea, .p-linha input, .p-linha select, .passo input) { background: #1c0b15 !important; color: var(--grafite) !important; border-color: var(--borda) !important; }
+:root[data-theme="dark"] :is(.coluna, .dia, .s-resumo, .texto-stats, .previa-prazo, .mensagem, .texto-usado p, .ficha-rodape) { background: var(--creme); color: var(--grafite); }
+:root[data-theme="dark"] .dialogo-ficha { background: var(--branco); }
+:root[data-theme="dark"] :is(.chip, .mini-btn, .valor-tag) { background: #3a1430; color: #ffb3d9; }
+:root[data-theme="dark"] :is(.mini-btn.zap, .chip.ok, .valor-tag.pago, .prazo, .previa-prazo.ok, .mini-btn.nf.emitida, .selo-fb.sim) { background: #10301f; color: #7ee2ad; }
+:root[data-theme="dark"] :is(.prazo.alerta, .tag-data.alerta, .previa-prazo.alerta, .atrasadas, .aviso-nf, .mini-btn.nf, .p-status.alerta, .mini-btn.agenda) { background: #3b2a12; color: #ffd28a; }
+:root[data-theme="dark"] :is(.prazo.atraso, .previa-prazo.atraso, .faixa-erro, .aviso-erro, .p-status.atraso, .hoje-item.atraso, .f-item.atrasado) { background: #3a0f18; color: #ff9aa8; }
+:root[data-theme="dark"] :is(.aprendendo, .ativar-lembrete, .chip.texto, .chip.marca) { background: #2a1640; color: #d9b8ff; }
+:root[data-theme="dark"] .p-item.aprovada { background: #10261b; }
+:root[data-theme="dark"] .tag-data, :root[data-theme="dark"] .prazo.neutro { background: var(--creme); color: var(--suave); }
+:root[data-theme="dark"] .dia.hoje { background: var(--branco); }
+:root[data-theme="dark"] .trilho, :root[data-theme="dark"] .carga { background: #3a1430; }
+:root[data-theme="dark"] .numero.destaque, :root[data-theme="dark"] :is(.btn-primario, .vis-btn.ativo, .periodo.ativo) { background: var(--gel) !important; color: #fff !important; }
+:root[data-theme="dark"] .dia-sem.folga { background: repeating-linear-gradient(-45deg, #2c1024 0 8px, #221019 8px 16px); }
+.tema-btn { width: 100%; margin-bottom: 8px; padding: 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,.45); background: rgba(255,255,255,.12); color: #fff; font-weight: 700; font-size: .85rem; }
+.tema-btn:hover { background: rgba(255,255,255,.22); }
+:root[data-theme="dark"] .selo-aba { color: #5a0a33; }
