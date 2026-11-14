@@ -267,6 +267,8 @@
           : 'Não consegui carregar seus conteúdos agora. Confira sua conexão e recarregue a página.'}</p></div>`;
       }
     },
-    aoAbrir() { desenhar(); }
+    aoAbrir() { desenhar(); },
+    // Usada pelo Assistente: abre "nova ideia" já preenchida
+    novaCom(dados) { document.querySelector('[data-tab="aba-conteudo"]').click(); abrirFicha(null, dados); }
   };
 })();

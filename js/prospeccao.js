@@ -210,9 +210,9 @@
 
   // ===== Ficha da abordagem =====
   function abrirFicha(p) {
-    const nova = !p;
+    const nova = !p || !!p._nova;
     const ultima = lista[0] || {};
-    p = p || { canal: ultima.canal || 'instagram', abordagem_id: ultima.abordagem_id || '', data_abordagem: hoje(), status: 'enviada' };
+    if (nova) p = { canal: ultima.canal || 'instagram', abordagem_id: ultima.abordagem_id || '', data_abordagem: hoje(), status: 'enviada', ...(p || {}) };
     const dlg = document.getElementById('ficha-marca');
     const campo = (n, r, v, a) => `<label class="campo"><span>${r}</span><input name="${n}" value="${esc(v ?? '')}" ${a || ''}></label>`;
     dlg.innerHTML = `<form class="ficha" novalidate>
@@ -451,6 +451,8 @@
       }
     },
     aoAbrir() { desenhar(); },
+    // Usada pelo Assistente: abre "registrar abordagem" já preenchida
+    novaCom(dados) { document.querySelector('[data-tab="aba-prospeccao"]').click(); abrirFicha({ ...dados, _nova: true }); },
     // Usada pelo Financeiro para estimar quantas abordagens bater a meta exige (últimos 90 dias)
     estatisticas() {
       const lim = somaDias(hoje(), -90), r = lista.filter(p => p.data_abordagem >= lim);

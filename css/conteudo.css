@@ -5,3 +5,25 @@
 .dia[data-cdia] { cursor: pointer; }
 .dia[data-cdia]:hover { background: #fff; }
 @media (max-width: 900px) { .numeros.quatro { grid-template-columns: repeat(2, 1fr); } }
+
+/* Assistente ✦ */
+.assistente-fab { position: fixed; right: 22px; bottom: 22px; z-index: 40; display: flex; align-items: center; gap: 8px; border: 0; border-radius: 999px; padding: 14px 20px; background: var(--gel); color: #fff; font-weight: 800; font-size: .95rem; box-shadow: var(--gel-sombra), 0 14px 30px -10px rgba(224,21,122,.6); animation: fab-brilho 3s ease-in-out infinite; }
+.assistente-fab span { font-size: 1.1rem; }
+.assistente-fab:hover { transform: translateY(-2px) scale(1.03); }
+@keyframes fab-brilho { 50% { box-shadow: var(--gel-sombra), 0 14px 34px -6px rgba(255,79,163,.85); } }
+.as-print { display: flex; align-items: center; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+.as-print label { cursor: pointer; }
+.as-mini { position: relative; }
+.as-mini img { height: 72px; border-radius: 10px; border: 1px solid var(--borda); display: block; }
+.as-mini button { position: absolute; top: -8px; right: -8px; width: 22px; height: 22px; border-radius: 50%; border: 0; background: var(--vinho); color: #fff; font-size: .8rem; }
+.as-card { margin-top: 16px; padding: 16px; border-radius: 18px; border: 1.5px solid var(--dourado); background: var(--vinho-claro); display: flex; flex-direction: column; gap: 10px; }
+.as-tipo { font-weight: 800; color: var(--vinho); }
+.as-resumo { font-size: .98rem; }
+.as-campos { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; font-size: .85rem; background: var(--branco); border-radius: 12px; padding: 10px 12px; }
+.as-campos dt { color: var(--suave); }
+.as-campos dd { word-break: break-word; white-space: pre-wrap; }
+.as-pensando { display: flex; gap: 6px; justify-content: center; padding: 20px; }
+.as-pensando span { width: 10px; height: 10px; border-radius: 50%; background: var(--dourado); animation: pulo 1s ease-in-out infinite; }
+.as-pensando span:nth-child(2) { animation-delay: .15s; } .as-pensando span:nth-child(3) { animation-delay: .3s; }
+@keyframes pulo { 50% { transform: translateY(-8px); opacity: .5; } }
+@media (max-width: 560px) { .assistente-fab { right: 14px; bottom: 14px; padding: 12px 16px; } }

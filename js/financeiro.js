@@ -196,8 +196,8 @@
   }
 
   function abrirDespesa(d) {
-    const nova = !d; d = d || { categoria: 'outros', data: paraISO(new Date(mes.getFullYear(), mes.getMonth(), Math.min(new Date().getDate(), 28))), recorrente: false };
-    if (chaveMes(new Date()) === chaveMes(mes) && nova) d.data = hoje();
+    const nova = !d || !!d._nova; if (nova) d = { categoria: 'outros', data: paraISO(new Date(mes.getFullYear(), mes.getMonth(), Math.min(new Date().getDate(), 28))), recorrente: false, ...(d || {}) };
+    if (chaveMes(new Date()) === chaveMes(mes) && nova && !d._data) d.data = d.data && d._nova ? d.data : hoje();
     const dlg = document.getElementById('ficha-marca');
     dlg.innerHTML = `<form class="ficha" novalidate>
       <header class="ficha-cab"><div><small>Despesa</small><h2>${nova ? 'Nova despesa' : esc(d.descricao)}</h2></div><button type="button" class="fechar" data-fechar aria-label="Fechar">×</button></header>
@@ -300,6 +300,8 @@
       }
     },
     aoAbrir() { desenhar(); },
+    // Usada pelo Assistente: abre "nova despesa" já preenchida
+    novaCom(dados) { document.querySelector('[data-tab="aba-financeiro"]').click(); abrirDespesa({ ...dados, _nova: true }); },
     plano
   };
 })();
