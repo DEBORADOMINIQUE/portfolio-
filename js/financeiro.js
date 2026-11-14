@@ -300,6 +300,16 @@
       }
     },
     aoAbrir() { desenhar(); },
+    // Usada pelo Crescimento: gastos entre duas datas (recorrentes contam proporcional aos dias)
+    gastosEntre(ini, fim) {
+      const dias = Math.max(1, Math.round((deISO(fim) - deISO(ini)) / 864e5) + 1);
+      return despesas.reduce((s, d) => {
+        if (!d.recorrente) return s + (d.data >= ini && d.data <= fim ? Number(d.valor) : 0);
+        const a = d.data > ini ? d.data : ini, b = d.ate && d.ate < fim ? d.ate : fim;
+        if (a > b) return s;
+        return s + Number(d.valor) * ((Math.round((deISO(b) - deISO(a)) / 864e5) + 1) / 30);
+      }, 0) * (dias ? 1 : 1);
+    },
     // Usada pelo Assistente: abre "nova despesa" já preenchida
     novaCom(dados) { document.querySelector('[data-tab="aba-financeiro"]').click(); abrirDespesa({ ...dados, _nova: true }); },
     plano

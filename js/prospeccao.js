@@ -451,6 +451,7 @@
       }
     },
     aoAbrir() { desenhar(); },
+    lista: () => (carregado ? lista : []),
     // Usada pelo Assistente: abre "registrar abordagem" já preenchida
     novaCom(dados) { document.querySelector('[data-tab="aba-prospeccao"]').click(); abrirFicha({ ...dados, _nova: true }); },
     // Usada pelo Financeiro para estimar quantas abordagens bater a meta exige (últimos 90 dias)

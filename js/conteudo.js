@@ -268,6 +268,7 @@
       }
     },
     aoAbrir() { desenhar(); },
+    lista: () => itens,
     // Usada pelo Assistente: abre "nova ideia" já preenchida
     novaCom(dados) { document.querySelector('[data-tab="aba-conteudo"]').click(); abrirFicha(null, dados); }
   };

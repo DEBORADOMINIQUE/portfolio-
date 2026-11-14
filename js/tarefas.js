@@ -689,6 +689,7 @@
     // Guarda só alguns campos (ex.: meta de abordagens), sem apagar o resto nem pular as boas-vindas
     async salvarPrefsParcial(parcial) { await salvarPrefs({ ...dadosBrutos, ...parcial }); },
     pronto: () => carregado,
+    lista: () => tarefas,
     // Usada por Conteúdo: abre "nova tarefa" já preenchida (ex.: "Gravar: ...")
     novaCom(dados) { document.querySelector('[data-tab="aba-tarefas"]').click(); if (prefs) abrirTarefa(null, null, dados); },
     saudacao: saudacaoHora

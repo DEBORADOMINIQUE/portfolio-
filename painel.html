@@ -15,14 +15,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/auth.js?v=2"></script>
   <script src="js/marcas.js?v=4"></script>
-  <script src="js/tarefas.js?v=3"></script>
-  <script src="js/prospeccao.js?v=4"></script>
-  <script src="js/financeiro.js?v=3"></script>
+  <script src="js/tarefas.js?v=4"></script>
+  <script src="js/prospeccao.js?v=5"></script>
+  <script src="js/financeiro.js?v=4"></script>
   <script src="js/simulador.js?v=2"></script>
-  <script src="js/conteudo.js?v=2"></script>
+  <script src="js/conteudo.js?v=3"></script>
   <script src="js/assistente.js?v=2"></script>
+  <script src="js/crescimento.js?v=1"></script>
   <script src="js/tema.js?v=1"></script>
-  <link rel="stylesheet" href="css/conteudo.css?v=2">
+  <link rel="stylesheet" href="css/conteudo.css?v=3">
   <link rel="stylesheet" href="css/financeiro.css?v=2">
   <link rel="stylesheet" href="css/prospeccao.css?v=1">
   <link rel="stylesheet" href="css/tarefas.css?v=1">
@@ -307,6 +308,7 @@
     <!-- ===== Aba 1: Menu Principal ===== -->
     <section class="painel-aba ativo" id="aba-principal">
       <p class="saudacao">Olá! Aqui estão os números do seu portfólio.</p>
+      <div id="crescimento"></div>
 
       <div class="numeros">
         <div class="cartao numero destaque"><div class="rotulo">Visitas</div><div class="valor" id="n-visitas">0</div></div>
@@ -593,6 +595,7 @@
         if (botao.dataset.tab === 'aba-financeiro') Financeiro.aoAbrir();
         if (botao.dataset.tab === 'aba-simulador') Simulador.aoAbrir();
         if (botao.dataset.tab === 'aba-conteudo') Conteudo.aoAbrir();
+        if (botao.dataset.tab === 'aba-principal') Crescimento.desenhar();
         window.scrollTo({ top: 0 });
       });
     });
@@ -620,11 +623,15 @@
     Simulador.iniciar($('aba-simulador'));
     Conteudo.iniciar(sb, $('aba-conteudo'));
     Assistente.iniciar(sb);
+    Crescimento.iniciar($('crescimento'));
     // Modo escuro
     const rotuloTema = () => { $('btn-tema').textContent = Tema.escuro() ? '☀️ Modo claro' : '🌙 Modo escuro'; };
     rotuloTema();
     $('btn-tema').addEventListener('click', () => { Tema.alternar(); rotuloTema(); });
     document.addEventListener('oug:nome', saudar);
+
+    // Compartilha os números do site com o termômetro de Crescimento
+    window.Painel = { eventos: () => cache.eventos, leads: () => cache.leads };
 
     // ===== 9. Carrega as duas tabelas uma vez (se uma falhar, a outra continua) =====
     const [resEventos, resLeads] = await Promise.allSettled([buscarTudo('portfolio_events'), buscarTudo('portfolio_leads')]);
