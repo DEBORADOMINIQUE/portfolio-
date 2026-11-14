@@ -129,9 +129,18 @@
   window.Assistente = {
     iniciar(cliente) {
       sb = cliente;
+      // O assistente NÃO faz parte do plano vendido: só aparece para contas liberadas
+      // no banco (preferencias.dados.assistente_ia = true). O servidor confere de novo.
+      const esperar = (n = 0) => {
+        if (window.Tarefas && Tarefas.pronto()) { if (Tarefas.prefs().assistente_ia === true) montar(); return; }
+        if (n < 40) setTimeout(() => esperar(n + 1), 300);
+      };
+      esperar();
+    }
+  };
+  function montar() {
       const d = document.createElement('dialog'); d.id = 'assistente-dlg'; d.className = 'dialogo-ficha'; document.body.appendChild(d);
       const b = document.createElement('button'); b.className = 'assistente-fab'; b.innerHTML = '<span>✦</span> Assistente'; b.setAttribute('aria-label', 'Abrir o assistente');
       b.addEventListener('click', abrir); document.body.appendChild(b);
-    }
-  };
+  }
 })();
