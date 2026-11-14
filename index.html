@@ -1071,6 +1071,7 @@
     <div class="player-video" id="playerVideo"></div>
   </dialog>
 
+<script src="js/rastreio.js"></script>
 <script>
 /* ===================================================================
    CONFIGURAÇÃO DO SITE
@@ -1711,6 +1712,7 @@ let ultimoCard = null;
 function abrirVideo(id, titulo, card) {
   const janela = $('player');
   ultimoCard = card;
+  if (window.Rastreio) Rastreio.video(id, titulo, card); // conta no meu.painel
   $('playerTitulo').textContent = titulo;
   $('playerVideo').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0&playsinline=1&modestbranding=1" title="${titulo}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
   janela.showModal();
@@ -1795,6 +1797,7 @@ function ativarFormulario() {
     if (telefone.replace(/\D/g, '').length < 10) { aviso.textContent = 'Confira o telefone, com DDD.'; form.telefone.focus(); return; }
     if (!form.email.checkValidity()) { aviso.textContent = 'Confira se o e-mail está escrito corretamente.'; form.email.focus(); return; }
     if (form._honey && form._honey.value) return; // proteção contra robôs
+    if (window.Rastreio) Rastreio.mensagem({ nome, email, telefone, mensagem }); // guarda no meu.painel
     if (SITE.contato.modoFormulario !== 'direto') { abrirEmail(nome, email, telefone, mensagem); aviso.textContent = 'Abrimos o seu e-mail com a mensagem pronta. É só clicar em enviar!'; return; }
     botao.disabled = true;
     aviso.textContent = 'Enviando...';
