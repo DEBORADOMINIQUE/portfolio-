@@ -17,13 +17,13 @@
     { id: 'ganchos', nome: 'Gancho extra', tipo: 'unidade', conteudo: false, ref: null, min: null },
     { id: 'brutos', nome: 'Arquivos brutos', tipo: 'unidade', conteudo: false, ref: null, min: null }
   ];
-  // ===== Níveis de UGC: valor sugerido (calibrado: Intermediária = R$ 350 por vídeo) =====
+  // ===== Níveis de UGC: vídeo "a partir de" (definido pela Débora): 250 / 350 / 450 / 550 =====
   // Base = preço do vídeo UGC por nível; os outros itens são proporções do vídeo.
   const NIVEIS = {
     iniciante:     { nome: 'Iniciante',     desc: 'Até 5 trabalhos pagos, portfólio ainda em construção.', video: 250, pisoVideo: 250 },
-    intermediaria: { nome: 'Intermediária', desc: 'De 6 a 20 trabalhos, já tem marcas no portfólio.', video: 350 },
-    avancada:      { nome: 'Avançada',      desc: 'Mais de 20 trabalhos, marcas que voltam, vídeos rodando em anúncio.', video: 600 },
-    referencia:    { nome: 'Referência',    desc: 'Trabalha com marcas grandes e tem resultados comprovados.', video: 1000 }
+    intermediaria: { nome: 'Intermediária', desc: 'De 6 a 20 trabalhos, já tem marcas no portfólio.', video: 350, pisoVideo: 350 },
+    avancada:      { nome: 'Avançada',      desc: 'Mais de 20 trabalhos, marcas que voltam, vídeos rodando em anúncio.', video: 450, pisoVideo: 450 },
+    referencia:    { nome: 'Referência',    desc: 'Trabalha com marcas grandes e tem resultados comprovados.', video: 550, pisoVideo: 550 }
   };
   const PROPORCOES = [
     { id: 'video', nome: 'Vídeo UGC', tipo: 'unidade', conteudo: true, x: 1 },
@@ -45,7 +45,7 @@
     if (!n || !p) return null;
     if (p.tipo === 'percentual') return { ref: p.pct, min: p.pct };
     const ref = arred(n.video * p.x);
-    // Piso do nível: o vídeo nunca é sugerido abaixo disso (Iniciante: R$ 250)
+    // Piso do nível: o vídeo nunca é sugerido abaixo do "a partir de"
     const min = id === 'video' && n.pisoVideo ? Math.max(arred(ref * 0.75), n.pisoVideo) : arred(ref * 0.75);
     return { ref, min };
   }
