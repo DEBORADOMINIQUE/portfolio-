@@ -380,7 +380,7 @@
   }
 
   function abrirFicha(m, focoSecao) {
-    const nova = !m;
+    const nova = !m || !!m._nova;
     m = m || { etapa: 'contato', prazo_tipo: 'corridos', historico: [] };
     const dlg = document.getElementById('ficha-marca');
     const valorTxt = m.valor != null ? String(m.valor).replace('.', ',') : '';
@@ -432,6 +432,8 @@
             ${campo('data_entregue', 'Entreguei em', m.data_entregue, { attrs: 'type="date"' })}
             ${campo('data_pagamento', 'Pagamento (data)', m.data_pagamento, { attrs: 'type="date"' })}
             <label class="check grande"><input type="checkbox" name="pago" ${m.pago ? 'checked' : ''}><span>Já recebi o pagamento</span></label>
+            <label class="check grande"><input type="checkbox" name="nf_emitida" ${m.nf_emitida ? 'checked' : ''}><span>Nota fiscal emitida</span></label>
+            ${campo('nf_numero', 'Número da nota', m.nf_numero, { attrs: 'placeholder="Opcional"' })}
           </div>
         </fieldset>
 
@@ -544,7 +546,7 @@
         contrato_assinado: f.contrato_assinado.checked, roteiro_aprovado: f.roteiro_aprovado.checked,
         data_recebimento: txt('data_recebimento'), prazo_dias: f.prazo_dias.value === '' ? null : Math.max(0, Math.min(365, parseInt(f.prazo_dias.value, 10))),
         prazo_tipo: f.prazo_tipo.value, data_entrega: txt('data_entrega'), data_entregue: txt('data_entregue'),
-        pago: f.pago.checked, data_pagamento: txt('data_pagamento'),
+        pago: f.pago.checked, data_pagamento: txt('data_pagamento'), nf_emitida: f.nf_emitida.checked, nf_numero: txt('nf_numero'),
         feedback_nota: f.feedback_nota.value ? Number(f.feedback_nota.value) : null, feedback_texto: txt('feedback_texto'),
         trabalharia_de_novo: tdn ? tdn.value === 'sim' : null, notas: txt('notas')
       };
@@ -613,6 +615,11 @@
 
   window.Marcas = {
     lista: () => marcas, // usada pelas Tarefas (ligar tarefa a uma marca)
+    // Usada pelo Financeiro: marcar como recebido, nota fiscal etc.
+    async atualizar(id, dados) { const salvo = await salvar(id, dados); if (raiz) desenhar(); return salvo; },
+    // Usada pelo Simulador: abre a ficha de nova marca já com entregas e valor
+    novaCom(dados) { document.querySelector('[data-tab="aba-marcas"]').click(); abrirFicha({ etapa: 'negociando', prazo_tipo: 'corridos', historico: [], ...dados, _nova: true }); },
+    FECHADAS,
     // Usada pela Prospecção: quando uma abordagem é aprovada, vira parceria no funil
     async adicionar(dados) {
       const etapa = dados.etapa || 'negociando';

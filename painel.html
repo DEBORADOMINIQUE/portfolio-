@@ -14,9 +14,12 @@
   <!-- Supabase por CDN e depois a autenticação compartilhada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/auth.js?v=2"></script>
-  <script src="js/marcas.js?v=2"></script>
+  <script src="js/marcas.js?v=3"></script>
   <script src="js/tarefas.js?v=2"></script>
-  <script src="js/prospeccao.js?v=1"></script>
+  <script src="js/prospeccao.js?v=2"></script>
+  <script src="js/financeiro.js?v=1"></script>
+  <script src="js/simulador.js?v=1"></script>
+  <link rel="stylesheet" href="css/financeiro.css?v=1">
   <link rel="stylesheet" href="css/prospeccao.css?v=1">
   <link rel="stylesheet" href="css/tarefas.css?v=1">
   <link rel="stylesheet" href="css/marcas.css?v=1">
@@ -231,6 +234,7 @@
     <div class="logo"><span class="bolinha" aria-hidden="true"></span>organized <b>UGC</b></div>
     <div class="menu-rotulo">Navegação</div>
     <nav>
+      <div class="menu-grupo">Números</div>
       <button class="aba ativa" data-tab="aba-principal" data-titulo="Menu Principal">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
         Menu Principal
@@ -239,6 +243,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6" rx="1"/><rect x="12" y="8" width="3" height="10" rx="1"/><rect x="17" y="5" width="3" height="13" rx="1"/></svg>
         Portfólio
       </button>
+      <div class="menu-grupo">Trabalho</div>
       <button class="aba" data-tab="aba-prospeccao" data-titulo="Prospecção">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
         Prospecção
@@ -253,6 +258,15 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg>
         Tarefas
         <span class="selo-aba" hidden>0</span>
+      </button>
+      <div class="menu-grupo">Dinheiro</div>
+      <button class="aba" data-tab="aba-financeiro" data-titulo="Financeiro">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="3"/><path d="M2 10h20"/><circle cx="16.5" cy="15" r="1.5"/><path d="M6 6V5a2 2 0 0 1 2-2h8"/></svg>
+        Financeiro
+      </button>
+      <button class="aba" data-tab="aba-simulador" data-titulo="Simulador de preço">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M8 6h8"/><path d="M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01M8 19h.01M12 19h4"/></svg>
+        Simulador
       </button>
     </nav>
     <div class="sidebar-rodape">
@@ -338,6 +352,8 @@
     <section class="painel-aba" id="aba-marcas"></section>
     <!-- ===== Aba 4: Tarefas (montada pelo js/tarefas.js) ===== -->
     <section class="painel-aba" id="aba-tarefas"></section>
+    <section class="painel-aba" id="aba-financeiro"></section>
+    <section class="painel-aba" id="aba-simulador"></section>
   </main>
 
   <script>
@@ -560,10 +576,12 @@
         $(botao.dataset.tab).classList.add('ativo');
         botao.classList.add('ativa');
         $('titulo-topo').textContent = botao.dataset.titulo;
-        $('periodos').style.display = ['aba-prospeccao', 'aba-marcas', 'aba-tarefas'].includes(botao.dataset.tab) ? 'none' : ''; // período só vale para os números do site
+        $('periodos').style.display = !['aba-principal', 'aba-portfolio'].includes(botao.dataset.tab) ? 'none' : ''; // período só vale para os números do site
         document.body.classList.remove('menu-aberto');
         if (botao.dataset.tab === 'aba-tarefas') Tarefas.aoAbrir();
         if (botao.dataset.tab === 'aba-prospeccao') Prospeccao.aoAbrir();
+        if (botao.dataset.tab === 'aba-financeiro') Financeiro.aoAbrir();
+        if (botao.dataset.tab === 'aba-simulador') Simulador.aoAbrir();
         window.scrollTo({ top: 0 });
       });
     });
@@ -587,6 +605,8 @@
     const saudar = () => { $('aba-principal').querySelector('.saudacao').textContent = `${Tarefas.saudacao()}, ${Tarefas.nome()}! Aqui estão os números do seu portfólio.`; };
     Tarefas.iniciar(sb, $('aba-tarefas')).then(() => { saudar(); Prospeccao.aoAbrir(); });
     Prospeccao.iniciar(sb, $('aba-prospeccao'));
+    Financeiro.iniciar(sb, $('aba-financeiro'));
+    Simulador.iniciar($('aba-simulador'));
     document.addEventListener('oug:nome', saudar);
 
     // ===== 9. Carrega as duas tabelas uma vez (se uma falhar, a outra continua) =====

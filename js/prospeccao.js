@@ -129,6 +129,7 @@
           <strong>${feitasHoje >= m ? `Meta batida, ${esc(nomeDela())}! ✦` : `Abordagens de hoje`}</strong>
           <div class="carga ${feitasHoje >= m ? 'ok' : ''}"><div style="width:${Math.min(100, feitasHoje / m * 100)}%"></div></div>
           <small>${feitasHoje >= m ? 'Cada marca a mais hoje é bônus.' : `Faltam ${m - feitasHoje} para bater a meta.`} ${seq ? `🔥 ${seq} ${seq === 1 ? 'dia' : 'dias'} seguidos batendo a meta` : ''}</small>
+          ${(() => { const pl = window.Financeiro && Financeiro.plano(); return pl && pl.porDia ? `<small class="meta-plano">💸 Para a meta de faturamento do mês, o ideal são <b>${pl.porDia} abordagens por dia</b>.${pl.porDia !== m ? ' <button class="link-precos" data-usar-plano>Usar como meta</button>' : ''}</small>` : ''; })()}
         </div>
         <button class="mini-btn" data-meta>Meta: ${m}/dia</button>
       </div>`;
@@ -396,6 +397,12 @@
     catch (e) { console.error(e); toast('Não consegui salvar a meta.', true); }
   }
 
+  async function usarPlano() {
+    const pl = window.Financeiro && Financeiro.plano(); if (!pl || !pl.porDia) return;
+    try { await Tarefas.salvarPrefsParcial({ meta_abordagens: pl.porDia }); desenhar(); toast(`Meta: ${pl.porDia} abordagens por dia. Bora, Deusa! ✦`); }
+    catch (e) { console.error(e); toast('Não consegui salvar a meta.', true); }
+  }
+
   function montarEsqueleto() {
     raiz.innerHTML = `
       <div class="marcas-barra"><p class="saudacao">Prospectar todo dia é o que enche a agenda.</p>
@@ -413,13 +420,14 @@
       </div>
       <div id="p-conteudo"><p class="carregando">Carregando suas abordagens...</p></div>`;
     raiz.addEventListener('click', (e) => {
-      const a = e.target.closest('[data-nova], [data-abrir], [data-pvis], [data-filtro], [data-fiz-followup], [data-meta], [data-novo-texto], [data-editar-texto], [data-copiar-texto]');
+      const a = e.target.closest('[data-nova], [data-abrir], [data-pvis], [data-filtro], [data-fiz-followup], [data-meta], [data-usar-plano], [data-novo-texto], [data-editar-texto], [data-copiar-texto]');
       if (!a) return;
       if (a.matches('[data-nova]')) return abrirFicha(null);
       if (a.matches('[data-pvis]')) { visao = a.dataset.pvis; return desenhar(); }
       if (a.matches('[data-filtro]')) { filtro = a.dataset.filtro; return desenharLista(); }
       if (a.matches('[data-fiz-followup]')) return fizFollowup(a.dataset.fizFollowup);
       if (a.matches('[data-meta]')) return mudarMeta();
+      if (a.matches('[data-usar-plano]')) return usarPlano();
       if (a.matches('[data-novo-texto]')) return abrirTexto(null);
       if (a.matches('[data-editar-texto]')) return abrirTexto(textos.find(t => t.id === a.dataset.editarTexto));
       if (a.matches('[data-copiar-texto]')) { const t = textos.find(x => x.id === a.dataset.copiarTexto); return navigator.clipboard.writeText(t.texto || '').then(() => toast('Texto copiado ✦')); }
@@ -443,6 +451,11 @@
           : 'Não consegui carregar suas abordagens agora. Confira sua conexão e recarregue a página.'}</p></div>`;
       }
     },
-    aoAbrir() { desenhar(); }
+    aoAbrir() { desenhar(); },
+    // Usada pelo Financeiro para estimar quantas abordagens bater a meta exige (últimos 90 dias)
+    estatisticas() {
+      const lim = somaDias(hoje(), -90), r = lista.filter(p => p.data_abordagem >= lim);
+      return { total: r.length, aprovadas: r.filter(p => p.status === 'aprovada').length };
+    }
   };
 })();
