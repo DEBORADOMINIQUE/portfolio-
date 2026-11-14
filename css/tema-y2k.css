@@ -1,0 +1,121 @@
+/* =========================================================
+   tema-y2k.css · Organized UGC
+   Estética garota anos 2000: tudo rosa, brilho de gel e glitter.
+   Carregado por ÚLTIMO: sobrescreve as cores do painel.
+   (Os nomes das variáveis vêm da versão antiga; só os valores mudaram.)
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&display=swap');
+
+:root, :root:not([data-theme]) {
+  --vinho: #e0157a;          /* rosa choque: botões, destaques */
+  --vinho-escuro: #a80d5a;   /* rosa profundo: hover */
+  --vinho-claro: #ffe0ef;    /* rosa bebê: selos */
+  --creme: #ffe4f1;
+  --creme-claro: #fff5fa;    /* fundo */
+  --dourado: #ff4fa3;        /* chiclete: estrelas, brilhos */
+  --dourado-claro: #fff1c4;  /* amarelo manteiga: alertas */
+  --branco: #ffffff;
+  --grafite: #3d0f2b;        /* texto: ameixa */
+  --suave: #8a4a6e;
+  --borda: #ffc6e2;
+  --verde: #1f8a5b;
+  --vermelho: #d62839;
+  --titulo: 'Fredoka', 'Nunito', system-ui, sans-serif;
+  --texto: 'Nunito', system-ui, -apple-system, sans-serif;
+  --gel: linear-gradient(180deg, #ff7cbf 0%, #ff2d95 55%, #e0157a 100%);
+  --gel-sombra: inset 0 1px 0 rgba(255,255,255,.65), inset 0 -2px 6px rgba(168,13,90,.25), 0 8px 18px -8px rgba(224,21,122,.65);
+  --sombra: 0 1px 2px rgba(224,21,122,.06), 0 12px 30px -14px rgba(224,21,122,.35);
+}
+
+/* Fundo de bolinhas */
+body {
+  background-color: var(--creme-claro);
+  background-image: radial-gradient(rgba(255,79,163,.16) 1.4px, transparent 1.6px);
+  background-size: 20px 20px;
+}
+
+/* Logo com a bolinha rosa choque */
+.logo { font-family: var(--titulo); font-weight: 700; letter-spacing: -.01em; display: flex; align-items: center; gap: 8px; }
+.logo .bolinha { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; background: radial-gradient(circle at 35% 30%, #ff9fd0, #ff1493 55%, #c20f6c); box-shadow: 0 0 10px rgba(255,20,147,.6); }
+.logo b { color: var(--dourado); font-weight: 700; }
+.logo .brilho { font-size: .7em; color: #fff; opacity: .9; }
+
+/* Títulos em gel */
+.topo h1, .cartao h2, .coluna h3, h1 { font-weight: 600; letter-spacing: -.01em; }
+.saudacao { font-family: var(--titulo); font-style: normal; color: var(--vinho); font-weight: 500; }
+.saudacao::after { content: ' ✦'; color: var(--dourado); }
+
+/* Sidebar rosa com brilho */
+.sidebar {
+  background: linear-gradient(170deg, #ff5fae 0%, #ff2d95 45%, #c8106a 100%);
+  color: #fff;
+  box-shadow: inset -1px 0 0 rgba(255,255,255,.35), 6px 0 30px -12px rgba(224,21,122,.5);
+}
+.sidebar::before { content: '✦  ✧  ✦'; position: absolute; bottom: 150px; left: 24px; color: rgba(255,255,255,.35); letter-spacing: 6px; font-size: .9rem; pointer-events: none; }
+.sidebar .logo { color: #fff; text-shadow: 0 2px 10px rgba(168,13,90,.35); }
+.sidebar .logo b { color: #fff3a8; }
+.menu-rotulo, .usuario-rotulo { color: rgba(255,255,255,.75); }
+.aba { color: rgba(255,255,255,.88); font-weight: 600; border-radius: 999px; }
+.aba:hover { background: rgba(255,255,255,.16); color: #fff; }
+.aba.ativa { background: rgba(255,255,255,.95); color: var(--vinho); box-shadow: 0 6px 16px -6px rgba(120,0,60,.5), inset 0 -2px 0 rgba(255,79,163,.25); }
+.usuario-email { color: #fff; }
+.sidebar-rodape { border-top-color: rgba(255,255,255,.3); }
+.sair { border-color: rgba(255,255,255,.7); color: #fff; border-radius: 999px; }
+.sair:hover { background: rgba(255,255,255,.18); }
+.selo-aba { background: #fff3a8; color: var(--vinho-escuro); box-shadow: 0 0 0 2px rgba(255,255,255,.6); }
+
+/* Botões de gel */
+.btn-primario, .botao, .periodo.ativo, .vis-btn.ativo, .numero.destaque, .btn.principal {
+  background: var(--gel) !important; color: #fff !important; border: 0; box-shadow: var(--gel-sombra);
+  text-shadow: 0 1px 1px rgba(168,13,90,.35);
+}
+.btn-primario, .botao, .btn.principal { border-radius: 999px; }
+.btn-primario:hover, .botao:hover, .btn.principal:hover { filter: brightness(1.06) saturate(1.05); transform: translateY(-1px); }
+.btn-secundario, .periodos, .visoes, .busca, .btn-menu { border-color: var(--borda); border-radius: 999px; }
+
+/* Cartões fofos */
+.cartao { border-color: var(--borda); border-radius: 26px; }
+.numero.destaque .rotulo, .numero.destaque .extra { color: #fff; opacity: .92; }
+.numero .valor { font-family: var(--titulo); font-weight: 600; color: var(--vinho); }
+.numero.destaque .valor { color: #fff; }
+.contato-destaque { background: linear-gradient(120deg, #fff, #ffe0ef 60%, #fff1c4); }
+
+/* Barras e gráficos em rosa */
+.barra { background: var(--gel); }
+.barra-col:hover .barra, .barra-col:focus .barra { background: linear-gradient(180deg, #fff1c4, #ffb3d9); }
+.preenchido { background: linear-gradient(90deg, #ff2d95, #ff8fc7); }
+.preenchido.ouro { background: linear-gradient(90deg, #c77dff, #ff8fc7); }
+.trilho { background: #ffe4f1; }
+.dica { background: var(--vinho-escuro); }
+
+/* Funil e marcas */
+.coluna { background: rgba(255,228,241,.6); border-radius: 26px; }
+.coluna.sobre { background: #fff1c4; border-color: var(--dourado); }
+.coluna.producao { background: rgba(255,208,232,.6); }
+.card-marca { border-radius: 18px; }
+.card-marca:hover { box-shadow: 0 10px 24px -12px rgba(224,21,122,.5); }
+.avancar:hover { background: var(--gel); }
+.estrela.on, .estrelas { color: var(--dourado); text-shadow: 0 0 6px rgba(255,79,163,.4); }
+.legenda .pagamento::before, .ev.pagamento { background: #c77dff; }
+.dia.hoje { outline-color: var(--dourado); }
+.ficha-cab small { color: var(--dourado); }
+.dialogo-ficha { border-radius: 28px; }
+.dialogo-ficha::backdrop { background: rgba(120,0,60,.35); backdrop-filter: blur(3px); }
+
+/* Login */
+.cartao-login, main.cartao { border-top-color: var(--vinho); }
+input:focus, .campo input:focus, .campo select:focus, .campo textarea:focus { border-color: var(--dourado) !important; box-shadow: 0 0 0 3px rgba(255,79,163,.18) !important; }
+.check input, .escolha input { accent-color: var(--vinho); }
+
+/* Seleção de texto rosinha */
+::selection { background: #ffb3d9; color: var(--grafite); }
+
+/* Glitter do mouse */
+.glitter {
+  position: fixed; pointer-events: none; z-index: 9999; line-height: 1; user-select: none;
+  animation: glitter-cai .9s ease-out forwards; will-change: transform, opacity;
+}
+@keyframes glitter-cai {
+  0%   { opacity: 1; transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.2) rotate(var(--giro)); }
+}

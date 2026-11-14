@@ -1,0 +1,114 @@
+/* =========================================================
+   tarefas.css · visual da área "Tarefas" (usa as variáveis do tema)
+   ========================================================= */
+.tarefas-botoes { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Cartão do ritmo do dia */
+.ritmo { margin-bottom: 18px; }
+.ritmo-topo { display: flex; gap: 24px; align-items: center; }
+.ritmo-rotulo { font-size: .8rem; color: var(--suave); font-weight: 600; }
+.ritmo-num { font-family: var(--titulo); font-size: 2.4rem; font-weight: 600; color: var(--vinho); line-height: 1; }
+.ritmo-num small { font-size: .95rem; color: var(--suave); font-weight: 500; margin-left: 4px; }
+.ritmo-barra { flex: 1; min-width: 0; }
+.ritmo-barra p { font-size: .9rem; margin-top: 8px; color: var(--grafite); }
+.ritmo-legenda { display: flex; justify-content: space-between; font-size: .78rem; color: var(--suave); margin-bottom: 6px; }
+.carga { height: 12px; border-radius: 999px; background: var(--creme); overflow: hidden; box-shadow: inset 0 1px 2px rgba(168,13,90,.12); }
+.carga > div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #ff8fc7, #ff2d95); transition: width .4s; }
+.carga.quase > div { background: linear-gradient(90deg, #ffb35c, #ff7a3d); }
+.carga.cheio > div { background: linear-gradient(90deg, #ff5a6e, #d62839); }
+.aprendendo, .atrasadas, .ativar-lembrete { margin-top: 14px; padding: 12px 14px; border-radius: 16px; font-size: .86rem; }
+.aprendendo { background: var(--vinho-claro); color: var(--vinho-escuro); }
+.atrasadas { background: var(--dourado-claro); display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.atrasadas small { display: block; color: var(--suave); margin-top: 2px; }
+.ativar-lembrete { background: #f3e8ff; color: #5b2a86; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+/* Lista de tarefas */
+.lista-tarefas { display: flex; flex-direction: column; gap: 8px; margin-bottom: 10px; }
+.tarefa { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 18px; background: #fff; border: 1px solid var(--borda); transition: opacity .2s, background .2s; }
+.tarefa.rolando { border-color: var(--dourado); box-shadow: 0 0 0 3px rgba(255,79,163,.12); }
+.tarefa.feita { background: var(--creme-claro); }
+.tarefa.feita .t-titulo { text-decoration: line-through; text-decoration-color: var(--dourado); color: var(--suave); }
+.t-hora { width: 52px; flex-shrink: 0; font-family: var(--titulo); font-weight: 600; color: var(--vinho); font-size: .95rem; text-align: center; }
+.t-hora small { display: block; font-family: var(--texto); font-size: .66rem; color: var(--suave); font-weight: 600; }
+.t-check { width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--dourado); background: #fff; color: #fff; font-weight: 800; font-size: .9rem; transition: background .15s, transform .1s; }
+.t-check:hover { background: var(--vinho-claro); transform: scale(1.08); }
+.tarefa.feita .t-check { background: var(--gel); border-color: transparent; box-shadow: var(--gel-sombra); }
+.t-corpo { flex: 1; min-width: 0; cursor: pointer; }
+.t-titulo { font-weight: 700; word-break: break-word; }
+.t-meta { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; font-size: .78rem; color: var(--suave); margin-top: 4px; }
+.t-meta em { font-style: normal; color: var(--vinho); }
+.chip { background: var(--vinho-claro); color: var(--vinho-escuro); border-radius: 999px; padding: 2px 9px; font-weight: 600; }
+.chip.marca { background: #f3e8ff; color: #5b2a86; }
+.cronometro { flex-shrink: 0; font-weight: 800; color: var(--vinho); background: var(--vinho-claro); border-radius: 999px; padding: 6px 12px; font-size: .82rem; animation: pulsar 1.6s ease-in-out infinite; }
+.cronometro::before { content: '● '; color: var(--dourado); }
+@keyframes pulsar { 50% { box-shadow: 0 0 0 6px rgba(255,79,163,.12); } }
+.comecar { flex-shrink: 0; }
+
+/* Semana */
+.semana-acoes { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.semana-acoes .desc { margin: 0; }
+.semana-acoes > div { display: flex; gap: 8px; flex-wrap: wrap; }
+.semana { display: grid; grid-template-columns: repeat(7, minmax(150px, 1fr)); gap: 10px; overflow-x: auto; padding-bottom: 8px; }
+.dia-sem { position: relative; background: rgba(255,255,255,.85); border: 1px solid var(--borda); border-radius: 22px; padding: 12px 10px 44px; min-height: 220px; display: flex; flex-direction: column; gap: 8px; }
+.dia-sem.hoje { border: 2px solid var(--dourado); box-shadow: 0 10px 24px -14px rgba(224,21,122,.6); }
+.dia-sem.folga { background: repeating-linear-gradient(-45deg, rgba(255,228,241,.5) 0 8px, rgba(255,255,255,.6) 8px 16px); }
+.dia-sem header strong { display: block; font-family: var(--titulo); font-weight: 600; color: var(--vinho-escuro); }
+.dia-sem header small { font-size: .72rem; color: var(--suave); }
+.dia-sem .carga { height: 8px; }
+.dia-lista { display: flex; flex-direction: column; gap: 6px; }
+.t-chip { text-align: left; border: 1px solid var(--borda); background: #fff; border-radius: 12px; padding: 6px 8px; font: inherit; font-size: .78rem; color: var(--grafite); word-break: break-word; }
+.t-chip b { color: var(--vinho); }
+.t-chip.feita { opacity: .55; text-decoration: line-through; }
+.t-chip:hover { border-color: var(--dourado); }
+.add-dia { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); width: 30px; height: 30px; border-radius: 50%; border: 0; background: var(--gel); color: #fff; font-weight: 800; box-shadow: var(--gel-sombra); }
+
+/* Meu ritmo */
+.ritmo-graf { position: relative; }
+.ritmo-graf::after { content: ''; position: absolute; left: 0; right: 0; bottom: var(--linha); border-top: 2px dashed var(--dourado); pointer-events: none; }
+.rotina { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+.rotina .desc { margin: 0; }
+.lista-barras .desc { display: block; margin: 2px 0 0; }
+
+/* Ficha de tarefa e boas-vindas */
+.dias-escolha, .cat-escolha { clear: both; display: flex; flex-wrap: wrap; gap: 8px; }
+.cat-escolha { margin: 12px 0; }
+.dias-escolha input, .cat-escolha input { position: absolute; opacity: 0; pointer-events: none; }
+.dias-escolha span, .cat-escolha span { display: inline-block; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--borda); background: #fff; font-size: .88rem; font-weight: 600; color: var(--suave); cursor: pointer; transition: all .15s; }
+.dias-escolha input:checked + span, .cat-escolha input:checked + span { background: var(--gel); color: #fff; border-color: transparent; box-shadow: var(--gel-sombra); }
+.dias-escolha input:focus-visible + span, .cat-escolha input:focus-visible + span { outline: 2px solid var(--vinho); outline-offset: 2px; }
+.horas-escolha { clear: both; display: flex; align-items: center; gap: 14px; }
+.horas-escolha input { flex: 1; accent-color: var(--vinho); }
+.horas-escolha output { font-family: var(--titulo); font-size: 1.5rem; font-weight: 600; color: var(--vinho); min-width: 56px; }
+.dur-escolha { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.dur-escolha button { border: 1.5px solid var(--borda); background: #fff; border-radius: 999px; padding: 6px 11px; font-size: .82rem; font-weight: 600; color: var(--suave); }
+.dur-escolha button.ativo { background: var(--gel); color: #fff; border-color: transparent; }
+.dur-escolha input { width: 80px !important; }
+.dur-escolha span { font-size: .8rem; }
+.sugestoes { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 12px; font-size: .82rem; color: var(--suave); }
+.sugestoes > span { width: 100%; }
+.sug { border: 1.5px dashed var(--dourado); background: var(--vinho-claro); color: var(--vinho-escuro); border-radius: 999px; padding: 7px 12px; font-weight: 700; font-size: .82rem; }
+.sug:hover { background: var(--gel); color: #fff; border-style: solid; }
+#sec-horario > .campo { margin-top: 12px; }
+#aba-tarefas .numeros { grid-template-columns: repeat(4, 1fr); }
+.passos { clear: both; display: flex; flex-direction: column; gap: 8px; }
+.passo { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid var(--borda); border-radius: 14px; background: #fff; }
+.passo span { flex: 1; font-weight: 600; }
+.passo input[type="number"] { width: 72px; font: inherit; border: 1px solid var(--borda); border-radius: 8px; padding: 6px 8px; }
+.passo input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--vinho); }
+.plano-lista { margin: 0 0 8px 18px; display: flex; flex-direction: column; gap: 4px; }
+
+@media (max-width: 900px) {
+  #aba-tarefas .numeros { grid-template-columns: repeat(2, 1fr); }
+  .semana { grid-template-columns: repeat(7, 72%); margin: 0 -16px; padding: 0 16px 8px; scroll-snap-type: x mandatory; }
+  .dia-sem { scroll-snap-align: start; }
+}
+@media (max-width: 560px) {
+  .tarefas-botoes { width: 100%; }
+  .tarefas-botoes button { flex: 1; }
+  .ritmo-topo { flex-direction: column; align-items: stretch; gap: 12px; }
+  .tarefa { flex-wrap: wrap; gap: 10px; }
+  .t-hora { width: 44px; }
+  .t-corpo { min-width: calc(100% - 110px); }
+  .comecar, .cronometro { margin-left: 96px; }
+  .atrasadas, .ativar-lembrete { flex-direction: column; align-items: flex-start; }
+}

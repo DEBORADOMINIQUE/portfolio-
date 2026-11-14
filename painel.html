@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex, nofollow">
-  <title>meu.painel</title>
+  <title>Organized UGC</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Cdefs%3E%3CradialGradient id=%27g%27 cx=%2735%25%27 cy=%2730%25%27%3E%3Cstop offset=%270%27 stop-color=%27%23ff9fd0%27/%3E%3Cstop offset=%27.55%27 stop-color=%27%23ff1493%27/%3E%3Cstop offset=%271%27 stop-color=%27%23c20f6c%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx=%2750%27 cy=%2750%27 r=%2746%27 fill=%27url(%23g)%27/%3E%3C/svg%3E">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,6 +14,10 @@
   <!-- Supabase por CDN e depois a autenticação compartilhada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/auth.js?v=2"></script>
+  <script src="js/marcas.js?v=1"></script>
+  <script src="js/tarefas.js?v=1"></script>
+  <link rel="stylesheet" href="css/tarefas.css?v=1">
+  <link rel="stylesheet" href="css/marcas.css?v=1">
 
   <style>
     /* ===== Design system: as mesmas cores e fontes do portfólio ===== */
@@ -215,11 +220,13 @@
       .leads { grid-template-columns: 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="css/tema-y2k.css?v=1">
+  <script src="js/glitter.js?v=1" defer></script>
 </head>
 <body>
   <!-- Menu lateral -->
   <aside class="sidebar" id="sidebar">
-    <div class="logo">meu<span>.</span>painel</div>
+    <div class="logo"><span class="bolinha" aria-hidden="true"></span>organized <b>UGC</b></div>
     <div class="menu-rotulo">Navegação</div>
     <nav>
       <button class="aba ativa" data-tab="aba-principal" data-titulo="Menu Principal">
@@ -229,6 +236,16 @@
       <button class="aba" data-tab="aba-portfolio" data-titulo="Portfólio">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6" rx="1"/><rect x="12" y="8" width="3" height="10" rx="1"/><rect x="17" y="5" width="3" height="13" rx="1"/></svg>
         Portfólio
+      </button>
+      <button class="aba" data-tab="aba-marcas" data-titulo="Marcas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg>
+        Marcas
+        <span class="selo-aba" hidden>0</span>
+      </button>
+      <button class="aba" data-tab="aba-tarefas" data-titulo="Tarefas">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg>
+        Tarefas
+        <span class="selo-aba" hidden>0</span>
       </button>
     </nav>
     <div class="sidebar-rodape">
@@ -247,7 +264,7 @@
         </button>
         <h1 id="titulo-topo">Menu Principal</h1>
       </div>
-      <div class="periodos" role="group" aria-label="Período">
+      <div class="periodos" id="periodos" role="group" aria-label="Período">
         <button class="periodo ativo" data-dias="0">Tudo</button>
         <button class="periodo" data-dias="7">7d</button>
         <button class="periodo" data-dias="30">30d</button>
@@ -309,6 +326,10 @@
         </div>
       </div>
     </section>
+    <!-- ===== Aba 3: Marcas (montada pelo js/marcas.js) ===== -->
+    <section class="painel-aba" id="aba-marcas"></section>
+    <!-- ===== Aba 4: Tarefas (montada pelo js/tarefas.js) ===== -->
+    <section class="painel-aba" id="aba-tarefas"></section>
   </main>
 
   <script>
@@ -531,7 +552,9 @@
         $(botao.dataset.tab).classList.add('ativo');
         botao.classList.add('ativa');
         $('titulo-topo').textContent = botao.dataset.titulo;
+        $('periodos').style.display = ['aba-marcas', 'aba-tarefas'].includes(botao.dataset.tab) ? 'none' : ''; // período só vale para os números do site
         document.body.classList.remove('menu-aberto');
+        if (botao.dataset.tab === 'aba-tarefas') Tarefas.aoAbrir();
         window.scrollTo({ top: 0 });
       });
     });
@@ -548,6 +571,13 @@
     $('btn-menu').addEventListener('click', () => document.body.classList.toggle('menu-aberto'));
     $('veu').addEventListener('click', () => document.body.classList.remove('menu-aberto'));
     $('btn-sair').addEventListener('click', () => Auth.logout());
+
+    // Área de Marcas: carrega em paralelo, sem esperar os números do site
+    Marcas.iniciar(sb, $('aba-marcas'));
+    // Saudação com o nome (ou "Deusa"), que vem das preferências das Tarefas
+    const saudar = () => { $('aba-principal').querySelector('.saudacao').textContent = `${Tarefas.saudacao()}, ${Tarefas.nome()}! Aqui estão os números do seu portfólio.`; };
+    Tarefas.iniciar(sb, $('aba-tarefas')).then(saudar);
+    document.addEventListener('oug:nome', saudar);
 
     // ===== 9. Carrega as duas tabelas uma vez (se uma falhar, a outra continua) =====
     const [resEventos, resLeads] = await Promise.allSettled([buscarTudo('portfolio_events'), buscarTudo('portfolio_leads')]);
