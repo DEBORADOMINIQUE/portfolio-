@@ -12,7 +12,7 @@
 
   <!-- Supabase por CDN e depois a autenticação compartilhada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-  <script src="js/auth.js"></script>
+  <script src="js/auth.js?v=2"></script>
 
   <style>
     /* ===== Design system: as mesmas cores e fontes do portfólio ===== */
@@ -160,7 +160,7 @@
       if (veioDaRecuperacao) { trocarTela('nova'); return; }
       // Já tem sessão ativa? Vai direto para o painel.
       try {
-        if (await Auth.sessaoAtual()) window.location.replace('painel.html');
+        if (await Auth.sessaoAtual()) window.location.replace(Auth.pagina('painel'));
       } catch (e) { /* sem conexão: continua na tela de login */ }
     })();
 
@@ -181,7 +181,7 @@
       carregando($('btn-entrar'), true, 'Entrando...');
       try {
         await Auth.login(email, senha);
-        window.location.replace('painel.html');
+        window.location.replace(Auth.pagina('painel'));
       } catch (err) {
         aviso('erro', err.message);
         carregando($('btn-entrar'), false);
@@ -214,7 +214,7 @@
       try {
         await Auth.definirNovaSenha(senha);
         aviso('ok', 'Senha salva! Abrindo o painel...');
-        setTimeout(() => window.location.replace('painel.html'), 1200);
+        setTimeout(() => window.location.replace(Auth.pagina('painel')), 1200);
       } catch (err) {
         aviso('erro', err.message);
         carregando($('btn-nova'), false);

@@ -16,8 +16,16 @@ function urlDaPagina(nome) {
   return new URL(nome, window.location.href).href;
 }
 
+// Endereço limpo, sem ".html" no final (ex.: deboradominique.com/painel).
+// No computador (localhost ou arquivo aberto direto) mantém o ".html", porque lá o endereço limpo não abre.
+function paginaLimpa(nome) {
+  const local = location.protocol === 'file:' || ['localhost', '127.0.0.1'].includes(location.hostname);
+  return urlDaPagina(local ? nome + '.html' : nome);
+}
+
 window.Auth = {
   client: sb,
+  pagina: paginaLimpa,
 
   // Entra com e-mail e senha. Devolve o usuário ou lança um erro em português.
   async login(email, senha) {
@@ -35,7 +43,7 @@ window.Auth = {
     const { data, error } = await sb.auth.getSession();
     const sessao = data && data.session;
     if (error || !sessao) {
-      window.location.replace(urlDaPagina('login.html'));
+      window.location.replace(paginaLimpa('login'));
       return null;
     }
     return sessao.user;
@@ -50,7 +58,7 @@ window.Auth = {
   // Sai e volta para o login
   async logout() {
     try { await sb.auth.signOut(); } finally {
-      window.location.replace(urlDaPagina('login.html'));
+      window.location.replace(paginaLimpa('login'));
     }
   },
 
