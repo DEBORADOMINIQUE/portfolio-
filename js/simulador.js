@@ -172,8 +172,8 @@
             return `<h2>${titulo}</h2><div class="s-lista">${lista.map(i => {
               const ativo = qtd[i.id] > 0, sg = sugerido(i.id);
               let preco = temPreco(i) ? (tipo === 'percentual' ? `+${i.ref}%` : moeda(i.ref) + (tipo === 'por_conteudo' ? ' / conteúdo' : '')) : 'sem preço';
-              if (i.sugerido) preco += ' · sugerido p/ seu nível';
-              else if (sg && temPreco(i) && tipo !== 'percentual' && Math.abs(sg.ref - i.ref) >= 10) preco += ` · nível ${NIVEIS[nivel()].nome.toLowerCase()}: ${moeda(sg.ref)}`;
+              if (i.sugerido) preco += ' · sugestão';
+              else if (sg && temPreco(i) && tipo !== 'percentual' && Math.abs(sg.ref - i.ref) >= 10) preco += ` · sugestão: ${moeda(sg.ref)}`;
               return `<div class="s-item ${ativo ? 'ativo' : ''} ${temPreco(i) ? '' : 'sem-preco'}">
                 <div><strong>${esc(i.nome)}</strong><small>${preco}${temPreco(i) && i.min != null && i.min !== i.ref && tipo !== 'percentual' && !i.sugerido ? ` · mín. ${moeda(i.min)}` : ''}</small></div>
                 ${tipo === 'unidade'
