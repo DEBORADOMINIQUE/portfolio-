@@ -129,7 +129,6 @@
           <strong>${feitasHoje >= m ? `Meta batida, ${esc(nomeDela())}! ✦` : `Abordagens de hoje`}</strong>
           <div class="carga ${feitasHoje >= m ? 'ok' : ''}"><div style="width:${Math.min(100, feitasHoje / m * 100)}%"></div></div>
           <small>${feitasHoje >= m ? 'Cada marca a mais hoje é bônus.' : `Faltam ${m - feitasHoje} para bater a meta.`} ${seq ? `🔥 ${seq} ${seq === 1 ? 'dia' : 'dias'} seguidos batendo a meta` : ''}</small>
-          ${(() => { const pl = window.Financeiro && Financeiro.plano(); return pl && pl.porDia ? `<small class="meta-plano">💸 Para a meta de faturamento do mês, o ideal são <b>${pl.porDia} abordagens por dia</b>.${pl.porDia !== m ? ' <button class="link-precos" data-usar-plano>Usar como meta</button>' : ''}</small>` : ''; })()}
         </div>
         <button class="mini-btn" data-meta>Meta: ${m}/dia</button>
       </div>`;

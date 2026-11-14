@@ -87,17 +87,14 @@
     el.hidden = !p || p.batida;
     if (el.hidden) return;
     if (p.semTicket) { el.innerHTML = `<h2>Como chegar na sua meta ✦</h2><p class="desc">Faltam ${moeda(p.faltam)}. Para eu calcular quantas marcas você precisa, cadastre seus preços no Simulador ou coloque o valor nas parcerias fechadas.</p>`; return; }
-    const pct = Math.round(p.taxa * 100 * 10) / 10;
     el.innerHTML = `<h2>Como chegar na sua meta ✦</h2>
       <p class="plano-frase">Deusa, faltam <b>${moeda(p.faltam)}</b> para os seus ${moeda(p.meta)}. Se você fechar <b>${p.marcasFechar} ${p.marcasFechar === 1 ? 'marca' : 'marcas'}</b> de ${moeda(p.ticket)}, você chega lá.
-      ${p.dias ? `Para isso, aborde <b>${p.porDia} ${p.porDia === 1 ? 'marca' : 'marcas'} por dia</b> nos ${p.dias} ${p.dias === 1 ? 'dia' : 'dias'} de trabalho que faltam. Vamos, você consegue! 💪` : 'Os dias de trabalho deste mês acabaram, mas esse ritmo já te deixa pronta para o próximo.'}</p>
+      Vamos, você consegue! 💪</p>
       <div class="plano-passos">
-        <div><b>${p.abordagens}</b><small>abordagens no mês</small></div><span>→</span>
         <div><b>${p.marcasFechar}</b><small>${p.marcasFechar === 1 ? 'marca fecha' : 'marcas fecham'}</small></div><span>→</span>
         <div><b>${moeda(p.marcasFechar * p.ticket)}</b><small>na conta</small></div>
       </div>
-      <p class="desc plano-base">Conta feita com ${p.origemTicket === 'media' ? 'o seu valor médio por parceria' : 'o preço do seu vídeo no Simulador'} e ${p.taxaReal ? `a sua taxa real de aprovação (${String(pct).replace('.', ',')}% nas últimas ${p.amostra} abordagens)` : 'uma taxa inicial de 5% de aprovação. Assim que você registrar 10 abordagens na Prospecção, eu troco pela sua taxa real'}.</p>
-      ${p.porDia && p.porDia !== Number(Tarefas.prefs().meta_abordagens || 10) ? `<button class="btn-primario" data-usar-plano>Usar ${p.porDia} por dia como minha meta de abordagens</button>` : '<p class="desc">✓ Sua meta diária de abordagens já está nesse ritmo.</p>'}`;
+      <p class="desc plano-base">Conta feita com ${p.origemTicket === 'media' ? 'o seu valor médio por parceria' : 'o preço do seu vídeo no Simulador'}.</p>`;
   }
 
   async function usarPlano() {
