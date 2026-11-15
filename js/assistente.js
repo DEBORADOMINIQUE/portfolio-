@@ -66,7 +66,7 @@
     btn.disabled = true; btn.textContent = 'Lendo... ✦';
     res.innerHTML = '<div class="as-pensando"><span></span><span></span><span></span></div>';
     try {
-      const { data: r, error } = await sb.functions.invoke('assistente', { body: { texto, imagem: imagem && { media_type: imagem.media_type, data: imagem.data }, hoje: hoje() } });
+      const { data: r, error } = await sb.functions.invoke('bright-endpoint', { body: { texto, imagem: imagem && { media_type: imagem.media_type, data: imagem.data }, hoje: hoje() } });
       if (error) {
         let msg = 'O assistente ainda não está ativado. Siga os passos de configuração.';
         try { const corpo = await error.context.json(); if (corpo && corpo.erro) msg = corpo.erro; } catch (e) {}
@@ -90,7 +90,7 @@
     const dlg = document.getElementById('assistente-dlg');
     imagem = null;
     dlg.innerHTML = `<div class="ficha">
-      <header class="ficha-cab"><div><small>Assistente ✦</small><h2>O que aconteceu, ${G.apelido()}?</h2></div><button type="button" class="fechar" data-fechar aria-label="Fechar">×</button></header>
+      <header class="ficha-cab"><div><small>Raquel · sua assistente ✦</small><h2>Oi, ${window.Tarefas ? Tarefas.nome() : G.apelido()}! Sou a Raquel. O que aconteceu?</h2></div><button type="button" class="fechar" data-fechar aria-label="Fechar">×</button></header>
       <div class="ficha-corpo">
         <p class="desc" style="margin-top:12px">Cole a conversa com a marca, o e-mail, o briefing, ou só escreva do seu jeito ("abordei a Sallve pelo direct", "gravar o reels da Kaisan sexta às 14h", "comprei um microfone de 189"). Eu entendo e preencho a ficha certa.</p>
         <label class="campo largo"><textarea id="as-texto" rows="7" placeholder="Cole ou escreva aqui..."></textarea></label>
@@ -140,7 +140,7 @@
   };
   function montar() {
       const d = document.createElement('dialog'); d.id = 'assistente-dlg'; d.className = 'dialogo-ficha'; document.body.appendChild(d);
-      const b = document.createElement('button'); b.className = 'assistente-fab'; b.innerHTML = '<span>✦</span> Assistente'; b.setAttribute('aria-label', 'Abrir o assistente');
+      const b = document.createElement('button'); b.className = 'assistente-fab'; b.innerHTML = '<span>✦</span> Raquel'; b.setAttribute('aria-label', 'Falar com a Raquel, sua assistente');
       b.addEventListener('click', abrir); document.body.appendChild(b);
   }
 })();
