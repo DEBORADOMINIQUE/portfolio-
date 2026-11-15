@@ -25,21 +25,22 @@
   <!-- Supabase por CDN e depois a autenticação compartilhada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/auth.js?v=3"></script>
-  <script src="js/marcas.js?v=5"></script>
+  <script src="js/marcas.js?v=6"></script>
   <script src="js/tarefas.js?v=6"></script>
-  <script src="js/prospeccao.js?v=6"></script>
+  <script src="js/prospeccao.js?v=8"></script>
   <script src="js/financeiro.js?v=5"></script>
-  <script src="js/simulador.js?v=8"></script>
+  <script src="js/simulador.js?v=9"></script>
   <script src="js/conteudo.js?v=4"></script>
   <script src="js/assistente.js?v=3"></script>
   <script src="js/crescimento.js?v=3"></script>
   <script src="js/primeiros.js?v=2"></script>
+  <script src="js/comparativo.js?v=1"></script>
   <script src="js/tema.js?v=2"></script>
-  <link rel="stylesheet" href="css/conteudo.css?v=5">
+  <link rel="stylesheet" href="css/conteudo.css?v=6">
   <link rel="stylesheet" href="css/financeiro.css?v=5">
-  <link rel="stylesheet" href="css/prospeccao.css?v=2">
+  <link rel="stylesheet" href="css/prospeccao.css?v=3">
   <link rel="stylesheet" href="css/tarefas.css?v=2">
-  <link rel="stylesheet" href="css/marcas.css?v=3">
+  <link rel="stylesheet" href="css/marcas.css?v=4">
 
   <style>
     /* ===== Design system: as mesmas cores e fontes do portfólio ===== */
@@ -256,6 +257,10 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V9.5"/></svg>
         Menu Principal
       </button>
+      <button class="aba" data-tab="aba-comparativo" data-titulo="Comparativo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+        Comparativo
+      </button>
       <button class="aba" data-tab="aba-portfolio" data-titulo="Portfólio">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6" rx="1"/><rect x="12" y="8" width="3" height="10" rx="1"/><rect x="17" y="5" width="3" height="13" rx="1"/></svg>
         Portfólio
@@ -350,6 +355,8 @@
       </div>
       </div>
     </section>
+
+    <section class="painel-aba" id="aba-comparativo"></section>
 
     <!-- ===== Aba 2: Portfólio ===== -->
     <section class="painel-aba" id="aba-portfolio">
@@ -627,6 +634,7 @@
         if (botao.dataset.tab === 'aba-simulador') Simulador.aoAbrir();
         if (botao.dataset.tab === 'aba-conteudo') Conteudo.aoAbrir();
         if (botao.dataset.tab === 'aba-principal') { Crescimento.desenhar(); PrimeirosPassos.desenhar(); }
+        if (botao.dataset.tab === 'aba-comparativo') Comparativo.aoAbrir();
         window.scrollTo({ top: 0 });
       });
     });
@@ -656,6 +664,7 @@
     Assistente.iniciar(sb);
     Crescimento.iniciar($('crescimento'));
     PrimeirosPassos.iniciar($('primeiros-passos'));
+    Comparativo.iniciar($('aba-comparativo'));
     // Modo escuro
     const rotuloTema = () => { $('btn-tema').textContent = Tema.escuro() ? '☀️ Modo claro' : '🌙 Modo escuro'; };
     rotuloTema();

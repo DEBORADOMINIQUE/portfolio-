@@ -197,3 +197,24 @@
 .link-linha input { flex: 1; }
 .licenca-rapida { margin-top: 12px; font-size: .8rem; color: var(--suave); }
 .legenda .licenca::before, .ev.licenca { background: #c77dff; }
+
+/* Acordo com a marca */
+.acordo { display: flex; flex-direction: column; gap: 8px; clear: both; }
+.acordo-linha { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--borda); border-radius: 14px; background: #fff; }
+.acordo-linha select { flex: 1; min-width: 0; font: inherit; border: 1px solid var(--borda); border-radius: 10px; padding: 8px; background: #fff; color: var(--ameixa); }
+.acordo-preco { font-family: var(--titulo); font-weight: 600; color: var(--ameixa); min-width: 70px; text-align: right; font-size: .9rem; }
+.acordo-add { margin-top: 8px; width: 100%; }
+.sugestao-valor { color: var(--suave); font-weight: 500; }
+.btn-lima { border: 0; border-radius: 999px; padding: 11px 16px; font-weight: 800; font-size: .88rem; background: var(--lima-gel); color: #2f4a00; box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 6px 14px -8px rgba(80,120,0,.6); margin-right: 6px; }
+.btn-lima:hover { filter: brightness(1.04); }
+.card-recebi { margin-top: 8px; display: inline-flex; }
+.ficha-rodape > div { flex-wrap: wrap; justify-content: flex-end; }
+
+/* Banco de marcas e nichos */
+.nichos { margin-bottom: 16px; }
+.nicho-top { font-size: 1rem; margin: 6px 0 14px; }
+.nicho-top b { color: var(--lima-texto); }
+.banco { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; }
+.banco > * { min-width: 0; }
+.banco-card .estrelas { display: block; margin: 4px 0; }
+.dur-escolha button.ativo { background: var(--gel); color: #fff; border-color: transparent; }

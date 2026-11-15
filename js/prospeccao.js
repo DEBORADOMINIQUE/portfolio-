@@ -233,10 +233,14 @@
         <fieldset><legend>Abordagem</legend>
           <div class="cat-escolha">${Object.entries(CANAIS).map(([k, c]) => `<label><input type="radio" name="canal" value="${k}" ${p.canal === k ? 'checked' : ''}><span>${c.emoji} ${c.nome}</span></label>`).join('')}</div>
           <div class="grade-campos">
-            <label class="campo"><span>Qual texto você usou?</span><select name="abordagem_id"><option value="">Nenhum / personalizado</option>${textos.map(t => `<option value="${t.id}" ${p.abordagem_id === t.id ? 'selected' : ''}>${esc(t.nome)}</option>`).join('')}</select></label>
+            <label class="campo"><span>Usou um texto salvo?</span><select name="abordagem_id"><option value="">${textos.length ? 'Não, escrevi na hora' : 'Nenhum texto salvo ainda'}</option>${textos.map(t => `<option value="${t.id}" ${p.abordagem_id === t.id ? 'selected' : ''}>${esc(t.nome)}</option>`).join('')}</select></label>
             ${campo('data_abordagem', 'Data da abordagem', p.data_abordagem, 'type="date"')}
           </div>
-          <div class="texto-usado" id="texto-usado"></div>
+          <label class="campo largo" style="margin-top:12px"><span>Texto que você mandou</span><textarea name="texto_usado" rows="5" placeholder="Escreva ou cole aqui a mensagem que você mandou para a marca. Use {marca} e {contato} se quiser.">${esc(p.texto_usado || '')}</textarea></label>
+          <div class="texto-acoes">
+            <button type="button" class="mini-btn" data-copiar-usado>Copiar texto</button>
+            <label class="check-mini"><input type="checkbox" name="salvar_texto"> Salvar em "Meus textos" para usar de novo</label>
+          </div>
         </fieldset>
         <fieldset><legend>Resposta</legend>
           <div class="cat-escolha status-escolha">${Object.entries(STATUS).map(([k, v]) => `<label><input type="radio" name="status" value="${k}" ${p.status === k ? 'checked' : ''}><span class="${v.cor}">${v.nome}</span></label>`).join('')}</div>
@@ -246,7 +250,7 @@
           </div>
         </fieldset>
         <fieldset><legend>Anotações</legend><label class="campo largo"><textarea name="notas" rows="2" placeholder="O que responderam, valores, próximos passos...">${esc(p.notas || '')}</textarea></label></fieldset>
-        ${!nova && p.status === 'aprovada' && !p.marca_id ? `<div class="levar-funil"><span>🎉 Aprovou! Quer acompanhar prazos e entrega no funil?</span><button type="button" class="btn-primario" data-levar>Levar para Marcas</button></div>` : ''}
+        ${!nova && p.status === 'aprovada' && !p.marca_id ? `<div class="levar-funil"><span>🎉 Aprovou! Registre o que foi combinado com a marca.</span><button type="button" class="btn-primario" data-levar>Contar o que foi acordado</button></div>` : ''}
       </div>
       <footer class="ficha-rodape">
         ${!nova ? '<button type="button" class="btn-perigo" data-excluir>Excluir</button>' : '<span></span>'}
@@ -258,15 +262,21 @@
     const f = dlg.querySelector('form');
     let proxima = false;
 
-    function mostrarTexto() {
-      const t = textos.find(x => x.id === f.abordagem_id.value), el = dlg.querySelector('#texto-usado');
-      if (!t || !t.texto) { el.innerHTML = ''; return; }
-      const txt = preencherTexto(t.texto, { marca: f.marca.value.trim(), contato_nome: f.contato_nome.value.trim() });
-      el.innerHTML = `<p>${esc(txt)}</p><button type="button" class="mini-btn" data-copiar>Copiar texto</button>`;
-      el.querySelector('[data-copiar]').onclick = () => navigator.clipboard.writeText(txt).then(() => toast('Texto copiado ✦'), () => toast('Não consegui copiar.', true));
+    // Escolheu um texto salvo? Ele aparece no campo, já com o nome da marca, para você ajustar.
+    let textoMexido = !!p.texto_usado;
+    f.texto_usado.addEventListener('input', () => { textoMexido = true; });
+    function mostrarTexto(forcar) {
+      const t = textos.find(x => x.id === f.abordagem_id.value);
+      if (!t || !t.texto || (textoMexido && !forcar)) return;
+      f.texto_usado.value = preencherTexto(t.texto, { marca: f.marca.value.trim(), contato_nome: f.contato_nome.value.trim() });
     }
-    ['abordagem_id', 'marca', 'contato_nome'].forEach(n => f[n].addEventListener('input', mostrarTexto));
-    mostrarTexto();
+    f.abordagem_id.addEventListener('change', () => { textoMexido = false; mostrarTexto(true); f.salvar_texto.checked = false; });
+    ['marca', 'contato_nome'].forEach(n => f[n].addEventListener('input', () => mostrarTexto()));
+    if (!p.texto_usado) mostrarTexto();
+    dlg.querySelector('[data-copiar-usado]').addEventListener('click', () => {
+      const txt = f.texto_usado.value.trim(); if (!txt) return toast('Escreva o texto primeiro.', true);
+      navigator.clipboard.writeText(txt).then(() => toast('Texto copiado ✦'), () => toast('Não consegui copiar.', true));
+    });
     // Marcou que respondeu? Preenche a data de hoje.
     $$('input[name="status"]', dlg).forEach(i => i.addEventListener('change', () => { if (i.value !== 'enviada' && !f.data_resposta.value) f.data_resposta.value = hoje(); }));
 
@@ -299,8 +309,16 @@
         const repetida = lista.find(x => x.marca.toLowerCase() === marca.toLowerCase() || (u && usuario(x.instagram).toLowerCase() === u));
         if (repetida && !confirm(`Você já abordou ${repetida.marca} em ${fmtCurta(repetida.data_abordagem)} (${STATUS[repetida.status].nome}). Registrar de novo?`)) { proxima = false; return; }
       }
+      dados.texto_usado = t('texto_usado');
       const btn = dlg.querySelector('#pf-salvar'); btn.disabled = true;
       try {
+        // Pediu para salvar em "Meus textos"? Vira um texto salvo e já fica ligado a esta abordagem.
+        if (f.salvar_texto.checked && dados.texto_usado) {
+          const nomeTexto = (prompt('Dê um nome para esse texto (ex.: DM curta com portfólio):', '') || '').trim() || `Texto ${textos.length + 1}`;
+          const modelo = dados.texto_usado.split(marca).join('{marca}');
+          const novo = await salvar('abordagens', null, { nome: nomeTexto, canal: dados.canal, texto: modelo });
+          dados.abordagem_id = novo.id;
+        }
         const salvo = await salvar('prospeccoes', nova ? null : p.id, dados);
         desenhar();
         const n = lista.filter(x => x.data_abordagem === hoje()).length;
@@ -315,18 +333,17 @@
     if (nova) setTimeout(() => f.marca.focus(), 50);
   }
 
+  // Aprovou! Abre direto a ficha da marca em "Fechada", no campo do que foi acordado
   function perguntarFunil(p) {
-    if (confirm(`🎉 ${p.marca} aprovou! Levar para o funil de Marcas para acompanhar prazo e entrega?`)) levarParaMarcas(p);
+    toast(`🎉 ${p.marca} aprovou! Agora conte o que foi acordado.`);
+    levarParaMarcas(p);
   }
 
-  async function levarParaMarcas(p) {
+  function levarParaMarcas(p) {
     if (!window.Marcas) return;
-    try {
-      const m = await Marcas.adicionar({ nome: p.marca, nicho: p.nicho, contato_nome: p.contato_nome, contato_email: p.email, contato_whatsapp: p.whatsapp,
-        contato_instagram: p.instagram, canal: ['instagram', 'email', 'whatsapp', 'plataforma'].includes(p.canal) ? p.canal : 'outro', notas: p.notas, etapa: 'negociando' });
-      await salvar('prospeccoes', p.id, { marca_id: m.id });
-      desenhar(); toast(`${p.marca} está no funil, em "Negociando" ✦`);
-    } catch (e) { console.error(e); toast('Não consegui levar para Marcas agora.', true); }
+    Marcas.novaCom({ nome: p.marca, nicho: p.nicho, contato_nome: p.contato_nome, contato_email: p.email, contato_whatsapp: p.whatsapp,
+      contato_instagram: p.instagram, canal: ['instagram', 'email', 'whatsapp', 'plataforma'].includes(p.canal) ? p.canal : 'outro', notas: p.notas, etapa: 'aguardando' },
+      { foco: 'acordo', aoSalvar: async (m) => { await salvar('prospeccoes', p.id, { marca_id: m.id }); desenhar(); } });
   }
 
   function abrirTexto(t) {

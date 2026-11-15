@@ -78,3 +78,27 @@
 .ajuda-link:hover { filter: brightness(1.05); }
 .links-legais { text-align: center; margin-top: 10px; font-size: .7rem; color: rgba(255,255,255,.8); }
 .links-legais a { color: rgba(255,255,255,.9); }
+
+/* Comparativo mês a mês */
+.comp-topo { margin-bottom: 16px; }
+.comp-metas-lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.comp-meta { background: var(--lima-claro); border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 2px; }
+.comp-meta span { font-size: .78rem; font-weight: 700; color: var(--lima-texto); text-transform: uppercase; letter-spacing: .05em; }
+.comp-meta b { font-family: var(--titulo); font-size: 1.5rem; color: var(--ameixa); font-weight: 600; }
+.comp-meta small { color: var(--suave); font-size: .76rem; }
+.comp-meta .mini-btn { margin-top: 6px; align-self: flex-start; }
+.comp-melhorar ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.comp-melhorar li { background: var(--branco); border: 1px solid var(--borda); border-radius: 14px; padding: 10px 12px; font-size: .9rem; }
+.comp-melhorar li small { display: block; color: var(--suave); margin-top: 4px; font-size: .8rem; }
+.comp-rolagem { overflow-x: auto; margin: 0 -8px; padding: 0 8px; }
+.comp-tabela { width: 100%; border-collapse: separate; border-spacing: 0; font-size: .88rem; min-width: 560px; }
+.comp-tabela th, .comp-tabela td { padding: 9px 10px; text-align: right; border-bottom: 1px solid var(--borda); white-space: nowrap; }
+.comp-tabela thead th { font-family: var(--texto); font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; color: var(--suave); font-weight: 800; }
+.comp-tabela thead th small { display: block; text-transform: none; letter-spacing: 0; font-weight: 600; font-size: .68rem; }
+.comp-tabela tbody th { text-align: left; font-weight: 600; color: var(--ameixa); position: sticky; left: 0; background: var(--branco); }
+.comp-tabela td { color: var(--ameixa); font-variant-numeric: tabular-nums; }
+.comp-tabela td i { font-style: normal; font-size: .7rem; margin-left: 4px; color: var(--suave); }
+.comp-tabela td i.sobe { color: var(--lima-texto); } .comp-tabela td i.desce { color: var(--vermelho); }
+.comp-tabela td.melhor { background: var(--lima-claro); font-weight: 800; border-radius: 8px; }
+.comp-tabela .atual { background: rgba(255,224,239,.35); }
+.comp-grupo td { text-align: left !important; font-size: .72rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--vinho); padding-top: 16px; border-bottom: 0; }

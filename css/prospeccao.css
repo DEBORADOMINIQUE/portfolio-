@@ -62,3 +62,6 @@
   .meta-topo { flex-wrap: wrap; gap: 12px; }
   .meta-info { flex-basis: 100%; order: 3; }
 }
+.texto-acoes { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+.check-mini { display: flex; align-items: center; gap: 6px; font-size: .84rem; color: var(--suave); cursor: pointer; }
+.check-mini input { accent-color: var(--vinho); width: 16px; height: 16px; }

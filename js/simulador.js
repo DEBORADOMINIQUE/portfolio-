@@ -294,6 +294,8 @@
 
   window.Simulador = {
     iniciar(secao) { raiz = secao; montar(); },
+    // Usada pelas Marcas (acordo): seus serviços por unidade, com o preço que vale (o seu ou a sugestão)
+    itens: () => itensComSugestoes().filter(i => i.tipo === 'unidade'),
     aoAbrir(tentativa = 0) { if ((window.Tarefas && Tarefas.pronto()) || tentativa > 20) desenhar(); else setTimeout(() => this.aoAbrir(tentativa + 1), 300); }
   };
 })();

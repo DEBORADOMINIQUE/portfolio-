@@ -87,9 +87,10 @@
     entrega:  (m) => `Oi, ${primeiroNome(m)}! O conteúdo da ${m.nome} está pronto. Posso te enviar por aqui?`,
     feedback: (m) => `Oi, ${primeiroNome(m)}! Foi um prazer criar para a ${m.nome}. Você me conta o que achou do conteúdo? Seu feedback me ajuda muito.`,
     pagamento:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? Passando para confirmar a previsão de pagamento do conteúdo da ${m.nome}.`,
+    repescagem:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? Faz um tempinho da nossa parceria com a ${m.nome} e eu amei o resultado. Tenho ideias novas de conteúdo para vocês. Posso te mandar uma proposta?`,
     renovacao:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? A licença de uso do conteúdo da ${m.nome} ${m.uso_imagem_ate && m.uso_imagem_ate < hoje() ? 'venceu em' : 'vence em'} ${fmtLonga(m.uso_imagem_ate)}. Querem renovar para continuar usando? Te passo os valores.`
   };
-  const NOMES_MODELO = { followup: 'Follow-up da proposta', cobrar: 'Cobrar produto/briefing', entrega: 'Avisar entrega', feedback: 'Pedir feedback', pagamento: 'Lembrar pagamento', renovacao: 'Renovar licença de uso' };
+  const NOMES_MODELO = { followup: 'Follow-up da proposta', cobrar: 'Cobrar produto/briefing', entrega: 'Avisar entrega', feedback: 'Pedir feedback', pagamento: 'Lembrar pagamento', renovacao: 'Renovar licença de uso', repescagem: 'Repescagem (nova parceria)' };
   function linkWhats(m, modelo) { return `https://wa.me/${soDigitos(m.contato_whatsapp)}?text=${encodeURIComponent(MODELOS[modelo](m))}`; }
   function linkEmail(m, modelo) { return `mailto:${encodeURIComponent(m.contato_email || '')}?subject=${encodeURIComponent(m.nome + ' · UGC')}&body=${encodeURIComponent(MODELOS[modelo](m))}`; }
   function modeloSugerido(m) {
@@ -97,6 +98,7 @@
     if (m.etapa === 'aguardando') return 'cobrar';
     if (m.etapa === 'producao') return 'entrega';
     if (m.etapa === 'concluida' && m.valor && !m.pago) return 'pagamento';
+    if (m.etapa === 'concluida' && m.repescagem_em) return 'repescagem';
     return 'feedback';
   }
   function linkAgenda(m) {
@@ -176,8 +178,21 @@
         const falta = [!m.produto_recebido && 'produto', !m.briefing_recebido && 'briefing'].filter(Boolean).join(' e ');
         if (d >= 5) itens.push({ m, peso: 3, cor: 'alerta', txt: `Cobrar ${falta}`, sub: `Fechou há ${d} dias e ainda não chegou`, modelo: 'cobrar' });
       }
-      if (['entregue', 'concluida'].includes(m.etapa) && m.valor && !m.pago) {
-        itens.push({ m, peso: 4, cor: 'neutro', txt: `Receber ${moeda(m.valor)}`, sub: 'Pagamento ainda não marcado como recebido', modelo: 'pagamento' });
+      // Cobrança: no dia que você escolheu (ou, sem lembrete, quando já entregou)
+      if (FECHADAS.includes(m.etapa) && m.valor && !m.pago) {
+        if (m.lembrar_cobranca) {
+          if (m.lembrar_cobranca <= h) itens.push({ m, peso: 1.5, cor: 'alerta', txt: `Cobrar ${moeda(m.valor)}`, sub: m.data_pagamento ? `Pagamento previsto para ${fmtLonga(m.data_pagamento)}` : 'Lembrete de cobrança de hoje', modelo: 'pagamento' });
+        } else if (['entregue', 'concluida'].includes(m.etapa)) {
+          itens.push({ m, peso: 4, cor: 'neutro', txt: `Receber ${moeda(m.valor)}`, sub: 'Pagamento ainda não marcado como recebido', modelo: 'pagamento' });
+        }
+      }
+      // Repescagem: hora de tentar uma nova parceria (uma vez por marca: só a última parceria,
+      // e nada se a marca já está com uma parceria nova em andamento)
+      const mesmas = marcas.filter(x => chaveNome(x.nome) === chaveNome(m.nome));
+      const ativa = mesmas.some(x => x.etapa !== 'concluida' && x.etapa !== 'perdida');
+      const ultimaConcluida = mesmas.filter(x => x.etapa === 'concluida').sort((a, b) => dataUltima(b).localeCompare(dataUltima(a)))[0];
+      if (!ativa && ultimaConcluida === m && m.repescagem_em && m.repescagem_em <= h) {
+        itens.push({ m, peso: 2.2, cor: 'alerta', txt: 'Repescagem: tentar nova parceria', sub: `Última parceria finalizada ${fmtLonga(m.finalizada_em || m.data_pagamento || desdeQuando(m))}`, modelo: 'repescagem' });
       }
       if (m.etapa === 'concluida' && !m.feedback_nota && !m.feedback_texto && diasEntre(desdeQuando(m), h) <= 45) {
         itens.push({ m, peso: 5, cor: 'neutro', txt: 'Pedir feedback', sub: 'Guarde o que a marca achou', modelo: 'feedback' });
@@ -216,6 +231,7 @@
     $$('.vis-btn').forEach(b => b.classList.toggle('ativo', b.dataset.vis === visao));
     if (visao === 'funil') desenharFunil();
     else if (visao === 'calendario') desenharCalendario();
+    else if (visao === 'banco') desenharBanco();
     else desenharFeedbacks();
   }
 
@@ -278,6 +294,9 @@
       linhaExtra = `<div class="tag-data ${atrasado ? 'alerta' : ''}">Follow-up ${m.proximo_followup === hoje() ? 'hoje' : fmtCurta(m.proximo_followup)}</div>`;
     } else if (m.etapa === 'concluida' && m.feedback_nota) {
       linhaExtra = estrelas(m.feedback_nota);
+    }
+    if (['entregue', 'concluida'].includes(m.etapa) && Number(m.valor) > 0 && !m.pago) {
+      linhaExtra += `<button class="mini-btn zap card-recebi" data-finalizar-card="${m.id}">✓ Recebido e finalizado</button>`;
     }
     if (['entregue', 'concluida'].includes(m.etapa) && m.uso_imagem_ate) {
       const d = diasEntre(hoje(), m.uso_imagem_ate);
@@ -395,7 +414,7 @@
       <input name="${nome}" value="${esc(valor ?? '')}" ${extra && extra.attrs || ''}></label>`;
   }
 
-  function abrirFicha(m, focoSecao) {
+  function abrirFicha(m, focoSecao, aoSalvar) {
     const nova = !m || !!m._nova;
     m = m || { etapa: 'contato', prazo_tipo: 'corridos', historico: [] };
     const dlg = document.getElementById('ficha-marca');
@@ -423,10 +442,20 @@
           <div class="grade-campos">
             <label class="campo"><span>Etapa</span><select name="etapa">${ETAPAS.map(e => `<option value="${e.id}" ${e.id === m.etapa ? 'selected' : ''}>${e.nome}</option>`).join('')}</select></label>
             <label class="campo"><span>Por onde chegou</span><select name="canal"><option value="">Escolha</option>${Object.entries(CANAIS).map(([k, v]) => `<option value="${k}" ${m.canal === k ? 'selected' : ''}>${v}</option>`).join('')}</select></label>
-            ${campo('entregaveis', 'O que vou entregar', m.entregaveis, { largo: true, attrs: 'placeholder="Ex.: 2 vídeos UGC de 30s + 5 fotos"' })}
-            ${campo('valor', 'Valor fechado (R$)', valorTxt, { attrs: 'inputmode="decimal" placeholder="0,00"' })}
             ${campo('proximo_followup', 'Próximo follow-up', m.proximo_followup, { attrs: 'type="date"' })}
           </div>
+        </fieldset>
+
+        <fieldset id="sec-acordo"><legend>O que foi acordado com a marca</legend>
+          <div class="acordo" id="acordo-itens"></div>
+          <button type="button" class="add-coluna acordo-add" data-acordo-add>+ Adicionar entrega</button>
+          <div class="grade-campos" style="margin-top:12px">
+            ${campo('entregaveis', 'Resumo das entregas', m.entregaveis, { largo: true, attrs: 'placeholder="Ex.: 1 reels + 1 foto"' })}
+            <label class="campo"><span>Valor cobrado (R$)</span><input name="valor" value="${esc(valorTxt)}" inputmode="decimal" placeholder="0,00"><small class="sugestao-valor" id="sugestao-valor"></small></label>
+            ${campo('data_pagamento', 'Pagamento previsto para', m.data_pagamento, { attrs: 'type="date"' })}
+            ${campo('lembrar_cobranca', 'Me lembrar de cobrar em', m.lembrar_cobranca, { attrs: 'type="date"' })}
+          </div>
+          <div class="dur-escolha licenca-rapida"><span>Lembrar</span><button type="button" data-cobrar="0">no dia do pagamento</button><button type="button" data-cobrar="1">1 dia depois</button><button type="button" data-cobrar="3">3 dias depois</button><button type="button" data-cobrar="7">7 dias depois</button></div>
         </fieldset>
 
         <fieldset id="sec-prazo"><legend>O que preciso para criar</legend>
@@ -446,8 +475,8 @@
         <fieldset><legend>Entrega e pagamento</legend>
           <div class="grade-campos">
             ${campo('data_entregue', 'Entreguei em', m.data_entregue, { attrs: 'type="date"' })}
-            ${campo('data_pagamento', 'Pagamento (data)', m.data_pagamento, { attrs: 'type="date"' })}
             <label class="check grande"><input type="checkbox" name="pago" ${m.pago ? 'checked' : ''}><span>Já recebi o pagamento</span></label>
+            ${campo('repescagem_em', 'Tentar nova parceria em', m.repescagem_em, { attrs: 'type="date"' })}
             <label class="check grande"><input type="checkbox" name="nf_emitida" ${m.nf_emitida ? 'checked' : ''}><span>Nota fiscal emitida</span></label>
             ${campo('nf_numero', 'Número da nota', m.nf_numero, { attrs: 'placeholder="Opcional"' })}
           </div>
@@ -498,7 +527,7 @@
       </div>
       <footer class="ficha-rodape">
         ${!nova ? '<button type="button" class="btn-perigo" data-excluir>Excluir</button>' : '<span></span>'}
-        <div><button type="button" class="btn-secundario" data-fechar>Cancelar</button>
+        <div>${!nova && FECHADAS.includes(m.etapa) && !(m.pago && m.etapa === 'concluida') ? '<button type="button" class="btn-lima" data-finalizar>✓ Recebido e finalizado</button>' : ''}<button type="button" class="btn-secundario" data-fechar>Cancelar</button>
         <button type="submit" class="btn-primario" id="btn-salvar-marca">${nova ? 'Adicionar' : 'Salvar'}</button></div>
       </footer>
     </form>`;
@@ -526,6 +555,52 @@
       }
     }));
     form.pago.addEventListener('change', () => { if (form.pago.checked && !form.data_pagamento.value) form.data_pagamento.value = hoje(); });
+
+    // ===== Acordo: entregas item por item, com sugestão de valor pelos seus preços =====
+    const servicos = window.Simulador ? Simulador.itens().filter(i => i.nome) : [];
+    let acordo = Array.isArray(m.acordo) && m.acordo.length ? m.acordo.map(x => ({ ...x })) : [];
+    let resumoManual = !!m.entregaveis && !acordo.length;
+    const precoDe = (nome) => { const sv = servicos.find(i => i.nome === nome); return sv && sv.ref != null ? Number(sv.ref) : null; };
+    function desenharAcordo() {
+      const el = dlg.querySelector('#acordo-itens');
+      el.innerHTML = acordo.length ? acordo.map((x, i) => `<div class="acordo-linha" data-i="${i}">
+          <div class="stepper"><button type="button" data-ac-menos="${i}" aria-label="Menos">−</button><span>${x.qtd}</span><button type="button" data-ac-mais="${i}" aria-label="Mais">+</button></div>
+          <select data-ac-item="${i}" aria-label="Entrega">${servicos.map(sv => `<option ${sv.nome === x.item ? 'selected' : ''}>${esc(sv.nome)}</option>`).join('')}${servicos.some(sv => sv.nome === x.item) ? '' : `<option selected>${esc(x.item)}</option>`}<option value="__outro">Outro...</option></select>
+          <span class="acordo-preco">${x.preco ? moeda(x.preco * x.qtd) : ''}</span>
+          <button type="button" class="p-remover" data-ac-tirar="${i}" aria-label="Tirar">×</button>
+        </div>`).join('') : '<p class="desc">Toque em "+ Adicionar entrega" para montar o que você combinou: reels, fotos, stories...</p>';
+      if (acordo.length && !resumoManual) form.entregaveis.value = acordo.map(x => `${x.qtd} ${x.item}`).join(' + ');
+      const soma = acordo.reduce((t, x) => t + (x.preco || 0) * x.qtd, 0);
+      dlg.querySelector('#sugestao-valor').innerHTML = soma ? `Pelos seus preços: ${moeda(soma)} <button type="button" class="link-precos" data-usar-soma="${soma}">usar</button>` : '';
+    }
+    dlg.querySelector('#sec-acordo').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-acordo-add], [data-ac-mais], [data-ac-menos], [data-ac-tirar], [data-usar-soma], [data-cobrar]'); if (!b) return;
+      if (b.matches('[data-acordo-add]')) { const sv = servicos[0]; acordo.push({ item: sv ? sv.nome : 'Vídeo UGC', qtd: 1, preco: sv ? precoDe(sv.nome) : null }); resumoManual = false; }
+      else if (b.matches('[data-ac-mais]')) acordo[b.dataset.acMais].qtd++;
+      else if (b.matches('[data-ac-menos]')) { const x = acordo[b.dataset.acMenos]; x.qtd = Math.max(1, x.qtd - 1); }
+      else if (b.matches('[data-ac-tirar]')) acordo.splice(Number(b.dataset.acTirar), 1);
+      else if (b.matches('[data-usar-soma]')) { form.valor.value = String(b.dataset.usarSoma).replace('.', ','); return; }
+      else if (b.matches('[data-cobrar]')) {
+        const base = form.data_pagamento.value || hoje();
+        form.lembrar_cobranca.value = somarPrazo(base, Number(b.dataset.cobrar), 'corridos'); return;
+      }
+      desenharAcordo();
+    });
+    dlg.querySelector('#sec-acordo').addEventListener('change', (e) => {
+      const sel = e.target.closest('[data-ac-item]'); if (!sel) return;
+      const i = Number(sel.dataset.acItem);
+      let nome = sel.value;
+      if (nome === '__outro') { nome = (prompt('Qual é a entrega? (ex.: Story, Unboxing, Live)') || '').trim(); if (!nome) { desenharAcordo(); return; } }
+      acordo[i].item = nome; acordo[i].preco = precoDe(nome); desenharAcordo();
+    });
+    form.entregaveis.addEventListener('input', () => { resumoManual = true; });
+    // Escolheu a previsão de pagamento e ainda não tem lembrete? Sugere lembrar no próprio dia.
+    form.data_pagamento.addEventListener('change', () => { if (form.data_pagamento.value && !form.lembrar_cobranca.value) form.lembrar_cobranca.value = form.data_pagamento.value; });
+    desenharAcordo();
+
+    // Recebido e finalizado: paga, conclui e pergunta quando tentar de novo
+    const fin = dlg.querySelector('[data-finalizar]');
+    if (fin) fin.addEventListener('click', async () => { dlg.close(); await finalizar(m); });
     // Licença de uso: atalhos de 30/60/90 dias a partir da entrega (ou de hoje)
     function previaLicenca() {
       const el = dlg.querySelector('#previa-licenca'), ate = form.uso_imagem_ate.value;
@@ -588,6 +663,7 @@
         data_recebimento: txt('data_recebimento'), prazo_dias: f.prazo_dias.value === '' ? null : Math.max(0, Math.min(365, parseInt(f.prazo_dias.value, 10))),
         prazo_tipo: f.prazo_tipo.value, data_entrega: txt('data_entrega'), data_entregue: txt('data_entregue'),
         pago: f.pago.checked, data_pagamento: txt('data_pagamento'), nf_emitida: f.nf_emitida.checked, nf_numero: txt('nf_numero'),
+        acordo, lembrar_cobranca: txt('lembrar_cobranca'), repescagem_em: txt('repescagem_em'),
         contrato_link: txt('contrato_link'), uso_imagem_tipo: f.uso_imagem_tipo.value || null, uso_imagem_ate: txt('uso_imagem_ate'), exclusividade_ate: txt('exclusividade_ate'),
         feedback_nota: f.feedback_nota.value ? Number(f.feedback_nota.value) : null, feedback_texto: txt('feedback_texto'),
         trabalharia_de_novo: tdn ? tdn.value === 'sim' : null, notas: txt('notas')
@@ -600,8 +676,9 @@
       const btn = dlg.querySelector('#btn-salvar-marca');
       btn.disabled = true; btn.textContent = 'Salvando...';
       try {
-        await salvar(nova ? null : m.id, dados);
+        const salvo = await salvar(nova ? null : m.id, dados);
         dlg.close(); desenhar(); toast(nova ? `${nome} adicionada!` : 'Alterações salvas.');
+        if (aoSalvar) { try { await aoSalvar(salvo); } catch (x) { console.error(x); } }
       } catch (err) {
         console.error(err);
         erroFicha('Não consegui salvar agora. Confira sua conexão e tente de novo.');
@@ -610,9 +687,118 @@
     });
 
     dlg.showModal();
-    const alvo = focoSecao && dlg.querySelector(focoSecao === 'feedback' ? '#sec-feedback' : '#sec-prazo');
+    const alvo = focoSecao && dlg.querySelector(focoSecao === 'feedback' ? '#sec-feedback' : focoSecao === 'acordo' ? '#sec-acordo' : '#sec-prazo');
     if (alvo) { alvo.classList.add('destacar'); setTimeout(() => alvo.scrollIntoView({ block: 'start', behavior: 'smooth' }), 60); }
     else if (nova) setTimeout(() => form.nome.focus(), 50);
+  }
+
+  // ===== Recebido e finalizado → repescagem =====
+  async function finalizar(m) {
+    const mud = { pago: true, data_pagamento: m.pago && m.data_pagamento ? m.data_pagamento : hoje(), finalizada_em: hoje() };
+    if (!m.data_entregue && m.data_entrega) mud.data_entregue = hoje();
+    if (m.etapa !== 'concluida') { mud.etapa = 'concluida'; mud.historico = [...(m.historico || []), { etapa: 'concluida', em: new Date().toISOString() }]; }
+    try {
+      const salvo = await salvar(m.id, mud);
+      desenhar();
+      toast(`🎉 Parceria com ${m.nome} finalizada!${m.valor ? ' ' + moeda(m.valor) + ' recebidos.' : ''}`);
+      setTimeout(() => abrirRepescagem(salvo), 300);
+    } catch (e) { console.error(e); toast('Não consegui finalizar agora. Tente de novo.', true); }
+  }
+
+  function abrirRepescagem(m) {
+    const dlg = document.getElementById('ficha-marca');
+    const sugerida = somarPrazo(hoje(), 60, 'corridos');
+    dlg.innerHTML = `<form class="ficha" novalidate>
+      <header class="ficha-cab"><div><small>Parceria finalizada ✦</small><h2>${esc(m.nome)} está no seu Banco de marcas</h2></div><button type="button" class="fechar" data-fechar aria-label="Fechar">×</button></header>
+      <div class="ficha-corpo">
+        <p class="desc" style="margin-top:12px">Marca que já trabalhou com você é a mais fácil de fechar de novo. Quando quer tentar uma nova parceria? Eu te lembro no dia, com a mensagem pronta.</p>
+        <div class="dur-escolha licenca-rapida">${[[30, '30 dias'], [60, '60 dias'], [90, '90 dias'], [180, '6 meses']].map(([d, n]) => `<button type="button" data-rep="${d}" class="${d === 60 ? 'ativo' : ''}">${n}</button>`).join('')}</div>
+        <label class="campo" style="margin-top:12px"><span>Tentar nova parceria em</span><input type="date" name="repescagem_em" value="${sugerida}"></label>
+        ${!m.feedback_nota && !m.feedback_texto ? '<button type="button" class="link-precos" data-rep-feedback style="margin-top:14px">Guardar o feedback da marca agora</button>' : ''}
+      </div>
+      <footer class="ficha-rodape"><button type="button" class="btn-secundario" data-fechar>Agora não</button><button type="submit" class="btn-primario">Me lembrar ✦</button></footer>
+    </form>`;
+    const f = dlg.querySelector('form');
+    dlg.querySelectorAll('[data-fechar]').forEach(b => b.addEventListener('click', () => dlg.close()));
+    dlg.oncancel = null;
+    dlg.querySelectorAll('[data-rep]').forEach(b => b.addEventListener('click', () => {
+      f.repescagem_em.value = somarPrazo(hoje(), Number(b.dataset.rep), 'corridos');
+      dlg.querySelectorAll('[data-rep]').forEach(x => x.classList.toggle('ativo', x === b));
+    }));
+    const fb = dlg.querySelector('[data-rep-feedback]');
+    f.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try { const salvo = await salvar(m.id, { repescagem_em: f.repescagem_em.value || null }); dlg.close(); desenhar(); toast(`Vou te lembrar da ${m.nome} em ${fmtLonga(f.repescagem_em.value)} ✦`); return salvo; }
+      catch (x) { console.error(x); toast('Não consegui salvar agora.', true); }
+    });
+    if (fb) fb.addEventListener('click', async () => {
+      try { const salvo = await salvar(m.id, { repescagem_em: f.repescagem_em.value || null }); dlg.close(); setTimeout(() => abrirFicha(salvo, 'feedback'), 200); }
+      catch (x) { console.error(x); }
+    });
+    dlg.showModal();
+  }
+
+  // ===== Banco de marcas e nichos =====
+  const chaveNome = (t) => String(t || '').trim().toLowerCase();
+  const bonito = (t) => { t = String(t || '').trim(); return t ? t.charAt(0).toUpperCase() + t.slice(1) : 'Sem nicho'; };
+  function dataUltima(m) { return m.finalizada_em || (m.pago && m.data_pagamento) || m.data_entregue || String(m.created_at || '').slice(0, 10); }
+
+  function nichos() {
+    const parcerias = marcas.filter(m => FECHADAS.includes(m.etapa));
+    const pr = window.Prospeccao ? Prospeccao.lista() : [];
+    const g = {};
+    parcerias.forEach(m => {
+      const k = chaveNome(m.nicho) || '~';
+      g[k] = g[k] || { nome: bonito(m.nicho), qtd: 0, total: 0, notas: [], marcas: new Set() };
+      g[k].qtd++; g[k].total += Number(m.valor || 0); g[k].marcas.add(chaveNome(m.nome)); if (m.feedback_nota) g[k].notas.push(m.feedback_nota);
+    });
+    Object.keys(g).forEach(k => {
+      const ab = pr.filter(p => (chaveNome(p.nicho) || '~') === k);
+      g[k].abordagens = ab.length; g[k].aprovadas = ab.filter(p => p.status === 'aprovada').length;
+    });
+    return Object.values(g).sort((a, b) => b.total - a.total || b.qtd - a.qtd);
+  }
+
+  function desenharBanco() {
+    const parcerias = filtradas().filter(m => FECHADAS.includes(m.etapa));
+    const area = $('#m-visao');
+    if (!parcerias.length) {
+      area.innerHTML = `<div class="cartao"><p class="vazio">Quando você finalizar uma parceria (botão "Recebido e finalizado"), a marca entra aqui com o histórico, e eu te lembro de tentar de novo no momento certo.</p></div>`;
+      return;
+    }
+    // Agrupa por marca (a mesma marca pode ter várias parcerias)
+    const grupos = {};
+    parcerias.forEach(m => { const k = chaveNome(m.nome); (grupos[k] = grupos[k] || []).push(m); });
+    const lista = Object.values(grupos).map(ms => {
+      ms.sort((a, b) => dataUltima(b).localeCompare(dataUltima(a)));
+      const ult = ms[0], notas = ms.filter(x => x.feedback_nota).map(x => x.feedback_nota);
+      const rep = ms.map(x => x.repescagem_em).filter(Boolean).sort().pop();
+      return { ult, ms, total: ms.reduce((t, x) => t + Number(x.valor || 0), 0), nota: notas.length ? Math.round(notas.reduce((a, b) => a + b, 0) / notas.length) : 0, rep };
+    }).sort((a, b) => dataUltima(b.ult).localeCompare(dataUltima(a.ult)));
+    const ns = nichos(), top = ns.find(n => n.nome !== 'Sem nicho') || ns[0], maxN = Math.max(1, ...ns.map(n => n.total));
+    area.innerHTML = `
+      <div class="cartao nichos">
+        <h2>Seus nichos no UGC</h2>
+        ${top && top.total ? `<p class="nicho-top">Seu nicho mais forte: <b>${esc(top.nome)}</b>, com ${moeda(top.total)} em ${top.qtd} ${top.qtd === 1 ? 'parceria' : 'parcerias'}.</p>` : '<p class="desc">Coloque o nicho de cada marca para eu descobrir onde você é mais forte.</p>'}
+        <div class="lista-barras">${ns.map(n => `<div class="item-barra">
+          <div class="cabeca"><span>${esc(n.nome)} <small class="desc">· ${n.qtd} ${n.qtd === 1 ? 'parceria' : 'parcerias'}${n.notas.length ? ` · nota ${(n.notas.reduce((a, b) => a + b, 0) / n.notas.length).toFixed(1).replace('.', ',')}` : ''}${n.abordagens >= 3 ? ` · ${Math.round(n.aprovadas / n.abordagens * 100)}% de aprovação` : ''}</small></span><strong>${moeda(n.total)}</strong></div>
+          <div class="trilho"><div class="preenchido" style="width:${Math.max(3, n.total / maxN * 100)}%"></div></div>
+        </div>`).join('')}</div>
+      </div>
+      <div class="banco">${lista.map(({ ult, ms, total, nota, rep }) => {
+        const vencida = rep && rep <= hoje();
+        return `<div class="cartao banco-card">
+          <div class="fb-topo"><strong>${esc(ult.nome)}</strong>${ult.nicho ? `<span class="chip">${esc(bonito(ult.nicho))}</span>` : ''}</div>
+          <p class="desc">${ms.length} ${ms.length === 1 ? 'parceria' : 'parcerias'} · ${moeda(total)} · última em ${fmtCurta(dataUltima(ult))}</p>
+          ${nota ? estrelas(nota) : ''}
+          <div class="tag-data ${vencida ? 'alerta' : ''}">${rep ? (vencida ? '🔁 Hora da repescagem!' : `🔁 Repescagem em ${fmtCurta(rep)}`) : 'Sem data de repescagem'}</div>
+          <div class="atalhos" style="margin-top:12px">
+            ${ult.contato_whatsapp ? `<a class="mini-btn zap" href="${linkWhats(ult, 'repescagem')}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
+            ${ult.contato_email ? `<a class="mini-btn" href="${linkEmail(ult, 'repescagem')}">E-mail</a>` : ''}
+            <button class="mini-btn" data-repescar="${ult.id}">${rep ? 'Mudar data' : 'Marcar repescagem'}</button>
+            <button class="mini-btn" data-nova-parceria="${ult.id}">+ Nova parceria</button>
+          </div>
+        </div>`; }).join('')}</div>`;
   }
 
   // ===== Montagem da aba =====
@@ -629,6 +815,7 @@
           <button class="vis-btn ativo" data-vis="funil">Funil</button>
           <button class="vis-btn" data-vis="calendario">Calendário</button>
           <button class="vis-btn" data-vis="feedbacks">Feedbacks</button>
+          <button class="vis-btn" data-vis="banco">Banco de marcas</button>
         </div>
         <input type="search" class="busca" id="m-busca" placeholder="Buscar marca..." aria-label="Buscar marca">
       </div>
@@ -639,8 +826,14 @@
 
     // Um ouvinte só para os cliques da aba
     raiz.addEventListener('click', (e) => {
-      const alvo = e.target.closest('[data-nova], [data-avancar], [data-abrir], .card-marca, .vis-btn, .cal-nav');
+      const alvo = e.target.closest('[data-nova], [data-avancar], [data-abrir], [data-finalizar-card], [data-repescar], [data-nova-parceria], .card-marca, .vis-btn, .cal-nav');
       if (!alvo) return;
+      if (alvo.matches('[data-finalizar-card]')) { e.stopPropagation(); const mm = marcas.find(x => x.id === alvo.dataset.finalizarCard); return mm && finalizar(mm); }
+      if (alvo.matches('[data-repescar]')) { const mm = marcas.find(x => x.id === alvo.dataset.repescar); return mm && abrirRepescagem(mm); }
+      if (alvo.matches('[data-nova-parceria]')) {
+        const mm = marcas.find(x => x.id === alvo.dataset.novaParceria); if (!mm) return;
+        return abrirFicha({ etapa: 'negociando', prazo_tipo: 'corridos', historico: [], acordo: [], _nova: true, nome: mm.nome, nicho: mm.nicho, contato_nome: mm.contato_nome, contato_whatsapp: mm.contato_whatsapp, contato_email: mm.contato_email, contato_instagram: mm.contato_instagram, canal: mm.canal }, 'acordo');
+      }
       if (alvo.matches('[data-nova]')) return abrirFicha(null);
       if (alvo.matches('[data-avancar]')) { e.stopPropagation(); return moverPara(alvo.dataset.avancar, alvo.dataset.para); }
       if (alvo.matches('.vis-btn')) { visao = alvo.dataset.vis; return desenhar(); }
@@ -660,7 +853,7 @@
     // Usada pelo Financeiro: marcar como recebido, nota fiscal etc.
     async atualizar(id, dados) { const salvo = await salvar(id, dados); if (raiz) desenhar(); return salvo; },
     // Usada pelo Simulador: abre a ficha de nova marca já com entregas e valor
-    novaCom(dados) { document.querySelector('[data-tab="aba-marcas"]').click(); abrirFicha({ etapa: 'negociando', prazo_tipo: 'corridos', historico: [], ...dados, _nova: true }); },
+    novaCom(dados, opcoes) { const o = opcoes || {}; document.querySelector('[data-tab="aba-marcas"]').click(); abrirFicha({ etapa: 'negociando', prazo_tipo: 'corridos', historico: [], acordo: [], ...dados, _nova: true }, o.foco, o.aoSalvar); },
     FECHADAS,
     // Usada pela Prospecção: quando uma abordagem é aprovada, vira parceria no funil
     async adicionar(dados) {
