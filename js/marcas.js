@@ -173,9 +173,12 @@
         const d = diasEntre(m.proximo_followup, h);
         itens.push({ m, peso: 2, cor: 'alerta', txt: 'Fazer follow-up', sub: d ? `Era para ${fmtLonga(m.proximo_followup)}` : 'Marcado para hoje', modelo: 'followup' });
       }
-      if (m.etapa === 'aguardando' && !(m.produto_recebido && m.briefing_recebido)) {
+      const envioP = Array.isArray(m.acordo) ? m.acordo.filter(x => x.envio && !x.recebido) : [];
+      const temLista = Array.isArray(m.acordo) && m.acordo.some(x => x.envio);
+      if (m.etapa === 'aguardando' && (temLista ? envioP.length : !(m.produto_recebido && m.briefing_recebido))) {
         const d = diasEntre(desdeQuando(m), h);
-        const falta = [!m.produto_recebido && 'produto', !m.briefing_recebido && 'briefing'].filter(Boolean).join(' e ');
+        const nomes = temLista ? envioP.map(x => String(x.item).toLowerCase()) : [!m.produto_recebido && 'produto', !m.briefing_recebido && 'briefing'].filter(Boolean);
+        const falta = nomes.length > 1 ? nomes.slice(0, -1).join(', ') + ' e ' + nomes[nomes.length - 1] : nomes[0];
         if (d >= 5) itens.push({ m, peso: 3, cor: 'alerta', txt: `Cobrar ${falta}`, sub: `Fechou há ${d} dias e ainda não chegou`, modelo: 'cobrar' });
       }
       // Cobrança: no dia que você escolheu (ou, sem lembrete, quando já entregou)
@@ -287,7 +290,11 @@
     const i = ETAPAS.findIndex(e => e.id === m.etapa);
     const proxima = ['concluida', 'perdida'].includes(m.etapa) ? null : ETAPAS[i + 1];
     let linhaExtra = '';
-    if (m.etapa === 'aguardando') {
+    const envioM = Array.isArray(m.acordo) ? m.acordo.filter(x => x.envio) : [];
+    if (m.etapa === 'aguardando' && envioM.length) {
+      const r = envioM.filter(x => x.recebido).length;
+      linhaExtra = `<div class="checks"><span class="${r === envioM.length ? 'sim' : ''}">${r === envioM.length ? '✓' : '📦'} ${r} de ${envioM.length} itens recebidos</span></div>`;
+    } else if (m.etapa === 'aguardando') {
       linhaExtra = `<div class="checks"><span class="${m.produto_recebido ? 'sim' : ''}">${m.produto_recebido ? '✓' : '○'} Produto</span><span class="${m.briefing_recebido ? 'sim' : ''}">${m.briefing_recebido ? '✓' : '○'} Briefing</span></div>`;
     } else if (['contato', 'negociando'].includes(m.etapa) && m.proximo_followup) {
       const atrasado = m.proximo_followup <= hoje();
@@ -463,6 +470,11 @@
         </fieldset>
 
         <fieldset id="sec-prazo"><legend>O que preciso para criar</legend>
+          <div class="envio-bloco">
+            <div class="envio-cab"><strong>O que a marca vai me enviar</strong><small class="desc" id="envio-resumo"></small></div>
+            <div class="envio" id="envio-itens"></div>
+            <div class="dur-escolha envio-atalhos"><span>Adicionar:</span>${['Produto', 'Briefing', 'Roteiro ou referências', 'Cupom', 'Acesso ou login', 'Kit de amostras'].map(n => `<button type="button" data-envio-add="${n}">+ ${n}</button>`).join('')}<button type="button" data-envio-add="">+ Outro</button></div>
+          </div>
           <div class="checklist">
             ${[['produto_recebido', 'Produto recebido'], ['briefing_recebido', 'Briefing recebido'], ['contrato_assinado', 'Contrato assinado'], ['roteiro_aprovado', 'Roteiro aprovado']].map(([k, r]) =>
               `<label class="check"><input type="checkbox" name="${k}" ${m[k] ? 'checked' : ''}><span>${r}</span></label>`).join('')}
@@ -559,7 +571,45 @@
 
     // ===== Acordo: entregas item por item, com sugestão de valor pelos seus preços =====
     const servicos = window.Simulador ? Simulador.itens().filter(i => i.nome) : [];
-    let acordo = Array.isArray(m.acordo) && m.acordo.length ? m.acordo.map(x => ({ ...x })) : [];
+    let acordo = Array.isArray(m.acordo) ? m.acordo.filter(x => !x.envio).map(x => ({ ...x })) : [];
+    // Itens que a marca vai enviar (produto, briefing, cupom...), cada um com "recebido" e a data
+    let envio = Array.isArray(m.acordo) ? m.acordo.filter(x => x.envio).map(x => ({ ...x })) : [];
+    function desenharEnvio() {
+      const el = dlg.querySelector('#envio-itens'), rec = envio.filter(x => x.recebido).length;
+      dlg.querySelector('#envio-resumo').textContent = envio.length ? `${rec} de ${envio.length} ${envio.length === 1 ? 'item recebido' : 'itens recebidos'}` : '';
+      el.innerHTML = envio.length ? envio.map((x, i) => `<div class="envio-linha ${x.recebido ? 'ok' : ''}">
+          <label class="envio-check"><input type="checkbox" data-env-rec="${i}" ${x.recebido ? 'checked' : ''}><span></span></label>
+          <input class="envio-nome" data-env-nome="${i}" value="${esc(x.item)}" placeholder="Ex.: Kit com 3 sérums" aria-label="Item">
+          <small>${x.recebido ? `chegou ${x.em ? fmtCurta(x.em) : ''}` : 'aguardando'}</small>
+          <button type="button" class="p-remover" data-env-tirar="${i}" aria-label="Tirar">×</button>
+        </div>`).join('') : '<p class="desc">Liste o que a marca combinou de te mandar e marque quando chegar.</p>';
+    }
+    dlg.querySelector('#sec-prazo').addEventListener('click', (e) => {
+      const b = e.target.closest('[data-envio-add], [data-env-tirar]'); if (!b) return;
+      if (b.matches('[data-envio-add]')) {
+        let nomeItem = b.dataset.envioAdd;
+        if (!nomeItem) { nomeItem = (prompt('O que a marca vai enviar?') || '').trim(); if (!nomeItem) return; }
+        envio.push({ envio: true, item: nomeItem, recebido: false, em: null });
+      } else envio.splice(Number(b.dataset.envTirar), 1);
+      desenharEnvio();
+    });
+    dlg.querySelector('#sec-prazo').addEventListener('change', (e) => {
+      const c = e.target.closest('[data-env-rec]'); if (!c) return;
+      const x = envio[Number(c.dataset.envRec)]; x.recebido = c.checked; x.em = c.checked ? hoje() : null;
+      // Produto e briefing da lista marcam as caixinhas de baixo também
+      if (/produto|kit/i.test(x.item) && c.checked) form.produto_recebido.checked = true;
+      if (/briefing/i.test(x.item) && c.checked) form.briefing_recebido.checked = true;
+      // Chegou tudo? Preenche "recebi tudo em" e move para produção, como as caixinhas já faziam
+      if (envio.length && envio.every(y => y.recebido) && !form.data_recebimento.value) {
+        form.data_recebimento.value = hoje(); recalcular();
+        if (form.etapa.value === 'aguardando') { form.etapa.value = 'producao'; toast('Chegou tudo: movi para "Em produção". O prazo começa hoje.'); }
+      }
+      desenharEnvio();
+    });
+    dlg.querySelector('#sec-prazo').addEventListener('input', (e) => {
+      const n = e.target.closest('[data-env-nome]'); if (n) envio[Number(n.dataset.envNome)].item = n.value;
+    });
+    desenharEnvio();
     let resumoManual = !!m.entregaveis && !acordo.length;
     const precoDe = (nome) => { const sv = servicos.find(i => i.nome === nome); return sv && sv.ref != null ? Number(sv.ref) : null; };
     function desenharAcordo() {
@@ -664,7 +714,7 @@
         data_recebimento: txt('data_recebimento'), prazo_dias: f.prazo_dias.value === '' ? null : Math.max(0, Math.min(365, parseInt(f.prazo_dias.value, 10))),
         prazo_tipo: f.prazo_tipo.value, data_entrega: txt('data_entrega'), data_entregue: txt('data_entregue'),
         pago: f.pago.checked, data_pagamento: txt('data_pagamento'), nf_emitida: f.nf_emitida.checked, nf_numero: txt('nf_numero'),
-        acordo, lembrar_cobranca: txt('lembrar_cobranca'), repescagem_em: txt('repescagem_em'),
+        acordo: acordo.concat(envio.filter(x => String(x.item || '').trim())), lembrar_cobranca: txt('lembrar_cobranca'), repescagem_em: txt('repescagem_em'),
         contrato_link: txt('contrato_link'), uso_imagem_tipo: f.uso_imagem_tipo.value || null, uso_imagem_ate: txt('uso_imagem_ate'), exclusividade_ate: txt('exclusividade_ate'),
         feedback_nota: f.feedback_nota.value ? Number(f.feedback_nota.value) : null, feedback_texto: txt('feedback_texto'),
         trabalharia_de_novo: tdn ? tdn.value === 'sim' : null, notas: txt('notas')

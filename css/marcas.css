@@ -218,3 +218,23 @@
 .banco > * { min-width: 0; }
 .banco-card .estrelas { display: block; margin: 4px 0; }
 .dur-escolha button.ativo { background: var(--gel); color: #fff; border-color: transparent; }
+
+/* O que a marca vai enviar */
+.envio-bloco { clear: both; background: var(--creme-claro); border: 1px solid var(--borda); border-radius: 16px; padding: 12px; margin-bottom: 14px; }
+.envio-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 8px; }
+.envio-cab strong { color: var(--ameixa); font-size: .92rem; }
+.envio { display: flex; flex-direction: column; gap: 6px; }
+.envio-linha { display: flex; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--borda); border-radius: 12px; padding: 6px 8px; }
+.envio-linha.ok { background: var(--lima-claro); border-color: #cfe9a0; }
+.envio-linha small { color: var(--suave); font-size: .76rem; white-space: nowrap; }
+.envio-linha.ok small { color: var(--lima-texto); font-weight: 700; }
+.envio-nome { flex: 1; min-width: 0; border: 0; background: transparent; font: inherit; font-size: .92rem; color: var(--ameixa); padding: 6px 4px; }
+.envio-nome:focus { outline: none; box-shadow: none !important; border: 0 !important; }
+.envio-linha.ok .envio-nome { text-decoration: line-through; text-decoration-color: var(--lima-forte); }
+.envio-check input { position: absolute; opacity: 0; pointer-events: none; }
+.envio-check span { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--lima-forte); background: #fff; cursor: pointer; }
+.envio-check input:checked + span { background: var(--lima-gel); border-color: transparent; }
+.envio-check input:checked + span::after { content: '✓'; font-weight: 800; color: #2f4a00; font-size: .85rem; }
+.envio-check input:focus-visible + span { outline: 2px solid var(--vinho); outline-offset: 2px; }
+.envio-atalhos { margin-top: 8px; font-size: .78rem; }
+.envio-atalhos button { font-size: .78rem; padding: 5px 10px; }
