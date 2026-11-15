@@ -24,7 +24,7 @@
   const lerValor = (v) => { const b = String(v || '').trim().replace(/[R$\s]/g, ''); if (!b) return null; const n = Number(b.includes(',') ? b.replace(/\./g, '').replace(',', '.') : b); return isFinite(n) ? n : NaN; };
   const marcas = () => (window.Marcas ? Marcas.lista() : []);
   const fechadas = () => marcas().filter(m => ['aguardando', 'producao', 'entregue', 'concluida'].includes(m.etapa) && Number(m.valor) > 0);
-  const nomeDela = () => (window.Tarefas ? Tarefas.nome() : 'Deusa');
+  const nomeDela = () => (window.Tarefas ? Tarefas.nome() : G.apelido());
 
   function toast(msg, erro) {
     let t = document.getElementById('toast-marcas');
@@ -88,7 +88,7 @@
     if (el.hidden) return;
     if (p.semTicket) { el.innerHTML = `<h2>Como chegar na sua meta ✦</h2><p class="desc">Faltam ${moeda(p.faltam)}. Para eu calcular quantas marcas você precisa, cadastre seus preços no Simulador ou coloque o valor nas parcerias fechadas.</p>`; return; }
     el.innerHTML = `<h2>Como chegar na sua meta ✦</h2>
-      <p class="plano-frase">Deusa, faltam <b>${moeda(p.faltam)}</b> para os seus ${moeda(p.meta)}. Se você fechar <b>${p.marcasFechar} ${p.marcasFechar === 1 ? 'marca' : 'marcas'}</b> de ${moeda(p.ticket)}, você chega lá.
+      <p class="plano-frase">${G.apelido()}, faltam <b>${moeda(p.faltam)}</b> para os seus ${moeda(p.meta)}. Se você fechar <b>${p.marcasFechar} ${p.marcasFechar === 1 ? 'marca' : 'marcas'}</b> de ${moeda(p.ticket)}, você chega lá.
       Vamos, você consegue! 💪</p>
       <div class="plano-passos">
         <div><b>${p.marcasFechar}</b><small>${p.marcasFechar === 1 ? 'marca fecha' : 'marcas fecham'}</small></div><span>→</span>
@@ -99,7 +99,7 @@
 
   async function usarPlano() {
     const p = plano(); if (!p || !p.porDia) return;
-    try { await Tarefas.salvarPrefsParcial({ meta_abordagens: p.porDia }); desenhar(); if (window.Prospeccao) Prospeccao.aoAbrir(); toast(`Meta: ${p.porDia} abordagens por dia. Bora, Deusa! ✦`); }
+    try { await Tarefas.salvarPrefsParcial({ meta_abordagens: p.porDia }); desenhar(); if (window.Prospeccao) Prospeccao.aoAbrir(); toast(`Meta: ${p.porDia} abordagens por dia. Bora, ${G.apelido()}! ✦`); }
     catch (e) { console.error(e); toast('Não consegui salvar a meta.', true); }
   }
 

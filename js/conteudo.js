@@ -65,7 +65,7 @@
     const c = itens.find(x => x.id === id); if (!c || c.etapa === etapa) return;
     try {
       await salvar(id, { etapa }); desenhar();
-      toast(etapa === 'postado' ? `${c.titulo}: no ar! Arrasou, Deusa ✦` : `${c.titulo} foi para "${NOME_ETAPA[etapa]}"`);
+      toast(etapa === 'postado' ? `${c.titulo}: no ar! ${G.t('Arrasou', 'Mandou bem')}, ${G.apelido()} ✦` : `${c.titulo} foi para "${NOME_ETAPA[etapa]}"`);
       if (etapa === 'gravar' && window.Tarefas && confirm('Quer reservar um horário para gravar?')) Tarefas.novaCom({ titulo: `Gravar: ${c.titulo}`, categoria: 'gravar', marca_id: c.marca_id });
     } catch (e) { console.error(e); toast('Não consegui mover agora.', true); }
   }

@@ -1,0 +1,66 @@
+/* =========================================================
+   perfil.css · "Meu perfil" + estilo masculino
+   O estilo masculino mantém a identidade (verde e rosa) num
+   visual mais sóbrio: lateral grafite, botões em verde, cantos
+   menos arredondados, fontes retas e sem brilhos.
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Bloco de perfil na barra lateral */
+.perfil-btn { display: flex; align-items: center; gap: 10px; width: 100%; background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25); border-radius: 16px; padding: 8px 10px; margin-bottom: 10px; color: #fff; text-align: left; }
+.perfil-btn:hover { background: rgba(255,255,255,.2); }
+.perfil-txt { display: flex; flex-direction: column; min-width: 0; }
+.perfil-txt b { font-size: .9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.perfil-txt small { font-size: .7rem; opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--lima); }
+.avatar.sem-foto { display: grid; place-items: center; background: var(--lima); color: #2f4a00; font-weight: 800; font-size: .85rem; }
+.avatar.grande { width: 96px; height: 96px; font-size: 1.8rem; border-width: 3px; }
+.perfil-foto { display: flex; align-items: center; gap: 18px; clear: both; }
+.perfil-foto-acoes { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.perfil-foto-acoes label { cursor: pointer; }
+.genero-escolha { margin-bottom: 8px; }
+
+/* ===== Estilo masculino ===== */
+:root[data-genero="masculino"] {
+  --titulo: 'Sora', system-ui, sans-serif;
+  --texto: 'Inter', system-ui, -apple-system, sans-serif;
+  --gel: linear-gradient(180deg, #d4f77a 0%, #b8e83f 55%, #9fd12a 100%);
+  --gel-sombra: inset 0 1px 0 rgba(255,255,255,.5), 0 6px 14px -8px rgba(60,90,0,.55);
+  --vinho-claro: #eef3e6;
+  --borda: #e1e5da;
+}
+:root[data-genero="masculino"] body { background-color: #f6f7f3; background-image: linear-gradient(rgba(46,11,34,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(46,11,34,.035) 1px, transparent 1px); background-size: 28px 28px; }
+:root[data-genero="masculino"] .sidebar { background: linear-gradient(175deg, #2a2d33 0%, #1b1d22 100%); box-shadow: inset -1px 0 0 rgba(198,240,90,.25); }
+:root[data-genero="masculino"] .aba { border-radius: 12px; }
+:root[data-genero="masculino"] .aba.ativa { background: var(--gel); color: #1f2e00; box-shadow: inset 4px 0 0 #ff2d9b; }
+:root[data-genero="masculino"] .menu-grupo { color: rgba(198,240,90,.8); }
+:root[data-genero="masculino"] .selo-aba { background: #ff2d9b; color: #fff; }
+:root[data-genero="masculino"] .sidebar .logo b { color: var(--lima); }
+:root[data-genero="masculino"] :is(.btn-primario, .botao, .periodo.ativo, .vis-btn.ativo, .numero.destaque, .btn.principal, .dias-escolha input:checked + span, .cat-escolha input:checked + span, .filtros button.ativo, .dur-escolha button.ativo, .stepper button:last-child, .add-dia, .nivel-chips button.ativo) {
+  background: var(--gel) !important; color: #1f2e00 !important; text-shadow: none !important; border-color: transparent;
+}
+:root[data-genero="masculino"] .numero.destaque :is(.rotulo, .extra, .valor) { color: #1f2e00 !important; opacity: 1; }
+:root[data-genero="masculino"] :is(.cartao, .dialogo-ficha, .tarefa, .p-item, .f-item, .s-item, .card-marca, .coluna, .dia-sem, .hoje-item, .acordo-linha) { border-radius: 14px; }
+:root[data-genero="masculino"] :is(.btn-primario, .btn-secundario, .btn-lima, .botao, .mini-btn, .sair, .tema-btn, .ajuda-link, .periodos, .visoes, .vis-btn, .periodo, .busca) { border-radius: 10px; }
+:root[data-genero="masculino"] .cartao { border-color: var(--borda); box-shadow: 0 1px 2px rgba(0,0,0,.04), 0 10px 24px -16px rgba(0,0,0,.18); }
+:root[data-genero="masculino"] .coluna { background: #eef0ea; }
+:root[data-genero="masculino"] .saudacao::after, :root[data-sem-brilho] .saudacao::after { content: none; }
+:root[data-genero="masculino"] .t-check { border-color: #9fd12a; }
+:root[data-genero="masculino"] .tarefa.feita .t-check { background: var(--gel); }
+:root[data-genero="masculino"] .barra { background: linear-gradient(180deg, #ff5fae, #e0127a); }
+:root[data-genero="masculino"] .perfil-btn { border-radius: 12px; }
+/* modo escuro + masculino */
+:root[data-genero="masculino"][data-theme="dark"] .sidebar { background: linear-gradient(175deg, #15171a, #0d0e10); }
+:root[data-genero="masculino"][data-theme="dark"] body { background-color: #121316; background-image: linear-gradient(rgba(198,240,90,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(198,240,90,.04) 1px, transparent 1px); }
+:root[data-genero="masculino"][data-theme="dark"] { --branco: #1b1d21; --creme: #23262b; --creme-claro: #121316; --borda: #30343a; }
+/* Rodapé da barra lateral mais compacto */
+.rodape-linha { display: flex; gap: 6px; }
+.rodape-linha .tema-btn, .rodape-linha .sair { margin: 0; padding: 8px 6px; font-size: .78rem; flex: 1; }
+.rodape-linha .sair { flex: 0 0 64px; }
+.sidebar-rodape { padding-top: 12px; }
+.ajuda-link { padding: 8px; margin-bottom: 6px; }
+.links-legais { margin-top: 8px; }
+/* Masculino: janelas neutras */
+:root[data-genero="masculino"] .dialogo-ficha::backdrop { background: rgba(20,22,26,.55); }
+:root[data-genero="masculino"] .ficha-rodape { background: #f4f5f1; }
+:root[data-genero="masculino"][data-theme="dark"] .ficha-rodape { background: var(--creme); }

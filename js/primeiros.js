@@ -10,7 +10,7 @@
     const p = window.Tarefas ? Tarefas.prefs() : {};
     const temRegistro = (window.Marcas && Marcas.lista().length) || (window.Prospeccao && Prospeccao.lista().length);
     return [
-      { feito: !!(window.Tarefas && Tarefas.configurado()), titulo: 'Conte como quer ser chamada e monte sua rotina', sub: 'Seus dias e horários de trabalho. É com isso que eu sugiro horários sem te sobrecarregar.', aba: 'aba-tarefas', botao: 'Montar rotina' },
+      { feito: !!(window.Tarefas && Tarefas.configurado()), titulo: `Conte como quer ser ${G.t('chamada', 'chamado')} e monte sua rotina`, sub: 'Seus dias e horários de trabalho. É com isso que eu sugiro horários sem te sobrecarregar.', aba: 'aba-tarefas', botao: 'Montar rotina' },
       { feito: !!p.meta_abordagens, titulo: 'Defina sua meta de abordagens por dia', sub: 'Na Prospecção, toque em "Meta" e escolha quantas marcas quer abordar por dia.', aba: 'aba-prospeccao', botao: 'Definir meta' },
       { feito: !!(p.nivel_ugc || (Array.isArray(p.precos) && p.precos.length)), titulo: 'Escolha seu nível de UGC ou cadastre seus preços', sub: 'O Simulador usa isso para montar seus orçamentos.', aba: 'aba-simulador', botao: 'Abrir Simulador' },
       { feito: !!p.meta_faturamento, titulo: 'Coloque sua meta de faturamento do mês', sub: 'No Financeiro. Eu te mostro quantas marcas faltam para chegar lá.', aba: 'aba-financeiro', botao: 'Definir meta' },

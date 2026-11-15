@@ -13,7 +13,7 @@
   const dia = (v) => v ? (String(v).length > 10 ? paraISO(new Date(v)) : String(v).slice(0, 10)) : null;
   const mesDe = (v) => { const d = dia(v); return d ? d.slice(0, 7) : null; };
   const nomeMes = (k, curto) => { const [a, m] = k.split('-').map(Number); const t = new Date(a, m - 1, 1).toLocaleDateString('pt-BR', curto ? { month: 'short' } : { month: 'long' }).replace('.', ''); return t.charAt(0).toUpperCase() + t.slice(1) + (curto ? '/' + String(a).slice(2) : ''); };
-  const nome = () => (window.Tarefas ? Tarefas.nome() : 'Deusa');
+  const nome = () => (window.Tarefas ? Tarefas.nome() : G.apelido());
 
   function chavesMeses() {
     const hoje = new Date(), lista = [];

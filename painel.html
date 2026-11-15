@@ -26,16 +26,17 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/auth.js?v=3"></script>
   <script src="js/marcas.js?v=6"></script>
-  <script src="js/tarefas.js?v=6"></script>
-  <script src="js/prospeccao.js?v=8"></script>
-  <script src="js/financeiro.js?v=5"></script>
+  <script src="js/tarefas.js?v=7"></script>
+  <script src="js/prospeccao.js?v=9"></script>
+  <script src="js/financeiro.js?v=6"></script>
   <script src="js/simulador.js?v=9"></script>
-  <script src="js/conteudo.js?v=4"></script>
-  <script src="js/assistente.js?v=3"></script>
-  <script src="js/crescimento.js?v=3"></script>
-  <script src="js/primeiros.js?v=2"></script>
-  <script src="js/comparativo.js?v=1"></script>
-  <script src="js/tema.js?v=2"></script>
+  <script src="js/conteudo.js?v=5"></script>
+  <script src="js/assistente.js?v=4"></script>
+  <script src="js/crescimento.js?v=4"></script>
+  <script src="js/primeiros.js?v=3"></script>
+  <script src="js/comparativo.js?v=2"></script>
+  <script src="js/perfil.js?v=1"></script>
+  <script src="js/tema.js?v=3"></script>
   <link rel="stylesheet" href="css/conteudo.css?v=6">
   <link rel="stylesheet" href="css/financeiro.css?v=5">
   <link rel="stylesheet" href="css/prospeccao.css?v=3">
@@ -244,7 +245,8 @@
     }
   </style>
   <link rel="stylesheet" href="css/tema-y2k.css?v=6">
-  <script src="js/glitter.js?v=3" defer></script>
+  <link rel="stylesheet" href="css/perfil.css?v=2">
+  <script src="js/glitter.js?v=4" defer></script>
 </head>
 <body>
   <!-- Menu lateral -->
@@ -296,11 +298,12 @@
       </button>
     </nav>
     <div class="sidebar-rodape">
-      <div class="usuario-rotulo">Conectada como</div>
-      <div class="usuario-email" id="usuario-email">...</div>
+      <button class="perfil-btn" id="perfil-btn" aria-label="Abrir meu perfil">
+        <span class="avatar-lugar"><span class="avatar sem-foto">✦</span></span>
+        <span class="perfil-txt"><b id="perfil-nome">Meu perfil</b><small id="usuario-email">...</small></span>
+      </button>
       <a class="ajuda-link" href="https://wa.me/5531984042252?text=Oi%2C%20D%C3%A9bora!%20Preciso%20de%20ajuda%20com%20o%20UGC%20Organized." target="_blank" rel="noopener">💬 Precisa de ajuda?</a>
-      <button class="tema-btn" id="btn-tema">🌙 Modo escuro</button>
-      <button class="sair" id="btn-sair">Sair</button>
+      <div class="rodape-linha"><button class="tema-btn" id="btn-tema">🌙 Modo escuro</button><button class="sair" id="btn-sair">Sair</button></div>
       <div class="links-legais"><a href="termos.html" target="_blank">Termos de uso</a> · <a href="privacidade.html" target="_blank">Privacidade</a></div>
     </div>
   </aside>
@@ -665,6 +668,7 @@
     Crescimento.iniciar($('crescimento'));
     PrimeirosPassos.iniciar($('primeiros-passos'));
     Comparativo.iniciar($('aba-comparativo'));
+    Perfil.iniciar();
     // Modo escuro
     const rotuloTema = () => { $('btn-tema').textContent = Tema.escuro() ? '☀️ Modo claro' : '🌙 Modo escuro'; };
     rotuloTema();

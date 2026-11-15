@@ -38,7 +38,7 @@
   const usuario = (ig) => String(ig || '').trim().replace(/^https?:\/\/(www\.)?instagram\.com\//i, '').replace(/^@/, '').replace(/[/?#].*$/, '');
   const digitos = (t) => { let d = String(t || '').replace(/\D/g, ''); if (d.length === 10 || d.length === 11) d = '55' + d; return d; };
   const meta = () => (window.Tarefas && Tarefas.prefs().meta_abordagens) || META_PADRAO;
-  const nomeDela = () => (window.Tarefas ? Tarefas.nome() : 'Deusa');
+  const nomeDela = () => (window.Tarefas ? Tarefas.nome() : G.apelido());
   const respondida = (p) => p.status !== 'enviada';
 
   function toast(msg, erro) {
@@ -322,7 +322,7 @@
         const salvo = await salvar('prospeccoes', nova ? null : p.id, dados);
         desenhar();
         const n = lista.filter(x => x.data_abordagem === hoje()).length;
-        if (nova && n === meta()) toast(`Meta do dia batida, Deusa! ${n} abordagens ✦`);
+        if (nova && n === meta()) toast(`Meta do dia batida, ${G.apelido()}! ${n} abordagens ✦`);
         else toast(nova ? `${marca} registrada! ${n}/${meta()} hoje ✦` : 'Alterações salvas.');
         if (proxima) return abrirFicha(null);
         dlg.close();
@@ -415,7 +415,7 @@
 
   async function usarPlano() {
     const pl = window.Financeiro && Financeiro.plano(); if (!pl || !pl.porDia) return;
-    try { await Tarefas.salvarPrefsParcial({ meta_abordagens: pl.porDia }); desenhar(); toast(`Meta: ${pl.porDia} abordagens por dia. Bora, Deusa! ✦`); }
+    try { await Tarefas.salvarPrefsParcial({ meta_abordagens: pl.porDia }); desenhar(); toast(`Meta: ${pl.porDia} abordagens por dia. Bora, ${G.apelido()}! ✦`); }
     catch (e) { console.error(e); toast('Não consegui salvar a meta.', true); }
   }
 

@@ -18,7 +18,7 @@
   };
   const PREFS_PADRAO = { nome: '', dias: [1, 2, 3, 4, 5], inicio: '09:00', fim: '18:00', horas: 4, lembrete: 30 };
   // Como chamar a usuária: o nome nas saudações; "Deusa" nas comemorações (e quando não há nome)
-  const nomeDela = () => ((prefs && prefs.nome) || '').trim() || 'Deusa';
+  const nomeDela = () => ((prefs && prefs.nome) || '').trim() || G.apelido();
   const saudacaoHora = () => { const h = new Date().getHours(); return h < 12 ? 'Bom dia' : h < 18 ? 'Boa tarde' : 'Boa noite'; };
   const DIAS_MIN_APRENDER = 5; // dias com tarefas concluídas para o ritmo começar a valer
 
@@ -52,6 +52,7 @@
 
   // Explosão de glitter quando conclui uma tarefa
   function comemorar(el) {
+    if (window.G && !G.brilho()) return; // estilo sem brilho
     const r = el.getBoundingClientRect(), cx = r.left + r.width / 2, cy = r.top + r.height / 2;
     const cores = ['#ff1493', '#ff4fa3', '#ff8fc7', '#fff3a8', '#c77dff', '#ffffff'];
     for (let i = 0; i < 26; i++) {
@@ -238,7 +239,7 @@
     const feitoHoje = tarefas.filter(t => t.data === h && t.concluida).length, totalHoje = tarefas.filter(t => t.data === h).length;
     const atrasadas = tarefas.filter(t => !t.concluida && t.data && t.data < h).sort((a, b) => a.data.localeCompare(b.data));
     let frase;
-    if (!ehDiaDeTrabalho(h) && !totalHoje) frase = 'Hoje é dia de folga na sua rotina. Descansar também é produtividade, Deusa ✦';
+    if (!ehDiaDeTrabalho(h) && !totalHoje) frase = 'Hoje é dia de folga na sua rotina. Descansar também é produtividade, ' + G.apelido() + ' ✦';
     else if (carga > cap) frase = `Hoje está acima do seu ritmo (${durTxt(carga)} de ${durTxt(cap)}). Que tal passar algo para outro dia?`;
     else if (carga > cap * .85) frase = `Dia bem cheio, mas cabe: ${durTxt(carga)} de ${durTxt(cap)}.`;
     else frase = `Cabe mais uns ${durTxt(cap - carga)} hoje sem se sobrecarregar.`;
@@ -362,11 +363,18 @@
     const dlg = document.getElementById('ficha-marca');
     const nomes = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
     dlg.innerHTML = `<form class="ficha" novalidate>
-      <header class="ficha-cab"><div><small>${editar ? 'Sua rotina' : 'Bem-vinda, Deusa ✦'}</small><h2>${editar ? 'Ajustar rotina' : 'Vamos montar sua rotina'}</h2></div>${editar ? '<button type="button" class="fechar" data-fechar aria-label="Fechar">×</button>' : ''}</header>
+      <header class="ficha-cab"><div><small>${editar ? 'Sua rotina' : `${G.t('Bem-vinda', 'Bem-vindo')}, ${G.apelido()} ✦`}</small><h2>${editar ? 'Ajustar rotina' : 'Vamos montar sua rotina'}</h2></div>${editar ? '<button type="button" class="fechar" data-fechar aria-label="Fechar">×</button>' : ''}</header>
       <div class="ficha-corpo">
         <p class="desc" style="margin-top:12px">Com isso eu sugiro horários, te lembro das tarefas e não deixo nenhum dia pesado demais. Depois eu vou aprendendo o seu ritmo de verdade.</p>
-        <fieldset><legend>Como você quer ser chamada?</legend>
-          <label class="campo largo"><input name="nome" maxlength="40" value="${esc(p.nome || '')}" placeholder="Seu nome (se deixar em branco, te chamo de Deusa)"></label>
+        <fieldset><legend>Como você se identifica?</legend>
+          <div class="dias-escolha genero-escolha">
+            <label><input type="radio" name="genero" value="feminino" ${p.genero !== 'masculino' ? 'checked' : ''}><span>Feminino</span></label>
+            <label><input type="radio" name="genero" value="masculino" ${p.genero === 'masculino' ? 'checked' : ''}><span>Masculino</span></label>
+          </div>
+          <small class="desc">Muda o jeito que eu falo com você e o estilo do app. Dá para trocar depois em "Meu perfil".</small>
+        </fieldset>
+        <fieldset><legend>Como você quer ser ${G.t('chamada', 'chamado')}?</legend>
+          <label class="campo largo"><input name="nome" maxlength="40" value="${esc(p.nome || '')}" placeholder="Seu nome (se deixar em branco, te chamo de ${G.apelido()})"></label>
         </fieldset>
         <fieldset><legend>Em quais dias você trabalha com UGC?</legend>
           <div class="dias-escolha">${nomes.map((n, i) => `<label><input type="checkbox" name="dia" value="${i}" ${p.dias.includes(i) ? 'checked' : ''}><span>${n}</span></label>`).join('')}</div>
@@ -398,8 +406,9 @@
       const erro = (m) => { const el = dlg.querySelector('#bv-erro'); el.textContent = m; el.hidden = false; };
       if (!dias.length) return erro('Escolha pelo menos um dia.');
       if (!f.inicio.value || !f.fim.value || minutos(f.fim.value) <= minutos(f.inicio.value)) return erro('O horário de término precisa ser depois do começo.');
-      const novas = { ...dadosBrutos, nome: f.nome.value.trim(), dias, inicio: f.inicio.value, fim: f.fim.value, horas: Number(f.horas.value), lembrete: Number(f.lembrete.value) };
-      try { await salvarPrefs(novas); dlg.close(); desenhar(); toast(editar ? 'Rotina atualizada.' : `Prontinho, ${nomeDela()}! Agora é só reservar seus horários ✦`);
+      const genero = (f.querySelector('input[name="genero"]:checked') || {}).value || 'feminino';
+      const novas = { ...dadosBrutos, genero, brilho: dadosBrutos.brilho != null && dadosBrutos.genero === genero ? dadosBrutos.brilho : genero !== 'masculino', nome: f.nome.value.trim(), dias, inicio: f.inicio.value, fim: f.fim.value, horas: Number(f.horas.value), lembrete: Number(f.lembrete.value) };
+      try { await salvarPrefs(novas); if (window.Tema) Tema.aplicarPerfil(novas.genero, novas.brilho); if (window.Perfil) Perfil.desenhar(); dlg.close(); desenhar(); toast(editar ? 'Rotina atualizada.' : `Prontinho, ${nomeDela()}! Agora é só reservar seus horários ✦`);
         document.dispatchEvent(new CustomEvent('oug:nome', { detail: nomeDela() })); }
       catch (err) { console.error(err); erro('Não consegui salvar agora. Tente de novo.'); }
     });
@@ -623,13 +632,13 @@
       await salvarTarefa(id, dados); desenhar();
       if (feito) {
         const pend = tarefas.filter(x => x.data === hoje() && !x.concluida).length;
-        toast(pend ? `Arrasou, Deusa! Faltam ${pend} hoje ✦` : `Dia concluído! Você é incrível, Deusa ✦`);
+        toast(pend ? `${G.t('Arrasou', 'Mandou bem')}, ${G.apelido()}! Faltam ${pend} hoje ✦` : `Dia concluído! Você é incrível, ${G.apelido()} ✦`);
       }
     } catch (e) { console.error(e); toast('Não consegui salvar agora.', true); }
   }
 
   async function comecar(id) {
-    try { await salvarTarefa(id, { iniciada_em: new Date().toISOString() }); desenhar(); toast('Cronômetro ligado. Vai lá, Deusa ✦'); }
+    try { await salvarTarefa(id, { iniciada_em: new Date().toISOString() }); desenhar(); toast(`Cronômetro ligado. Vai lá, ${G.apelido()} ✦`); }
     catch (e) { console.error(e); toast('Não consegui começar agora.', true); }
   }
 

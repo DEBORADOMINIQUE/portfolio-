@@ -90,7 +90,7 @@
     const dlg = document.getElementById('assistente-dlg');
     imagem = null;
     dlg.innerHTML = `<div class="ficha">
-      <header class="ficha-cab"><div><small>Assistente ✦</small><h2>O que aconteceu, Deusa?</h2></div><button type="button" class="fechar" data-fechar aria-label="Fechar">×</button></header>
+      <header class="ficha-cab"><div><small>Assistente ✦</small><h2>O que aconteceu, ${G.apelido()}?</h2></div><button type="button" class="fechar" data-fechar aria-label="Fechar">×</button></header>
       <div class="ficha-corpo">
         <p class="desc" style="margin-top:12px">Cole a conversa com a marca, o e-mail, o briefing, ou só escreva do seu jeito ("abordei a Sallve pelo direct", "gravar o reels da Kaisan sexta às 14h", "comprei um microfone de 189"). Eu entendo e preencho a ficha certa.</p>
         <label class="campo largo"><textarea id="as-texto" rows="7" placeholder="Cole ou escreva aqui..."></textarea></label>

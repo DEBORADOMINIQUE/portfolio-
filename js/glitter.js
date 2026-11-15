@@ -11,6 +11,7 @@
   let ultimo = 0;
 
   document.addEventListener('mousemove', (e) => {
+    if (document.documentElement.dataset.semBrilho) return; // estilo sem brilho (perfil)
     const agora = performance.now();
     if (agora - ultimo < 28) return; // no máximo ~35 brilhos por segundo
     ultimo = agora;

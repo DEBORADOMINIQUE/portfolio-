@@ -13,7 +13,7 @@
   const somaDias = (iso, n) => { const [a, m, d] = iso.split('-').map(Number); const x = new Date(a, m - 1, d); x.setDate(x.getDate() + n); return paraISO(x); };
   const moeda = (n) => Number(n || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
   const pctTxt = (n) => Math.round(n * 100) + '%';
-  const nome = () => (window.Tarefas ? Tarefas.nome() : 'Deusa');
+  const nome = () => (window.Tarefas ? Tarefas.nome() : G.apelido());
 
   function janelas() {
     const hoje = paraISO(new Date());
