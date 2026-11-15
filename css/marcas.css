@@ -238,3 +238,9 @@
 .envio-check input:focus-visible + span { outline: 2px solid var(--vinho); outline-offset: 2px; }
 .envio-atalhos { margin-top: 8px; font-size: .78rem; }
 .envio-atalhos button { font-size: .78rem; padding: 5px 10px; }
+
+/* Pedir avaliação para a marca */
+.fb-link { clear: both; background: var(--lilas-claro); border-radius: 16px; padding: 12px 14px; margin-bottom: 14px; display: flex; flex-direction: column; gap: 2px; }
+.fb-link strong { color: var(--ameixa); }
+.fb-link.ok { background: var(--lima-claro); color: var(--lima-texto); font-weight: 600; }
+.fb-selos { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }

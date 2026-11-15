@@ -85,12 +85,13 @@
     followup: (m) => `Oi, ${primeiroNome(m)}! Passando para saber se vocês conseguiram ver a minha proposta para a ${m.nome}. Fico à disposição para ajustar o que precisar.`,
     cobrar:   (m) => `Oi, ${primeiroNome(m)}! Tudo certo por aí? Queria saber se o produto e o briefing da ${m.nome} já foram enviados. Assim que chegarem, começo a produção.`,
     entrega:  (m) => `Oi, ${primeiroNome(m)}! O conteúdo da ${m.nome} está pronto. Posso te enviar por aqui?`,
-    feedback: (m) => `Oi, ${primeiroNome(m)}! Foi um prazer criar para a ${m.nome}. Você me conta o que achou do conteúdo? Seu feedback me ajuda muito.`,
+    feedback: (m) => `Oi, ${primeiroNome(m)}! Foi um prazer criar para a ${m.nome}. Você me conta o que achou do conteúdo? É rapidinho, menos de 1 minuto:${linkFeedback(m) ? ' ' + linkFeedback(m) : ''} Seu feedback me ajuda muito!`,
     pagamento:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? Passando para confirmar a previsão de pagamento do conteúdo da ${m.nome}.`,
     repescagem:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? Faz um tempinho da nossa parceria com a ${m.nome} e eu amei o resultado. Tenho ideias novas de conteúdo para vocês. Posso te mandar uma proposta?`,
     renovacao:(m) => `Oi, ${primeiroNome(m)}! Tudo bem? A licença de uso do conteúdo da ${m.nome} ${m.uso_imagem_ate && m.uso_imagem_ate < hoje() ? 'venceu em' : 'vence em'} ${fmtLonga(m.uso_imagem_ate)}. Querem renovar para continuar usando? Te passo os valores.`
   };
   const NOMES_MODELO = { followup: 'Follow-up da proposta', cobrar: 'Cobrar produto/briefing', entrega: 'Avisar entrega', feedback: 'Pedir feedback', pagamento: 'Lembrar pagamento', renovacao: 'Renovar licença de uso', repescagem: 'Repescagem (nova parceria)' };
+  function linkFeedback(m) { return m.feedback_token ? `${location.origin}/feedback?t=${m.feedback_token}` : ''; }
   function linkWhats(m, modelo) { return `https://wa.me/${soDigitos(m.contato_whatsapp)}?text=${encodeURIComponent(MODELOS[modelo](m))}`; }
   function linkEmail(m, modelo) { return `mailto:${encodeURIComponent(m.contato_email || '')}?subject=${encodeURIComponent(m.nome + ' · UGC')}&body=${encodeURIComponent(MODELOS[modelo](m))}`; }
   function modeloSugerido(m) {
@@ -196,6 +197,9 @@
       const ultimaConcluida = mesmas.filter(x => x.etapa === 'concluida').sort((a, b) => dataUltima(b).localeCompare(dataUltima(a)))[0];
       if (!ativa && ultimaConcluida === m && m.repescagem_em && m.repescagem_em <= h) {
         itens.push({ m, peso: 2.2, cor: 'alerta', txt: 'Repescagem: tentar nova parceria', sub: `Última parceria finalizada ${fmtLonga(m.finalizada_em || m.data_pagamento || desdeQuando(m))}`, modelo: 'repescagem' });
+      }
+      if (m.feedback_origem === 'marca' && m.feedback_em && diasEntre(m.feedback_em.slice(0, 10), h) <= 7) {
+        itens.push({ m, peso: 0.5, cor: 'neutro', txt: `Nova avaliação: ${'★'.repeat(m.feedback_nota || 0)}`, sub: m.feedback_texto ? `"${String(m.feedback_texto).slice(0, 90)}${String(m.feedback_texto).length > 90 ? '...' : ''}"` : 'A marca avaliou a parceria pelo link', modelo: null });
       }
       if (m.etapa === 'concluida' && !m.feedback_nota && !m.feedback_texto && diasEntre(desdeQuando(m), h) <= 45) {
         itens.push({ m, peso: 5, cor: 'neutro', txt: 'Pedir feedback', sub: 'Guarde o que a marca achou', modelo: 'feedback' });
@@ -412,6 +416,10 @@
             ${m.contato_nome ? `<span>${esc(m.contato_nome)}</span>` : '<span></span>'}
             ${m.trabalharia_de_novo === true ? '<span class="selo-fb sim">Faria de novo</span>' : m.trabalharia_de_novo === false ? '<span class="selo-fb nao">Não faria de novo</span>' : ''}
           </div>
+          <div class="fb-selos">
+            ${m.feedback_origem === 'marca' ? '<span class="chip ok">✓ Avaliado pela marca</span>' : ''}
+            ${m.feedback_autoriza ? '<span class="chip marca">Pode usar como depoimento</span>' : ''}
+          </div>
         </button>`).join('')}</div>`;
   }
 
@@ -511,6 +519,17 @@
         </fieldset>
 
         <fieldset id="sec-feedback"><legend>Feedback da marca</legend>
+          ${!nova && m.feedback_token ? (m.feedback_origem === 'marca'
+            ? `<div class="fb-link ok">💚 A marca avaliou pelo link em ${new Date(m.feedback_em).toLocaleDateString('pt-BR')}${m.feedback_autoriza ? ' · <b>pode usar como depoimento</b>' : ''}</div>`
+            : `<div class="fb-link">
+                <strong>Peça para a marca avaliar</strong>
+                <small class="desc">Ela abre um cartão com estrelas e um campo para escrever. A resposta aparece aqui sozinha.</small>
+                <div class="atalhos" style="margin-top:8px">
+                  ${m.contato_whatsapp ? `<a class="mini-btn zap" target="_blank" rel="noopener" href="${linkWhats(m, 'feedback')}">Mandar no WhatsApp</a>` : ''}
+                  ${m.contato_email ? `<a class="mini-btn" href="${linkEmail(m, 'feedback')}">Mandar por e-mail</a>` : ''}
+                  <button type="button" class="mini-btn" data-copiar-fb="${esc(linkFeedback(m))}">Copiar link</button>
+                </div>
+              </div>`) : ''}
           <div class="nota-estrelas" role="radiogroup" aria-label="Nota da marca">
             ${[1, 2, 3, 4, 5].map(n => `<button type="button" class="estrela ${m.feedback_nota >= n ? 'on' : ''}" data-nota="${n}" aria-label="${n} de 5">★</button>`).join('')}
             <input type="hidden" name="feedback_nota" value="${m.feedback_nota || ''}">
@@ -684,6 +703,8 @@
 
     dlg.querySelectorAll('[data-fechar]').forEach(b => b.addEventListener('click', () => dlg.close()));
     dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); }, { once: true });
+    const cpFb = dlg.querySelector('[data-copiar-fb]');
+    if (cpFb) cpFb.addEventListener('click', () => navigator.clipboard.writeText(cpFb.dataset.copiarFb).then(() => toast('Link de avaliação copiado ✦'), () => toast('Não consegui copiar.', true)));
 
     const exc = dlg.querySelector('[data-excluir]');
     if (exc) exc.addEventListener('click', async () => {

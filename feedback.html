@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Avaliação da parceria · UGC Organized</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="/app/icone-192.png?v=4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/app/icone-180.png?v=4">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script src="js/auth.js?v=3"></script>
+  <link rel="stylesheet" href="css/tema-y2k.css?v=6">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 28px 16px; font-family: var(--texto); color: var(--ameixa); }
+    .cartao-fb { width: 100%; max-width: 480px; background: #fff; border: 1px solid #f6cfe3; border-radius: 28px; overflow: hidden; box-shadow: 0 24px 60px -24px rgba(224,21,122,.35); }
+    .faixa { height: 6px; background: linear-gradient(90deg, #ff2d9b, var(--lima)); }
+    .corpo { padding: 30px 28px 28px; }
+    .quem { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+    .foto { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 3px solid var(--lima); flex-shrink: 0; }
+    .foto.sem { display: grid; place-items: center; background: var(--lima); color: #2f4a00; font-weight: 800; font-size: 1.4rem; }
+    .quem small { display: block; color: var(--suave); font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+    .quem b { font-family: var(--titulo); font-size: 1.15rem; font-weight: 600; }
+    h1 { font-family: var(--titulo); font-weight: 600; font-size: 1.55rem; line-height: 1.2; margin: 0 0 6px; letter-spacing: -.01em; }
+    .sub { color: var(--suave); font-size: .95rem; margin: 0 0 22px; line-height: 1.5; }
+    .estrelas-fb { display: flex; gap: 6px; justify-content: center; margin: 6px 0 4px; }
+    .estrelas-fb button { background: none; border: 0; font-size: 2.6rem; line-height: 1; color: #f3dbe7; cursor: pointer; transition: transform .1s, color .1s; padding: 2px; }
+    .estrelas-fb button.on { color: #ff2d9b; text-shadow: 0 2px 10px rgba(255,45,155,.35); }
+    .estrelas-fb button:hover { transform: scale(1.12); }
+    .nota-txt { text-align: center; color: var(--suave); font-size: .88rem; min-height: 1.3em; margin-bottom: 18px; }
+    label.rot { display: block; font-weight: 700; font-size: .92rem; margin: 16px 0 8px; }
+    textarea { width: 100%; font: inherit; font-size: .98rem; color: var(--ameixa); border: 1.5px solid #f6cfe3; border-radius: 16px; padding: 12px 14px; resize: vertical; min-height: 110px; background: #fff; }
+    textarea:focus { outline: none; border-color: var(--lima-forte); box-shadow: 0 0 0 3px rgba(168,222,46,.25); }
+    .opcoes { display: flex; gap: 8px; }
+    .opcoes label { flex: 1; }
+    .opcoes input { position: absolute; opacity: 0; pointer-events: none; }
+    .opcoes span { display: block; text-align: center; padding: 11px; border-radius: 999px; border: 1.5px solid #f6cfe3; font-weight: 700; cursor: pointer; color: var(--suave); }
+    .opcoes input:checked + span { background: var(--lima-gel); border-color: transparent; color: #2f4a00; }
+    .opcoes input:focus-visible + span { outline: 2px solid var(--vinho); outline-offset: 2px; }
+    .enviar { width: 100%; margin-top: 24px; border: 0; border-radius: 999px; padding: 15px; font: inherit; font-weight: 800; font-size: 1rem; color: #fff; background: var(--gel); box-shadow: var(--gel-sombra); cursor: pointer; }
+    .enviar:disabled { opacity: .6; cursor: wait; }
+    .erro { display: none; margin-top: 14px; background: #fde6e8; color: #b0213a; border-radius: 12px; padding: 10px 12px; font-size: .9rem; }
+    .fim { text-align: center; padding: 10px 0; }
+    .fim .grande { font-size: 3rem; }
+    .rodape-fb { text-align: center; font-size: .75rem; color: var(--suave); margin-top: 18px; }
+  </style>
+</head>
+<body>
+  <main class="cartao-fb">
+    <div class="faixa"></div>
+    <div class="corpo" id="conteudo"><p class="sub">Carregando...</p></div>
+  </main>
+
+  <script>
+  (async () => {
+    const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const el = document.getElementById('conteudo');
+    const token = new URLSearchParams(location.search).get('t') || '';
+    const sb = window.Auth && Auth.client;
+    const invalido = () => { el.innerHTML = '<div class="fim"><div class="grande">🔗</div><h1>Link inválido</h1><p class="sub">Esse link de avaliação não existe ou está incompleto. Peça um novo para quem te enviou.</p></div>'; };
+    if (!/^[0-9a-f-]{36}$/i.test(token) || !sb) return invalido();
+
+    let info;
+    try { const { data, error } = await sb.rpc('feedback_info', { p_token: token }); if (error) throw error; info = data; } catch (e) { console.error(e); }
+    if (!info) return invalido();
+    const nome = info.criadora, inicial = esc(String(nome).trim().charAt(0).toUpperCase() || '✦');
+    const quem = `<div class="quem">${info.foto ? `<img class="foto" src="${esc(info.foto)}" alt="">` : `<span class="foto sem">${inicial}</span>`}
+      <div><small>Avaliação da parceria</small><b>${esc(nome)}</b></div></div>`;
+    if (info.ja_enviado) {
+      el.innerHTML = quem + `<div class="fim"><div class="grande">💚</div><h1>Avaliação já enviada</h1><p class="sub">A ${esc(info.marca)} já avaliou essa parceria. Muito obrigada pelo carinho!</p></div>`;
+      return;
+    }
+    const FRASES = ['', 'Poderia ter sido melhor', 'Foi ok', 'Foi bom', 'Muito bom!', 'Incrível! 💖'];
+    el.innerHTML = quem + `
+      <h1>Como foi trabalhar com ${esc(nome.split(' ')[0])}?</h1>
+      <p class="sub">Sua opinião sobre ${info.entregas ? `<b>${esc(info.entregas)}</b>` : 'o conteúdo'} para a <b>${esc(info.marca)}</b> ajuda muito. Leva menos de um minuto.</p>
+      <div class="estrelas-fb" role="radiogroup" aria-label="Nota de 1 a 5">${[1, 2, 3, 4, 5].map(n => `<button type="button" data-n="${n}" aria-label="${n} de 5">★</button>`).join('')}</div>
+      <div class="nota-txt" id="nota-txt">Toque nas estrelas</div>
+      <label class="rot" for="texto">O que você achou do conteúdo?</label>
+      <textarea id="texto" maxlength="2000" placeholder="Conte como foi a experiência, o resultado do conteúdo, o que mais gostou..."></textarea>
+      <label class="rot">Trabalharia comigo de novo?</label>
+      <div class="opcoes"><label><input type="radio" name="voltaria" value="sim"><span>Sim</span></label><label><input type="radio" name="voltaria" value="nao"><span>Não</span></label></div>
+      <label class="rot">Posso usar seu depoimento no meu portfólio?</label>
+      <div class="opcoes"><label><input type="radio" name="autoriza" value="sim"><span>Pode sim</span></label><label><input type="radio" name="autoriza" value="nao"><span>Prefiro não</span></label></div>
+      <div class="erro" id="erro"></div>
+      <button class="enviar" id="enviar">Enviar avaliação</button>
+      <p class="rodape-fb">Enviado com UGC Organized</p>`;
+
+    let nota = 0;
+    const pintar = () => el.querySelectorAll('[data-n]').forEach(b => b.classList.toggle('on', Number(b.dataset.n) <= nota));
+    el.querySelectorAll('[data-n]').forEach(b => b.addEventListener('click', () => { nota = Number(b.dataset.n); pintar(); document.getElementById('nota-txt').textContent = FRASES[nota]; }));
+    document.getElementById('enviar').addEventListener('click', async () => {
+      const erro = document.getElementById('erro'), btn = document.getElementById('enviar');
+      erro.style.display = 'none';
+      if (!nota) { erro.textContent = 'Escolha de 1 a 5 estrelas.'; erro.style.display = 'block'; return; }
+      const v = el.querySelector('input[name="voltaria"]:checked'), a = el.querySelector('input[name="autoriza"]:checked');
+      btn.disabled = true; btn.textContent = 'Enviando...';
+      try {
+        const { data, error } = await sb.rpc('enviar_feedback', { p_token: token, p_nota: nota, p_texto: document.getElementById('texto').value, p_voltaria: v ? v.value === 'sim' : null, p_autoriza: a ? a.value === 'sim' : false });
+        if (error) throw error;
+        el.innerHTML = quem + (data
+          ? `<div class="fim"><div class="grande">💖</div><h1>Obrigada pela avaliação!</h1><p class="sub">Sua opinião já chegou para ${esc(nome.split(' ')[0])}. Foi um prazer criar para a ${esc(info.marca)}.</p></div>`
+          : `<div class="fim"><div class="grande">💚</div><h1>Avaliação já enviada</h1><p class="sub">Essa parceria já tinha sido avaliada. Obrigada!</p></div>`);
+      } catch (e) {
+        console.error(e); erro.textContent = 'Não consegui enviar agora. Confira sua internet e tente de novo.'; erro.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Enviar avaliação';
+      }
+    });
+  })();
+  </script>
+</body>
+</html>
