@@ -76,7 +76,7 @@
       <p class="sub">Sua opinião sobre ${info.entregas ? `<b>${esc(info.entregas)}</b>` : 'o conteúdo'} para a <b>${esc(info.marca)}</b> ajuda muito. Leva menos de um minuto.</p>
       <div class="estrelas-fb" role="radiogroup" aria-label="Nota de 1 a 5">${[1, 2, 3, 4, 5].map(n => `<button type="button" data-n="${n}" aria-label="${n} de 5">★</button>`).join('')}</div>
       <div class="nota-txt" id="nota-txt">Toque nas estrelas</div>
-      <label class="rot" for="texto">O que você achou do conteúdo?</label>
+      <label class="rot" for="texto">O que você achou do conteúdo? <small style="font-weight:500;color:var(--suave)">(opcional)</small></label>
       <textarea id="texto" maxlength="2000" placeholder="Conte como foi a experiência, o resultado do conteúdo, o que mais gostou..."></textarea>
       <label class="rot" for="melhorar">Tem algo que eu possa melhorar? <small style="font-weight:500;color:var(--suave)">(opcional)</small></label>
       <textarea id="melhorar" maxlength="2000" style="min-height:80px" placeholder="Pode ser sincera(o): prazo, comunicação, edição, roteiro... Toda dica me ajuda a crescer."></textarea>
