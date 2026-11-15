@@ -163,3 +163,134 @@ input:focus, .campo input:focus, .campo select:focus, .campo textarea:focus { bo
 .tema-btn { width: 100%; margin-bottom: 8px; padding: 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,.45); background: rgba(255,255,255,.12); color: #fff; font-weight: 700; font-size: .85rem; }
 .tema-btn:hover { background: rgba(255,255,255,.22); }
 :root[data-theme="dark"] .selo-aba { color: #5a0a33; }
+
+/* =========================================================
+   IDENTIDADE LIMA + ROSA (igual ao ícone do app)
+   Rosa choque continua como cor principal; o lima entra como
+   destaque: marca, selos, progresso, foco e detalhes.
+   ========================================================= */
+:root {
+  --lima: #c6f05a;
+  --lima-claro: #effbd2;
+  --lima-forte: #a8de2e;
+  --lima-texto: #4f7a00;   /* lima escuro para texto legível */
+  --lima-gel: linear-gradient(180deg, #e2ff8a 0%, #c6f05a 55%, #a8de2e 100%);
+}
+body {
+  background-color: #fff8fb;
+  background-image: radial-gradient(rgba(168,222,46,.22) 1.4px, transparent 1.6px);
+}
+
+/* Marca: quadradinho lima com a bolinha rosa, como o ícone */
+.logo .bolinha { position: relative; width: 26px; height: 26px; border-radius: 8px; background: var(--lima-gel); box-shadow: inset 0 1px 0 rgba(255,255,255,.7), 0 4px 10px -3px rgba(80,120,0,.45); }
+.logo .bolinha::after { content: ''; position: absolute; inset: 5px; border-radius: 50%; background: radial-gradient(circle at 36% 30%, #ffc2e2, #ff2d9b 40%, #e0127a 80%, #b00a5e); box-shadow: 0 2px 4px rgba(176,10,94,.35); }
+.logo b, .sidebar .logo b { color: var(--lima); text-shadow: 0 1px 0 rgba(0,0,0,.08); }
+main.cartao .logo b, .cartao .logo b { color: var(--lima-texto); }
+
+/* Barra lateral: rosa elegante, detalhes em lima */
+.sidebar { background: linear-gradient(175deg, #ff4fa8 0%, #ec1c86 50%, #c40f6a 100%); }
+.menu-grupo { color: rgba(239,251,210,.85); }
+.aba.ativa { box-shadow: inset 4px 0 0 var(--lima), 0 6px 16px -6px rgba(120,0,60,.5); }
+.selo-aba { background: var(--lima); color: #2f4a00; box-shadow: 0 0 0 2px rgba(255,255,255,.55); }
+.tema-btn { border-color: rgba(239,251,210,.6); }
+
+/* Detalhes em lima pelo app */
+.saudacao::after { color: var(--lima-forte); }
+.ficha-cab small, .menu-rotulo { color: var(--lima-texto); }
+.cartao { border-color: #f6cfe3; }
+.numero.destaque .extra { color: var(--lima-claro); opacity: 1; }
+.carga.ok > div, .meta-dia .carga.ok > div, .preenchido.ouro { background: linear-gradient(90deg, var(--lima-forte), var(--lima)); }
+.chip.ok, .valor-tag.pago, .mini-btn.zap { background: var(--lima-claro); color: var(--lima-texto); }
+.prazo, .previa-prazo.ok { background: var(--lima-claro); color: var(--lima-texto); }
+.p-item.aprovada { border-left-color: var(--lima-forte); background: #f8fde9; }
+.coluna.sobre { background: var(--lima-claro); border-color: var(--lima-forte); }
+.dia.hoje { outline-color: var(--lima-forte); }
+.legenda .feito::before, .ev.feito { background: var(--lima-forte); }
+.ev.feito { color: #2f4a00; }
+.t-check { border-color: var(--lima-forte); }
+.cronometro::before { color: var(--lima-forte); }
+.aprendendo { background: var(--lima-claro); color: var(--lima-texto); }
+.crescimento.ok { border-color: var(--lima); background: linear-gradient(135deg, #fff, var(--lima-claro)); }
+input:focus, .campo input:focus, .campo select:focus, .campo textarea:focus { border-color: var(--lima-forte) !important; box-shadow: 0 0 0 3px rgba(168,222,46,.28) !important; }
+::selection { background: var(--lima); color: #1f2e00; }
+.assistente-fab { box-shadow: var(--gel-sombra), 0 0 0 3px var(--lima), 0 14px 30px -10px rgba(224,21,122,.6); }
+main.cartao { border-top: 1px solid #f6cfe3; background: linear-gradient(90deg, #ff2d9b, var(--lima)) top / 100% 6px no-repeat, var(--branco); }
+.contato-destaque { background: linear-gradient(120deg, #fff, #ffe0ef 55%, var(--lima-claro)); }
+.plano-meta { background: linear-gradient(135deg, #fff 0%, #ffe8f4 55%, var(--lima-claro) 100%); }
+
+/* Modo escuro: lima neon */
+:root[data-theme="dark"] { --lima-claro: #24330a; --lima-texto: #d4ff7a; }
+:root[data-theme="dark"] body { background-image: radial-gradient(rgba(198,240,90,.10) 1.4px, transparent 1.6px); }
+:root[data-theme="dark"] :is(.chip.ok, .valor-tag.pago, .mini-btn.zap, .prazo, .previa-prazo.ok, .aprendendo) { background: #24330a; color: #d4ff7a; }
+:root[data-theme="dark"] .selo-aba { background: var(--lima); color: #1f2e00; }
+:root[data-theme="dark"] .crescimento.ok { background: #1a260a; }
+
+/* =========================================================
+   REGRAS DE DESIGN · cores com papel e hierarquia tipográfica
+   Rosa  = ação (botões, aba ativa, links)
+   Lima  = conquista e marca (progresso, metas, selos, logo)
+   Lilás = informação (marcas ligadas, lembretes, licenças)
+   Ameixa = tinta (títulos e números)
+   Escala: 1.85 / 1.15 / 1.0 / .95 / .86 / .72 rem
+   ========================================================= */
+:root {
+  --ameixa: #2e0b22;
+  --ameixa-suave: #6e3a5a;
+  --lilas: #9b6bf2;
+  --lilas-claro: #f1eaff;
+  --lilas-texto: #5b2fb0;
+  --suave: #7d5470;
+}
+:root[data-theme="dark"] { --ameixa: #ffe9f4; --ameixa-suave: #e3bcd3; --lilas-claro: #2a1a45; --lilas-texto: #d4bfff; }
+
+/* 1. Título da página */
+.topo h1 { font-family: var(--titulo); font-weight: 600; font-size: 1.85rem; letter-spacing: -.02em; color: var(--ameixa); }
+/* 2. Saudação: voz calma, abaixo do título */
+.saudacao, .marcas-barra .saudacao { font-family: var(--texto); font-weight: 600; font-size: 1rem; color: var(--ameixa-suave); }
+/* 3. Título de cartão e de seção */
+.cartao h2, .ficha-cab h2, .ficha legend, .cal-cab h2, .f-mes h2 { font-family: var(--titulo); font-weight: 600; color: var(--ameixa); letter-spacing: -.01em; }
+.cartao h2 { font-size: 1.15rem; }
+.coluna h3, .p-dia h3, .cr-colunas h3, .dia-sem header strong, .hoje-cab h2 { color: var(--ameixa); font-weight: 600; }
+/* 4. Rótulo: pequeno, caixa-alta, discreto */
+.numero .rotulo, .ritmo-rotulo, .s-total .rotulo, .feedback-resumo .rotulo { font-family: var(--texto); font-size: .72rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; color: var(--suave); }
+.numero.destaque .rotulo { color: rgba(255,255,255,.85); }
+/* 5. Números: tinta ameixa; o rosa fica para o cartão de destaque */
+.numero .valor, .ritmo-num, .meta-num, .s-ref, .contato-destaque .valor, .plano-passos b, .texto-stats b, .feedback-resumo .valor { color: var(--ameixa); font-family: var(--titulo); font-weight: 600; letter-spacing: -.02em; }
+.numero.destaque .valor { color: #fff; }
+.numero .valor.menor { font-size: 1.5rem; }
+.ritmo-num small, .meta-num small { color: var(--suave); font-family: var(--texto); }
+/* 6. Texto e notas */
+body { color: var(--ameixa); }
+.desc, .cartao .desc, small.desc { color: var(--suave); font-size: .86rem; line-height: 1.5; }
+.t-titulo, .p-nome, .card-topo strong, .f-corpo strong, .s-item strong { color: var(--ameixa); }
+.t-hora { color: var(--ameixa-suave); }
+.f-valor, .valor-tag { font-family: var(--titulo); }
+.f-valor { color: var(--ameixa); }
+.f-valor.ok { color: var(--lima-texto); }
+.f-valor.gasto { color: var(--lilas-texto); }
+
+/* Rosa = ação: links e textos clicáveis */
+.link, .link-precos, .cr-detalhes summary, .abrir, .add-coluna, .add-dia { color: var(--vinho); }
+
+/* Lilás = informação */
+.chip.marca, .chip.texto { background: var(--lilas-claro); color: var(--lilas-texto); }
+.ativar-lembrete { background: var(--lilas-claro); color: var(--lilas-texto); }
+.legenda .pagamento::before, .ev.pagamento, .legenda .licenca::before, .ev.licenca { background: var(--lilas); }
+.legenda .gasto::before, .f-b.gasto { background: var(--lilas); }
+.ev.followup { background: #ffd1e8; color: var(--ameixa); }
+.preenchido.ouro { background: linear-gradient(90deg, var(--lilas), #c7a6ff); }
+
+/* Ritmo visual: espaços e bordas consistentes */
+.cartao { box-shadow: 0 1px 2px rgba(46,11,34,.04), 0 12px 28px -16px rgba(224,21,122,.28); }
+.numeros { gap: 14px; }
+.vis-btn, .periodo { font-weight: 700; }
+
+/* Harmonia final */
+.cr-medidor { background: linear-gradient(90deg, #ffc2d6 0%, #d9c2ff 50%, var(--lima) 100%); }
+.cr-medidor div { border-color: var(--ameixa); }
+.meta-info strong { color: var(--ameixa); }
+.meta-dia .carga > div { background: linear-gradient(90deg, var(--lima-forte), var(--lima)); }
+.plano-frase b, .cr-colunas li b, .item-barra .cabeca strong { color: var(--ameixa); font-weight: 800; }
+.plano-passos > span { color: var(--lima-forte); }
+:root[data-theme="dark"] .sidebar .logo b { color: var(--lima); }
+:root[data-theme="dark"] .meta-dia .carga > div { background: linear-gradient(90deg, #8fc21c, var(--lima)); }

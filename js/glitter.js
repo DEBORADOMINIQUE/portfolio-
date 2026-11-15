@@ -6,7 +6,7 @@
   if (!window.matchMedia('(pointer: fine)').matches) return;
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-  const CORES = ['#ff1493', '#ff4fa3', '#ff8fc7', '#ffd1e8', '#ffffff', '#fff3a8', '#c77dff'];
+  const CORES = ['#ff1493', '#ff4fa3', '#ff8fc7', '#ffd1e8', '#ffffff', '#c6f05a', '#e2ff8a'];
   const FORMAS = ['✦', '✧', '•', '✦', '⋆'];
   let ultimo = 0;
 
