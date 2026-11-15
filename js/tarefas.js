@@ -191,7 +191,7 @@
       }
     });
     atualizarSelo();
-    if (visao === 'hoje' && raiz.classList.contains('ativo')) $$('.cronometro').forEach(c => { c.textContent = durTxt((Date.now() - new Date(c.dataset.desde)) / 60000); });
+    if (visao === 'hoje' && raiz.classList.contains('ativo')) $$('.cronometro[data-desde]').forEach(c => { c.textContent = durTxt(Number(c.dataset.acc || 0) + (Date.now() - new Date(c.dataset.desde)) / 60000); });
   }
 
   // ===== Agenda do celular: .ics com alarme e link do Google Agenda =====
@@ -277,8 +277,16 @@
           ${t.concluida && t.duracao_real_min ? `<span>levou ${durTxt(t.duracao_real_min)}</span>` : ''}</div>
       </div>
       ${!t.concluida && t.data === hoje() ? (t.iniciada_em
-        ? `<span class="cronometro" data-desde="${t.iniciada_em}">${durTxt((Date.now() - new Date(t.iniciada_em)) / 60000)}</span>`
-        : `<button class="mini-btn comecar" data-comecar="${t.id}">▶ Começar</button>`) : ''}
+        ? `<div class="crono-grupo"><span class="cronometro" data-desde="${t.iniciada_em}" data-acc="${acumulado(t)}">${durTxt(tempoTotal(t))}</span>
+            <button class="crono-btn" data-pausar="${t.id}" title="Pausar" aria-label="Pausar">⏸</button>
+            <button class="crono-btn" data-editar-tempo="${t.id}" title="Editar tempo" aria-label="Editar tempo">✎</button>
+            <button class="crono-btn fim" data-concluir="${t.id}" title="Finalizar tarefa" aria-label="Finalizar tarefa">✓ Finalizar</button></div>`
+        : acumulado(t)
+          ? `<div class="crono-grupo"><span class="cronometro pausado">⏸ ${durTxt(acumulado(t))}</span>
+            <button class="crono-btn" data-comecar="${t.id}" title="Retomar" aria-label="Retomar">▶</button>
+            <button class="crono-btn" data-editar-tempo="${t.id}" title="Editar tempo" aria-label="Editar tempo">✎</button>
+            <button class="crono-btn fim" data-concluir="${t.id}" title="Finalizar tarefa" aria-label="Finalizar tarefa">✓ Finalizar</button></div>`
+          : `<button class="mini-btn comecar" data-comecar="${t.id}">▶ Começar</button>`) : ''}
     </div>`;
   }
 
@@ -621,11 +629,33 @@
   }
 
   // ===== Ações =====
+  // Cronômetro com pausa: o tempo já cronometrado fica em duracao_real_min; rodando = iniciada_em preenchida
+  const acumulado = (t) => (!t.concluida && t.duracao_real_min) || 0;
+  const rodandoMin = (t) => t.iniciada_em ? (Date.now() - new Date(t.iniciada_em)) / 60000 : 0;
+  const tempoTotal = (t) => acumulado(t) + rodandoMin(t);
+
+  async function pausar(id) {
+    const t = tarefas.find(x => x.id === id); if (!t || !t.iniciada_em) return;
+    try { await salvarTarefa(id, { iniciada_em: null, duracao_real_min: Math.max(1, Math.min(1440, Math.round(tempoTotal(t)))) }); desenhar(); toast('Cronômetro pausado. Retome quando quiser.'); }
+    catch (e) { console.error(e); toast('Não consegui pausar agora.', true); }
+  }
+
+  async function editarTempo(id) {
+    const t = tarefas.find(x => x.id === id); if (!t) return;
+    const v = prompt('Quantos minutos você já trabalhou nessa tarefa?', Math.round(tempoTotal(t)));
+    if (v === null) return;
+    const n = parseInt(v, 10);
+    if (!(n >= 0 && n <= 1440)) return toast('Coloque um número de minutos entre 0 e 1440.', true);
+    // Se estava rodando, continua rodando a partir do novo tempo
+    try { await salvarTarefa(id, { duracao_real_min: n || null, iniciada_em: t.iniciada_em ? new Date().toISOString() : null }); desenhar(); toast('Tempo ajustado.'); }
+    catch (e) { console.error(e); toast('Não consegui ajustar agora.', true); }
+  }
+
   async function concluir(id, botao) {
     const t = tarefas.find(x => x.id === id); if (!t) return;
     const feito = !t.concluida;
     const dados = feito
-      ? { concluida: true, concluida_em: new Date().toISOString(), duracao_real_min: t.iniciada_em ? Math.max(1, Math.min(1440, Math.round((Date.now() - new Date(t.iniciada_em)) / 60000))) : t.duracao_real_min }
+      ? { concluida: true, concluida_em: new Date().toISOString(), iniciada_em: null, duracao_real_min: tempoTotal(t) ? Math.max(1, Math.min(1440, Math.round(tempoTotal(t)))) : t.duracao_real_min }
       : { concluida: false, concluida_em: null };
     if (feito && botao) comemorar(botao);
     try {
@@ -638,7 +668,8 @@
   }
 
   async function comecar(id) {
-    try { await salvarTarefa(id, { iniciada_em: new Date().toISOString() }); desenhar(); toast(`Cronômetro ligado. Vai lá, ${G.apelido()} ✦`); }
+    const t = tarefas.find(x => x.id === id), retomando = t && acumulado(t);
+    try { await salvarTarefa(id, { iniciada_em: new Date().toISOString() }); desenhar(); toast(retomando ? 'Cronômetro retomado ✦' : `Cronômetro ligado. Vai lá, ${G.apelido()} ✦`); }
     catch (e) { console.error(e); toast('Não consegui começar agora.', true); }
   }
 
@@ -654,11 +685,13 @@
       </div>
       <div id="t-conteudo"><p class="carregando">Carregando suas tarefas...</p></div>`;
     raiz.addEventListener('click', (e) => {
-      const a = e.target.closest('[data-nova-tarefa], [data-concluir], [data-comecar], [data-editar], [data-tvis], [data-plano], [data-reagendar-atrasadas], [data-equilibrar], [data-ics-semana], [data-notificar], [data-ajustar-rotina]');
+      const a = e.target.closest('[data-nova-tarefa], [data-concluir], [data-comecar], [data-pausar], [data-editar-tempo], [data-editar], [data-tvis], [data-plano], [data-reagendar-atrasadas], [data-equilibrar], [data-ics-semana], [data-notificar], [data-ajustar-rotina]');
       if (!a) return;
       if (a.matches('[data-nova-tarefa]')) return abrirTarefa(null, a.dataset.novaTarefa || null);
       if (a.matches('[data-concluir]')) return concluir(a.dataset.concluir, a);
       if (a.matches('[data-comecar]')) return comecar(a.dataset.comecar);
+      if (a.matches('[data-pausar]')) return pausar(a.dataset.pausar);
+      if (a.matches('[data-editar-tempo]')) return editarTempo(a.dataset.editarTempo);
       if (a.matches('[data-tvis]')) { visao = a.dataset.tvis; return desenhar(); }
       if (a.matches('[data-plano]')) return abrirPlano();
       if (a.matches('[data-reagendar-atrasadas]')) return reagendarAtrasadas();

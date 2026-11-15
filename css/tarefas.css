@@ -112,3 +112,13 @@
   .comecar, .cronometro { margin-left: 96px; }
   .atrasadas, .ativar-lembrete { flex-direction: column; align-items: flex-start; }
 }
+
+/* Cronômetro: pausar, editar, finalizar */
+.crono-grupo { display: flex; align-items: center; gap: 6px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+.cronometro.pausado { animation: none; background: var(--creme); color: var(--suave); }
+.cronometro.pausado::before { content: none; }
+.crono-btn { border: 1px solid var(--borda); background: var(--branco); color: var(--ameixa); border-radius: 999px; min-width: 34px; height: 34px; padding: 0 10px; font-weight: 800; font-size: .85rem; }
+.crono-btn:hover { border-color: var(--vinho); color: var(--vinho); }
+.crono-btn.fim { background: var(--lima-gel); border-color: transparent; color: #2f4a00; }
+:root[data-genero="masculino"] .crono-btn { border-radius: 10px; }
+@media (max-width: 560px) { .crono-grupo { margin-left: 96px; justify-content: flex-start; } }
