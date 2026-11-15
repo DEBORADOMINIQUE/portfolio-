@@ -64,3 +64,11 @@
 :root[data-genero="masculino"] .dialogo-ficha::backdrop { background: rgba(20,22,26,.55); }
 :root[data-genero="masculino"] .ficha-rodape { background: #f4f5f1; }
 :root[data-genero="masculino"][data-theme="dark"] .ficha-rodape { background: var(--creme); }
+
+/* Botão Voltar no topo */
+.btn-voltar { display: inline-flex; align-items: center; gap: 4px; height: 42px; padding: 0 14px 0 10px; border-radius: 999px; border: 1px solid var(--borda); background: var(--branco); color: var(--ameixa); font-weight: 700; font-size: .9rem; }
+.btn-voltar svg { width: 20px; height: 20px; }
+.btn-voltar:hover { border-color: var(--vinho); color: var(--vinho); }
+.btn-voltar[hidden] { display: none; }
+:root[data-genero="masculino"] .btn-voltar { border-radius: 10px; }
+@media (max-width: 560px) { .btn-voltar span { display: none; } .btn-voltar { padding: 0 10px; } }

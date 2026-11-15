@@ -245,7 +245,7 @@
     }
   </style>
   <link rel="stylesheet" href="css/tema-y2k.css?v=6">
-  <link rel="stylesheet" href="css/perfil.css?v=2">
+  <link rel="stylesheet" href="css/perfil.css?v=3">
   <script src="js/glitter.js?v=4" defer></script>
 </head>
 <body>
@@ -314,6 +314,9 @@
       <div class="topo-esq">
         <button class="btn-menu" id="btn-menu" aria-label="Abrir menu">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <button class="btn-voltar" id="btn-voltar" aria-label="Voltar para a página anterior" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg><span>Voltar</span>
         </button>
         <h1 id="titulo-topo">Menu Principal</h1>
       </div>
@@ -622,8 +625,35 @@
     }
 
     // ===== 8. Abas, período e menu do celular =====
-    document.querySelectorAll('.aba').forEach(botao => {
-      botao.addEventListener('click', () => {
+    // Histórico das abas: o "Voltar" do app e o do aparelho levam para a aba anterior
+    const pilha = [];
+    const atualizarVoltar = () => { $('btn-voltar').hidden = !pilha.length; };
+    function irPara(botao, opcoes) {
+      const o = opcoes || {};
+      const atual = document.querySelector('.aba.ativa');
+      if (atual === botao && !o.forcar) { document.body.classList.remove('menu-aberto'); return; }
+      if (!o.voltando && atual) pilha.push(atual.dataset.tab);
+      if (!o.voltando && !o.semHistorico) history.pushState({ aba: botao.dataset.tab }, '', '#' + botao.dataset.tab.replace('aba-', ''));
+      mostrarAba(botao);
+      atualizarVoltar();
+    }
+    function voltar() {
+      // Fecha janelas abertas (ficha, perfil...) junto
+      document.querySelectorAll('dialog[open]').forEach(d => d.close());
+      const anterior = pilha.pop();
+      if (!anterior) return false;
+      const b = document.querySelector(`.aba[data-tab="${anterior}"]`);
+      if (b) mostrarAba(b);
+      atualizarVoltar();
+      return true;
+    }
+    $('btn-voltar').addEventListener('click', () => { if (pilha.length) history.back(); });
+    window.addEventListener('popstate', () => {
+      if (!voltar()) { const ini = document.querySelector('.aba[data-tab="aba-principal"]'); if (ini && !ini.classList.contains('ativa')) mostrarAba(ini); }
+    });
+    history.replaceState({ aba: 'aba-principal' }, '', location.pathname + location.search);
+
+    function mostrarAba(botao) {
         document.querySelectorAll('.painel-aba').forEach(p => p.classList.remove('ativo'));
         document.querySelectorAll('.aba').forEach(b => b.classList.remove('ativa'));
         $(botao.dataset.tab).classList.add('ativo');
@@ -639,8 +669,8 @@
         if (botao.dataset.tab === 'aba-principal') { Crescimento.desenhar(); PrimeirosPassos.desenhar(); }
         if (botao.dataset.tab === 'aba-comparativo') Comparativo.aoAbrir();
         window.scrollTo({ top: 0 });
-      });
-    });
+    }
+    document.querySelectorAll('.aba').forEach(botao => botao.addEventListener('click', () => irPara(botao)));
 
     document.querySelectorAll('.periodo').forEach(botao => {
       botao.addEventListener('click', () => {
