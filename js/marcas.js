@@ -446,6 +446,10 @@
           </div>
         </fieldset>
 
+        <fieldset><legend>Anotações da negociação</legend>
+          <label class="campo largo"><textarea name="notas" rows="3" placeholder="O que a marca pediu ou observou, combinados, endereço de envio, cupom, referências...">${esc(m.notas || '')}</textarea></label>
+        </fieldset>
+
         <fieldset id="sec-acordo"><legend>O que foi acordado com a marca</legend>
           <div class="acordo" id="acordo-itens"></div>
           <button type="button" class="add-coluna acordo-add" data-acordo-add>+ Adicionar entrega</button>
@@ -508,9 +512,6 @@
           </div>
         </fieldset>
 
-        <fieldset><legend>Anotações</legend>
-          <label class="campo largo"><textarea name="notas" rows="3" placeholder="Endereço de envio, cupom, referências, combinados...">${esc(m.notas || '')}</textarea></label>
-        </fieldset>
 
         ${!nova ? `<fieldset><legend>Atalhos</legend>
           <div class="atalhos">
