@@ -1,5 +1,5 @@
 /* =========================================================
-   prospeccao.js · Área "Prospecção" do Organized UGC
+   prospeccao.js · Área "Prospecção" do UGC Organized
    Controle diário das abordagens a marcas: quem foi abordada,
    por onde, com qual texto, se respondeu e se aprovou.
    Tabelas: prospeccoes e abordagens (ver prospeccao.sql).

@@ -1,5 +1,5 @@
 /* =========================================================
-   assistente.js · "✦ Assistente" do Organized UGC
+   assistente.js · "✦ Assistente" do UGC Organized
    Cole uma conversa, e-mail ou briefing (ou mande um print):
    a IA entende e abre a ficha certa já preenchida para você
    só conferir e salvar. Chama a Edge Function "assistente".

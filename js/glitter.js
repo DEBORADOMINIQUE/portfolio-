@@ -1,5 +1,5 @@
 /* =========================================================
-   glitter.js · rastro de glitter atrás do mouse (Organized UGC)
+   glitter.js · rastro de glitter atrás do mouse (UGC Organized)
    Não roda no celular nem para quem pediu menos animação.
    ========================================================= */
 (function () {

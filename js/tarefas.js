@@ -1,5 +1,5 @@
 /* =========================================================
-   tarefas.js · Área "Tarefas" do Organized UGC
+   tarefas.js · Área "Tarefas" do UGC Organized
    Agenda com horário reservado, lembretes, e um "ritmo" que
    aprende quanto você realmente consegue fazer por dia.
    Tabelas: tarefas e preferencias (ver organizacao.sql).
@@ -186,7 +186,7 @@
         const faltam = Math.round((inicio - agora) / 60000);
         const msg = faltam > 0 ? `Daqui a ${durTxt(faltam)}: ${t.titulo}` : `Está na hora: ${t.titulo}`;
         toast('⏰ ' + msg);
-        try { if ('Notification' in window && Notification.permission === 'granted') new Notification('Organized UGC', { body: msg, tag: chave }); } catch (e) {}
+        try { if ('Notification' in window && Notification.permission === 'granted') new Notification('UGC Organized', { body: msg, tag: chave }); } catch (e) {}
       }
     });
     atualizarSelo();
@@ -196,25 +196,25 @@
   // ===== Agenda do celular: .ics com alarme e link do Google Agenda =====
   function dataHoraICS(iso, h) { return iso.replace(/-/g, '') + 'T' + hora5(h).replace(':', '') + '00'; }
   function baixarICS(lista) {
-    const linhas = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Organized UGC//PT', 'CALSCALE:GREGORIAN'];
+    const linhas = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//UGC Organized//PT', 'CALSCALE:GREGORIAN'];
     lista.forEach(t => {
       const fimMin = minutos(t.hora) + t.duracao_min;
       const fimData = fimMin >= 1440 ? somaDias(t.data, 1) : t.data;
-      linhas.push('BEGIN:VEVENT', `UID:${t.id}@organizedugc`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`,
+      linhas.push('BEGIN:VEVENT', `UID:${t.id}@ugcorganized`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`,
         `DTSTART:${dataHoraICS(t.data, t.hora)}`, `DTEND:${dataHoraICS(fimData, hhmm(fimMin % 1440))}`,
         `SUMMARY:${(cat(t).emoji + ' ' + t.titulo).replace(/[,;\\]/g, ' ')}`,
         'BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${t.titulo.replace(/[,;\\]/g, ' ')}`, `TRIGGER:-PT${t.lembrete_min || 0}M`, 'END:VALARM', 'END:VEVENT');
     });
     linhas.push('END:VCALENDAR');
     const blob = new Blob([linhas.join('\r\n')], { type: 'text/calendar' });
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'organized-ugc.ics'; a.click();
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ugc-organized.ics'; a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }
   function linkGoogle(t) {
     const fimMin = minutos(t.hora) + t.duracao_min;
     const fim = (fimMin >= 1440 ? somaDias(t.data, 1) : t.data);
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo';
-    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(cat(t).emoji + ' ' + t.titulo)}&dates=${dataHoraICS(t.data, t.hora)}/${dataHoraICS(fim, hhmm(fimMin % 1440))}&ctz=${encodeURIComponent(tz)}&details=${encodeURIComponent(t.notas || 'Organized UGC')}`;
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(cat(t).emoji + ' ' + t.titulo)}&dates=${dataHoraICS(t.data, t.hora)}/${dataHoraICS(fim, hhmm(fimMin % 1440))}&ctz=${encodeURIComponent(tz)}&details=${encodeURIComponent(t.notas || 'UGC Organized')}`;
   }
 
   // ===== Desenho =====

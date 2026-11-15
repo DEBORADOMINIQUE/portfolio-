@@ -24,7 +24,7 @@
     if (Tarefas.prefs().primeiros_passos_ok || feitos === ps.length) { raiz.innerHTML = ''; return; }
     raiz.innerHTML = `<div class="cartao primeiros">
       <div class="pp-topo">
-        <div><h2>Primeiros passos ✦</h2><p class="desc">Deixe o Organized UGC com a sua cara. Leva uns 5 minutos.</p></div>
+        <div><h2>Primeiros passos ✦</h2><p class="desc">Deixe o UGC Organized com a sua cara. Leva uns 5 minutos.</p></div>
         <div class="pp-progresso"><b>${feitos}/${ps.length}</b><div class="carga ok"><div style="width:${feitos / ps.length * 100}%"></div></div></div>
       </div>
       <ol class="pp-lista">${ps.map((x, i) => `<li class="${x.feito ? 'feito' : ''}">

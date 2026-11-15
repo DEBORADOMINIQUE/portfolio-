@@ -1,5 +1,5 @@
 /* =========================================================
-   simulador.js · Área "Simulador" do Organized UGC
+   simulador.js · Área "Simulador" do UGC Organized
    Monta o orçamento com a SUA tabela de preços (referência e
    mínimo), soma licenças e extras e mostra o que cabe na verba.
    Os preços ficam nas preferências da usuária (banco), nunca no código.

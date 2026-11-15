@@ -1,5 +1,5 @@
 /* =========================================================
-   financeiro.js · Área "Financeiro" do Organized UGC
+   financeiro.js · Área "Financeiro" do UGC Organized
    Faturado, recebido, a receber, despesas e lucro do mês.
    Os valores das parcerias vêm da área Marcas; despesas
    ficam na tabela "despesas" (ver financeiro.sql).

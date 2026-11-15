@@ -1,5 +1,5 @@
 /* =========================================================
-   conteudo.js · Área "Conteúdo" do Organized UGC
+   conteudo.js · Área "Conteúdo" do UGC Organized
    Planner (da ideia ao post), calendário de publicação e
    biblioteca de roteiros (gancho, desenvolvimento, chamada).
    Tabela: conteudos (ver conteudo.sql).
