@@ -54,3 +54,27 @@
 .cr-linha.sobe i { color: var(--verde); } .cr-linha.desce i { color: var(--vermelho); } .cr-linha.sem { opacity: .55; }
 :root[data-theme="dark"] .crescimento.ok { background: #10261b; }
 @media (max-width: 700px) { .cr-colunas { grid-template-columns: 1fr; } .cr-janela { width: 100%; } .cr-janela .vis-btn { flex: 1; } }
+
+/* Primeiros passos */
+.primeiros { margin-bottom: 18px; border: 2px solid var(--lima); background: linear-gradient(135deg, var(--branco), var(--lima-claro)); }
+.pp-topo { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+.pp-progresso { min-width: 160px; text-align: right; }
+.pp-progresso b { font-family: var(--titulo); font-size: 1.3rem; color: var(--ameixa); }
+.pp-progresso .carga { margin-top: 6px; }
+.pp-lista { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.pp-lista li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 16px; background: var(--branco); border: 1px solid var(--borda); }
+.pp-lista li div { flex: 1; min-width: 0; }
+.pp-lista li strong { display: block; font-size: .93rem; color: var(--ameixa); }
+.pp-lista li small { color: var(--suave); font-size: .8rem; }
+.pp-lista li.feito { opacity: .6; }
+.pp-lista li.feito strong { text-decoration: line-through; text-decoration-color: var(--lima-forte); }
+.pp-num { width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; font-weight: 800; background: var(--vinho-claro); color: var(--vinho); }
+.pp-lista li.feito .pp-num { background: var(--lima); color: #2f4a00; }
+.pp-esconder { margin-top: 12px; font-size: .84rem; }
+@media (max-width: 560px) { .pp-lista li { flex-wrap: wrap; } .pp-lista li .mini-btn { margin-left: 42px; } .pp-progresso { text-align: left; } }
+
+/* Ajuda e links legais na barra lateral */
+.ajuda-link { display: block; text-align: center; margin-bottom: 8px; padding: 9px; border-radius: 999px; background: var(--lima); color: #2f4a00; font-weight: 800; font-size: .85rem; text-decoration: none; }
+.ajuda-link:hover { filter: brightness(1.05); }
+.links-legais { text-align: center; margin-top: 10px; font-size: .7rem; color: rgba(255,255,255,.8); }
+.links-legais a { color: rgba(255,255,255,.9); }

@@ -26,15 +26,16 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/auth.js?v=2"></script>
   <script src="js/marcas.js?v=4"></script>
-  <script src="js/tarefas.js?v=4"></script>
+  <script src="js/tarefas.js?v=5"></script>
   <script src="js/prospeccao.js?v=5"></script>
   <script src="js/financeiro.js?v=4"></script>
   <script src="js/simulador.js?v=7"></script>
   <script src="js/conteudo.js?v=3"></script>
   <script src="js/assistente.js?v=2"></script>
-  <script src="js/crescimento.js?v=1"></script>
+  <script src="js/crescimento.js?v=2"></script>
+  <script src="js/primeiros.js?v=1"></script>
   <script src="js/tema.js?v=1"></script>
-  <link rel="stylesheet" href="css/conteudo.css?v=3">
+  <link rel="stylesheet" href="css/conteudo.css?v=4">
   <link rel="stylesheet" href="css/financeiro.css?v=4">
   <link rel="stylesheet" href="css/prospeccao.css?v=1">
   <link rel="stylesheet" href="css/tarefas.css?v=1">
@@ -292,8 +293,10 @@
     <div class="sidebar-rodape">
       <div class="usuario-rotulo">Conectada como</div>
       <div class="usuario-email" id="usuario-email">...</div>
+      <a class="ajuda-link" href="https://wa.me/5531984042252?text=Oi%2C%20D%C3%A9bora!%20Preciso%20de%20ajuda%20com%20o%20Organized%20UGC." target="_blank" rel="noopener">💬 Precisa de ajuda?</a>
       <button class="tema-btn" id="btn-tema">🌙 Modo escuro</button>
       <button class="sair" id="btn-sair">Sair</button>
+      <div class="links-legais"><a href="termos.html" target="_blank">Termos de uso</a> · <a href="privacidade.html" target="_blank">Privacidade</a></div>
     </div>
   </aside>
   <div class="veu" id="veu"></div>
@@ -319,8 +322,11 @@
     <!-- ===== Aba 1: Menu Principal ===== -->
     <section class="painel-aba ativo" id="aba-principal">
       <p class="saudacao">Olá! Aqui estão os números do seu portfólio.</p>
+      <div id="primeiros-passos"></div>
       <div id="crescimento"></div>
 
+      <!-- Números do site: só para a conta dona do portfólio -->
+      <div id="bloco-site">
       <div class="numeros">
         <div class="cartao numero destaque"><div class="rotulo">Visitas</div><div class="valor" id="n-visitas">0</div></div>
         <div class="cartao numero"><div class="rotulo">Visitantes únicos</div><div class="valor" id="n-unicos">0</div></div>
@@ -341,6 +347,7 @@
         <h2>Visitas por dia</h2>
         <p class="desc">Últimos 14 dias. Passe o mouse (ou toque) numa barra para ver o dia.</p>
         <div id="grafico"><p class="carregando">Carregando...</p></div>
+      </div>
       </div>
     </section>
 
@@ -389,6 +396,19 @@
 
     const sb = Auth.client;
     const $ = (id) => document.getElementById(id);
+
+    // A parte do portfólio (visitas e mensagens do site) é só da conta dona do site.
+    // Clientes não veem a aba Portfólio nem os números do site.
+    let temSite = false;
+    try { const { data: pf } = await sb.from('preferencias').select('dados').maybeSingle(); temSite = !!(pf && pf.dados && pf.dados.site_portfolio); } catch (e) {}
+    // Segunda checagem: se a conta enxerga as visitas do site, ela é a dona (o banco só mostra para a dona)
+    if (!temSite) { try { const { data: ev } = await sb.from('portfolio_events').select('id').limit(1); temSite = !!(ev && ev.length); } catch (e) {} }
+    if (!temSite) {
+      document.querySelector('[data-tab="aba-portfolio"]').style.display = 'none';
+      $('bloco-site').style.display = 'none';
+      $('periodos').style.display = 'none';
+      document.body.classList.add('sem-site');
+    }
 
     // Cache em memória: as tabelas são lidas uma vez só
     const cache = { eventos: [], leads: [] };
@@ -599,14 +619,14 @@
         $(botao.dataset.tab).classList.add('ativo');
         botao.classList.add('ativa');
         $('titulo-topo').textContent = botao.dataset.titulo;
-        $('periodos').style.display = !['aba-principal', 'aba-portfolio'].includes(botao.dataset.tab) ? 'none' : ''; // período só vale para os números do site
+        $('periodos').style.display = !temSite || !['aba-principal', 'aba-portfolio'].includes(botao.dataset.tab) ? 'none' : ''; // período só vale para os números do site
         document.body.classList.remove('menu-aberto');
         if (botao.dataset.tab === 'aba-tarefas') Tarefas.aoAbrir();
         if (botao.dataset.tab === 'aba-prospeccao') Prospeccao.aoAbrir();
         if (botao.dataset.tab === 'aba-financeiro') Financeiro.aoAbrir();
         if (botao.dataset.tab === 'aba-simulador') Simulador.aoAbrir();
         if (botao.dataset.tab === 'aba-conteudo') Conteudo.aoAbrir();
-        if (botao.dataset.tab === 'aba-principal') Crescimento.desenhar();
+        if (botao.dataset.tab === 'aba-principal') { Crescimento.desenhar(); PrimeirosPassos.desenhar(); }
         window.scrollTo({ top: 0 });
       });
     });
@@ -627,14 +647,15 @@
     // Área de Marcas: carrega em paralelo, sem esperar os números do site
     Marcas.iniciar(sb, $('aba-marcas'));
     // Saudação com o nome (ou "Deusa"), que vem das preferências das Tarefas
-    const saudar = () => { $('aba-principal').querySelector('.saudacao').textContent = `${Tarefas.saudacao()}, ${Tarefas.nome()}! Aqui estão os números do seu portfólio.`; };
-    Tarefas.iniciar(sb, $('aba-tarefas')).then(() => { saudar(); Prospeccao.aoAbrir(); });
+    const saudar = () => { $('aba-principal').querySelector('.saudacao').textContent = `${Tarefas.saudacao()}, ${Tarefas.nome()}! ${temSite ? 'Aqui estão os números do seu portfólio.' : 'Aqui está o resumo do seu trabalho.'}`; };
+    Tarefas.iniciar(sb, $('aba-tarefas')).then(() => { saudar(); Prospeccao.aoAbrir(); PrimeirosPassos.desenhar(); });
     Prospeccao.iniciar(sb, $('aba-prospeccao'));
     Financeiro.iniciar(sb, $('aba-financeiro'));
     Simulador.iniciar($('aba-simulador'));
     Conteudo.iniciar(sb, $('aba-conteudo'));
     Assistente.iniciar(sb);
     Crescimento.iniciar($('crescimento'));
+    PrimeirosPassos.iniciar($('primeiros-passos'));
     // Modo escuro
     const rotuloTema = () => { $('btn-tema').textContent = Tema.escuro() ? '☀️ Modo claro' : '🌙 Modo escuro'; };
     rotuloTema();
@@ -642,7 +663,8 @@
     document.addEventListener('oug:nome', saudar);
 
     // Compartilha os números do site com o termômetro de Crescimento
-    window.Painel = { eventos: () => cache.eventos, leads: () => cache.leads };
+    window.Painel = { eventos: () => cache.eventos, leads: () => cache.leads, temSite };
+    if (!temSite) return; // clientes: sem números do site para carregar
 
     // ===== 9. Carrega as duas tabelas uma vez (se uma falhar, a outra continua) =====
     const [resEventos, resLeads] = await Promise.allSettled([buscarTudo('portfolio_events'), buscarTudo('portfolio_leads')]);

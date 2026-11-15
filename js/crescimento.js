@@ -130,7 +130,8 @@
       : r.estado === 'crescendo' ? 'Seus números dos últimos dias estão melhores que os do período anterior. Continua assim!'
       : r.estado === 'estavel' ? 'Seus números estão parecidos com os do período anterior. Escolha um ponto abaixo para dar o próximo passo.'
       : 'Acontece com todo mundo. Veja abaixo onde agir primeiro: um ajuste de cada vez.';
-    const grupos = [...new Set(r.ms.map(m => m.grupo))];
+    // Sem site de portfólio (clientes), o grupo Vitrine não aparece
+    const grupos = [...new Set(r.ms.map(m => m.grupo))].filter(g => g !== 'Vitrine' || !window.Painel || window.Painel.temSite);
     raiz.innerHTML = `<div class="cartao crescimento ${VEREDITO.cor}">
       <div class="cr-topo">
         <div class="cr-titulo"><span class="cr-emoji">${VEREDITO.emoji}</span><div><h2>${VEREDITO.titulo}</h2><p class="desc">${sub}</p></div></div>
