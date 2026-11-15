@@ -78,6 +78,8 @@
       <div class="nota-txt" id="nota-txt">Toque nas estrelas</div>
       <label class="rot" for="texto">O que você achou do conteúdo?</label>
       <textarea id="texto" maxlength="2000" placeholder="Conte como foi a experiência, o resultado do conteúdo, o que mais gostou..."></textarea>
+      <label class="rot" for="melhorar">Tem algo que eu possa melhorar? <small style="font-weight:500;color:var(--suave)">(opcional)</small></label>
+      <textarea id="melhorar" maxlength="2000" style="min-height:80px" placeholder="Pode ser sincera(o): prazo, comunicação, edição, roteiro... Toda dica me ajuda a crescer."></textarea>
       <label class="rot">Trabalharia comigo de novo?</label>
       <div class="opcoes"><label><input type="radio" name="voltaria" value="sim"><span>Sim</span></label><label><input type="radio" name="voltaria" value="nao"><span>Não</span></label></div>
       <label class="rot">Posso usar seu depoimento no meu portfólio?</label>
@@ -96,7 +98,7 @@
       const v = el.querySelector('input[name="voltaria"]:checked'), a = el.querySelector('input[name="autoriza"]:checked');
       btn.disabled = true; btn.textContent = 'Enviando...';
       try {
-        const { data, error } = await sb.rpc('enviar_feedback', { p_token: token, p_nota: nota, p_texto: document.getElementById('texto').value, p_voltaria: v ? v.value === 'sim' : null, p_autoriza: a ? a.value === 'sim' : false });
+        const { data, error } = await sb.rpc('enviar_feedback', { p_token: token, p_nota: nota, p_texto: document.getElementById('texto').value, p_voltaria: v ? v.value === 'sim' : null, p_autoriza: a ? a.value === 'sim' : false, p_melhorar: document.getElementById('melhorar').value });
         if (error) throw error;
         el.innerHTML = quem + (data
           ? `<div class="fim"><div class="grande">💖</div><h1>Obrigada pela avaliação!</h1><p class="sub">Sua opinião já chegou para ${esc(nome.split(' ')[0])}. Foi um prazer criar para a ${esc(info.marca)}.</p></div>`

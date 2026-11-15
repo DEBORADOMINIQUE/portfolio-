@@ -199,7 +199,7 @@
         itens.push({ m, peso: 2.2, cor: 'alerta', txt: 'Repescagem: tentar nova parceria', sub: `Última parceria finalizada ${fmtLonga(m.finalizada_em || m.data_pagamento || desdeQuando(m))}`, modelo: 'repescagem' });
       }
       if (m.feedback_origem === 'marca' && m.feedback_em && diasEntre(m.feedback_em.slice(0, 10), h) <= 7) {
-        itens.push({ m, peso: 0.5, cor: 'neutro', txt: `Nova avaliação: ${'★'.repeat(m.feedback_nota || 0)}`, sub: m.feedback_texto ? `"${String(m.feedback_texto).slice(0, 90)}${String(m.feedback_texto).length > 90 ? '...' : ''}"` : 'A marca avaliou a parceria pelo link', modelo: null });
+        itens.push({ m, peso: 0.5, cor: 'neutro', txt: `Nova avaliação: ${'★'.repeat(m.feedback_nota || 0)}`, sub: (m.feedback_texto ? `"${String(m.feedback_texto).slice(0, 90)}${String(m.feedback_texto).length > 90 ? '...' : ''}"` : 'A marca avaliou a parceria pelo link') + (m.feedback_melhorar ? ' · 💡 deixou uma sugestão de melhoria' : ''), modelo: null });
       }
       if (m.etapa === 'concluida' && !m.feedback_nota && !m.feedback_texto && diasEntre(desdeQuando(m), h) <= 45) {
         itens.push({ m, peso: 5, cor: 'neutro', txt: 'Pedir feedback', sub: 'Guarde o que a marca achou', modelo: 'feedback' });
@@ -397,7 +397,7 @@
   }
 
   function desenharFeedbacks() {
-    const com = filtradas().filter(m => m.feedback_nota || m.feedback_texto).sort((a, b) => (b.updated_at || '').localeCompare(a.updated_at || ''));
+    const com = filtradas().filter(m => m.feedback_nota || m.feedback_texto || m.feedback_melhorar).sort((a, b) => (b.updated_at || '').localeCompare(a.updated_at || ''));
     const area = $('#m-visao');
     if (!com.length) {
       area.innerHTML = `<div class="cartao"><p class="vazio">Nenhum feedback guardado ainda. Quando uma marca for para "Concluída", o painel pede a nota e o que ela achou.</p></div>`;
@@ -412,6 +412,7 @@
         <button class="cartao feedback" data-abrir="${m.id}">
           <div class="fb-topo"><strong>${esc(m.nome)}</strong>${m.feedback_nota ? estrelas(m.feedback_nota) : ''}</div>
           ${m.feedback_texto ? `<blockquote>“${esc(m.feedback_texto)}”</blockquote>` : ''}
+          ${m.feedback_melhorar ? `<p class="fb-melhorar">💡 <b>Pode melhorar:</b> ${esc(m.feedback_melhorar)}</p>` : ''}
           <div class="fb-rodape">
             ${m.contato_nome ? `<span>${esc(m.contato_nome)}</span>` : '<span></span>'}
             ${m.trabalharia_de_novo === true ? '<span class="selo-fb sim">Faria de novo</span>' : m.trabalharia_de_novo === false ? '<span class="selo-fb nao">Não faria de novo</span>' : ''}
@@ -536,6 +537,7 @@
             <button type="button" class="limpar-nota" data-limpar-nota>limpar</button>
           </div>
           <label class="campo largo"><span>O que a marca disse</span><textarea name="feedback_texto" rows="3" placeholder="Cole aqui o elogio ou os ajustes que pediram">${esc(m.feedback_texto || '')}</textarea></label>
+          <label class="campo largo" style="margin-top:10px"><span>💡 O que posso melhorar</span><textarea name="feedback_melhorar" rows="2" placeholder="O que a marca sugeriu melhorar (prazo, comunicação, edição...)">${esc(m.feedback_melhorar || '')}</textarea></label>
           <div class="escolha">
             <span>Você trabalharia com ela de novo?</span>
             <label><input type="radio" name="trabalharia_de_novo" value="sim" ${m.trabalharia_de_novo === true ? 'checked' : ''}> Sim</label>
@@ -737,7 +739,7 @@
         pago: f.pago.checked, data_pagamento: txt('data_pagamento'), nf_emitida: f.nf_emitida.checked, nf_numero: txt('nf_numero'),
         acordo: acordo.concat(envio.filter(x => String(x.item || '').trim())), lembrar_cobranca: txt('lembrar_cobranca'), repescagem_em: txt('repescagem_em'),
         contrato_link: txt('contrato_link'), uso_imagem_tipo: f.uso_imagem_tipo.value || null, uso_imagem_ate: txt('uso_imagem_ate'), exclusividade_ate: txt('exclusividade_ate'),
-        feedback_nota: f.feedback_nota.value ? Number(f.feedback_nota.value) : null, feedback_texto: txt('feedback_texto'),
+        feedback_nota: f.feedback_nota.value ? Number(f.feedback_nota.value) : null, feedback_texto: txt('feedback_texto'), feedback_melhorar: txt('feedback_melhorar'),
         trabalharia_de_novo: tdn ? tdn.value === 'sim' : null, notas: txt('notas')
       };
       // Se a etapa mudou, registra no histórico e ajusta as datas
