@@ -1,0 +1,52 @@
+/* agenda.css · calendário único (trabalho + vida + feriados) */
+.agenda { display: grid; grid-template-columns: 1.6fr 1fr; gap: 16px; align-items: start; }
+.agenda > * { min-width: 0; }
+.ag-topo-acoes { display: flex; justify-content: center; margin: -4px 0 8px; }
+.ag-grade { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.ag-dia { min-height: 96px; background: var(--creme-claro); border: 1.5px solid transparent; border-radius: 12px; padding: 5px; display: flex; flex-direction: column; gap: 2px; text-align: left; font: inherit; color: var(--ameixa); cursor: pointer; min-width: 0; position: relative; }
+.ag-dia:hover { border-color: var(--borda); background: #fff; }
+.ag-dia.fora { background: transparent; cursor: default; border: 0; }
+.ag-dia.passado { opacity: .62; }
+.ag-dia.hoje .num { background: var(--vinho); color: #fff; }
+.ag-dia.sel { border-color: var(--vinho); background: #fff; box-shadow: 0 6px 16px -10px rgba(224,21,122,.5); }
+.ag-dia.feriado { background: #fff4d6; }
+.ag-dia .num { font-size: .78rem; font-weight: 800; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; }
+.ag-fer { font-size: .66rem; font-weight: 700; color: #8a5300; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ag-ev { display: block; font-size: .68rem; padding: 2px 5px; border-radius: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ag-ev b { font-weight: 800; }
+.ag-ev.feito { text-decoration: line-through; opacity: .6; }
+.ag-ev.trabalho, .ag-item.trabalho .ag-hora, .legenda .trabalho::before, .ag-pontos i.trabalho { background: #ffd1e8; color: #8a0f4f; }
+.ag-ev.vida, .ag-item.vida .ag-hora, .legenda .vida::before, .ag-pontos i.vida { background: var(--lilas-claro); color: var(--lilas-texto); }
+.ag-ev.marca, .ag-item.marca .ag-hora, .legenda .marca::before, .ag-pontos i.marca { background: var(--lima-claro); color: var(--lima-texto); }
+.ag-ev.post, .ag-item.post .ag-hora, .legenda .post::before, .ag-pontos i.post { background: #e0f0ff; color: #1f5f99; }
+.legenda .feriado::before { background: #ffd28a; }
+.ag-mais { font-size: .66rem; font-weight: 800; color: var(--suave); padding-left: 4px; }
+.ag-pontos { display: none; gap: 3px; margin-top: auto; }
+.ag-pontos i { width: 7px; height: 7px; border-radius: 50%; display: block; }
+.ag-lado { position: sticky; top: 16px; }
+.ag-lado-cab { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 12px; }
+.ag-lista { display: flex; flex-direction: column; gap: 8px; }
+.ag-item { display: flex; gap: 10px; align-items: flex-start; width: 100%; text-align: left; font: inherit; color: var(--ameixa); background: #fff; border: 1px solid var(--borda); border-radius: 14px; padding: 10px; cursor: pointer; }
+.ag-item:disabled { cursor: default; }
+.ag-item.feriado { background: #fff4d6; border-color: #ffd28a; }
+.ag-item.feito .ag-txt b { text-decoration: line-through; opacity: .6; }
+.ag-hora { flex-shrink: 0; min-width: 48px; text-align: center; font-weight: 800; font-size: .78rem; border-radius: 8px; padding: 4px 6px; background: var(--creme); }
+.ag-item.feriado .ag-hora { display: none; }
+.ag-txt { display: flex; flex-direction: column; min-width: 0; }
+.ag-txt b { font-weight: 700; word-break: break-word; }
+.ag-txt small { color: var(--suave); font-size: .78rem; }
+.ag-rapido { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--borda); font-size: .8rem; color: var(--suave); }
+.t-check.rep { border-color: transparent; background: var(--lilas-claro); display: grid; place-items: center; font-size: .8rem; }
+:root[data-genero="masculino"] .ag-dia { border-radius: 8px; }
+:root[data-theme="dark"] .ag-item, :root[data-theme="dark"] .ag-dia.sel { background: var(--branco); }
+:root[data-theme="dark"] .ag-dia.feriado, :root[data-theme="dark"] .ag-item.feriado { background: #3b2a12; }
+@media (max-width: 1000px) { .agenda { grid-template-columns: 1fr; } .ag-lado { position: static; } }
+@media (max-width: 560px) {
+  .ag-dia { min-height: 54px; padding: 3px; align-items: center; }
+  .ag-ev, .ag-mais, .ag-fer { display: none; }
+  .ag-pontos { display: flex; }
+}
+@media (max-width: 560px) {
+  .agenda .tarefas-botoes button { font-size: .82rem; padding: 10px 8px; }
+  .ag-rapido .mini-btn { font-size: .74rem; }
+}

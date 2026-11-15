@@ -13,6 +13,7 @@
     marca:      { nome: 'Marca',       emoji: '💼', min: 30 },
     prospectar: { nome: 'Prospectar',  emoji: '💌', min: 45 },
     admin:      { nome: 'Burocracia',  emoji: '🧾', min: 30 },
+    compromisso:{ nome: 'Compromisso', emoji: '📌', min: 30 },
     pessoal:    { nome: 'Pessoal',     emoji: '🌸', min: 60 },
     outro:      { nome: 'Outro',       emoji: '✦',  min: 30 }
   };
@@ -87,6 +88,7 @@
     if (error) throw error;
     const i = tarefas.findIndex(t => t.id === data.id);
     if (i >= 0) tarefas[i] = data; else tarefas.push(data);
+    document.dispatchEvent(new CustomEvent('oug:tarefas'));
     return data;
   }
 
@@ -145,8 +147,25 @@
 
   // Duração "de verdade": a estimativa corrigida pelo seu histórico naquela categoria
   function duracaoReal(t, r) { return Math.round(t.duracao_min * ((r || ritmo()).fatores[t.categoria] || 1) / 5) * 5; }
-  function cargaDia(iso, r, ignorarId) { return tarefas.filter(t => t.data === iso && t.id !== ignorarId).reduce((s, t) => s + (t.concluida && t.duracao_real_min ? t.duracao_real_min : duracaoReal(t, r)), 0); }
-  const ehDiaDeTrabalho = (iso) => (prefs || PREFS_PADRAO).dias.includes(diaSemana(iso));
+  // Compromissos e coisas pessoais ocupam o horário, mas não contam no seu ritmo de trabalho UGC
+  const LIVRES = ['compromisso', 'pessoal'];
+  // Repetição: diario, dias_uteis, semanal, mensal (a partir de t.data, até t.repetir_ate)
+  function repeteEm(t, iso) {
+    if (!t.repetir || !t.data || iso < t.data || (t.repetir_ate && iso > t.repetir_ate)) return false;
+    const d0 = deISO(t.data), d = deISO(iso), ds = d.getDay();
+    if (t.repetir === 'diario') return true;
+    if (t.repetir === 'dias_uteis') return ds > 0 && ds < 6;
+    if (t.repetir === 'semanal') return ds === d0.getDay();
+    if (t.repetir === 'mensal') return d.getDate() === d0.getDate();
+    return false;
+  }
+  // Tudo o que acontece num dia (inclui as repetições, como cópias marcadas com _rep)
+  function doDiaT(iso) {
+    return tarefas.filter(t => t.repetir ? repeteEm(t, iso) : t.data === iso).map(t => t.repetir ? { ...t, data: iso, concluida: false, _rep: true } : t);
+  }
+  function cargaDia(iso, r, ignorarId) { return doDiaT(iso).filter(t => !LIVRES.includes(t.categoria)).filter(t => t.data === iso && t.id !== ignorarId).reduce((s, t) => s + (t.concluida && t.duracao_real_min ? t.duracao_real_min : duracaoReal(t, r)), 0); }
+  // Feriado nacional (não facultativo) conta como folga: nada de sugerir trabalho
+  const ehDiaDeTrabalho = (iso) => (prefs || PREFS_PADRAO).dias.includes(diaSemana(iso)) && !(window.Feriados && Feriados.folga(iso));
 
   // Procura horários livres que não estourem o seu ritmo do dia
   function sugerirHorarios(duracao, opcoes) {
@@ -160,7 +179,7 @@
       const extrasDia = o.extras.filter(x => x.data === iso);
       const carga = cargaDia(iso, r, o.ignorarId) + extrasDia.reduce((s, x) => s + x.duracao_min, 0);
       if (carga + duracao > r.capacidade) continue;
-      const ocupados = tarefas.filter(t => t.data === iso && t.hora && t.id !== o.ignorarId && !t.concluida)
+      const ocupados = doDiaT(iso).filter(t => t.hora && t.id !== o.ignorarId && !t.concluida)
         .map(t => [minutos(t.hora), minutos(t.hora) + duracaoReal(t, r)])
         .concat(extrasDia.filter(x => x.hora).map(x => [minutos(x.hora), minutos(x.hora) + x.duracao_min]));
       let comeco = ini;
@@ -178,7 +197,7 @@
 
   function conferirLembretes() {
     const agora = Date.now(), ja = avisados();
-    tarefas.forEach(t => {
+    tarefas.filter(t => !t.repetir).concat(doDiaT(hoje()).filter(t => t._rep), doDiaT(somaDias(hoje(), 1)).filter(t => t._rep)).forEach(t => {
       if (t.concluida || !t.data || !t.hora) return;
       const inicio = new Date(deISO(t.data).getTime() + minutos(t.hora) * 60000).getTime();
       const chave = `${t.id}|${t.data}|${hora5(t.hora)}`;
@@ -203,7 +222,7 @@
       const fimData = fimMin >= 1440 ? somaDias(t.data, 1) : t.data;
       linhas.push('BEGIN:VEVENT', `UID:${t.id}@ugcorganized`, `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').slice(0, 15)}Z`,
         `DTSTART:${dataHoraICS(t.data, t.hora)}`, `DTEND:${dataHoraICS(fimData, hhmm(fimMin % 1440))}`,
-        `SUMMARY:${(cat(t).emoji + ' ' + t.titulo).replace(/[,;\\]/g, ' ')}`,
+        `SUMMARY:${(cat(t).emoji + ' ' + t.titulo).replace(/[,;\\]/g, ' ')}`, ...(regraICS(t) ? [regraICS(t)] : []),
         'BEGIN:VALARM', 'ACTION:DISPLAY', `DESCRIPTION:${t.titulo.replace(/[,;\\]/g, ' ')}`, `TRIGGER:-PT${t.lembrete_min || 0}M`, 'END:VALARM', 'END:VEVENT');
     });
     linhas.push('END:VCALENDAR');
@@ -211,11 +230,16 @@
     const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'ugc-organized.ics'; a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   }
+  function regraICS(t) {
+    if (!t.repetir) return '';
+    const ate = t.repetir_ate ? `;UNTIL=${t.repetir_ate.replace(/-/g, '')}T235959` : '';
+    return { diario: 'RRULE:FREQ=DAILY', dias_uteis: 'RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR', semanal: 'RRULE:FREQ=WEEKLY', mensal: 'RRULE:FREQ=MONTHLY' }[t.repetir] + ate;
+  }
   function linkGoogle(t) {
     const fimMin = minutos(t.hora) + t.duracao_min;
     const fim = (fimMin >= 1440 ? somaDias(t.data, 1) : t.data);
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || 'America/Sao_Paulo';
-    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(cat(t).emoji + ' ' + t.titulo)}&dates=${dataHoraICS(t.data, t.hora)}/${dataHoraICS(fim, hhmm(fimMin % 1440))}&ctz=${encodeURIComponent(tz)}&details=${encodeURIComponent(t.notas || 'UGC Organized')}`;
+    return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(cat(t).emoji + ' ' + t.titulo)}&dates=${dataHoraICS(t.data, t.hora)}/${dataHoraICS(fim, hhmm(fimMin % 1440))}&ctz=${encodeURIComponent(tz)}&details=${encodeURIComponent(t.notas || 'UGC Organized')}${t.repetir ? '&recur=' + encodeURIComponent(regraICS(t)) : ''}`;
   }
 
   // ===== Desenho =====
@@ -236,7 +260,7 @@
     atualizarSelo();
     raiz.querySelector('.saudacao').textContent = `${saudacaoHora()}, ${nomeDela()}! Seu dia, no seu ritmo.`;
     const r = ritmo(), h = hoje(), carga = cargaDia(h, r), cap = r.capacidade;
-    const feitoHoje = tarefas.filter(t => t.data === h && t.concluida).length, totalHoje = tarefas.filter(t => t.data === h).length;
+    const feitoHoje = doDiaT(h).filter(t => t.concluida).length, totalHoje = doDiaT(h).filter(t => !t._rep).length;
     const atrasadas = tarefas.filter(t => !t.concluida && t.data && t.data < h).sort((a, b) => a.data.localeCompare(b.data));
     let frase;
     if (!ehDiaDeTrabalho(h) && !totalHoje) frase = 'Hoje é dia de folga na sua rotina. Descansar também é produtividade, ' + G.apelido() + ' ✦';
@@ -269,14 +293,14 @@
     const fator = r.fatores[t.categoria];
     return `<div class="tarefa ${t.concluida ? 'feita' : ''} ${t.iniciada_em && !t.concluida ? 'rolando' : ''}" data-tid="${t.id}">
       <div class="t-hora">${t.hora ? hora5(t.hora) : '--:--'}${mostrarDia && t.data ? `<small>${nomeDia(t.data)}</small>` : ''}</div>
-      <button class="t-check" data-concluir="${t.id}" aria-label="${t.concluida ? 'Desmarcar' : 'Concluir'} ${esc(t.titulo)}">${t.concluida ? '✓' : ''}</button>
+      ${t._rep ? `<span class="t-check rep" title="Se repete">🔁</span>` : `<button class="t-check" data-concluir="${t.id}" aria-label="${t.concluida ? 'Desmarcar' : 'Concluir'} ${esc(t.titulo)}">${t.concluida ? '✓' : ''}</button>`}
       <div class="t-corpo" data-editar="${t.id}">
         <div class="t-titulo">${esc(t.titulo)}</div>
         <div class="t-meta"><span class="chip">${c.emoji} ${c.nome}</span>${m ? `<span class="chip marca">💼 ${esc(m.nome)}</span>` : ''}
           <span>${durTxt(t.duracao_min)}${fator && Math.abs(fator - 1) > .15 && !t.concluida ? ` <em title="Pelo seu histórico">(costuma levar ${durTxt(duracaoReal(t, r))})</em>` : ''}</span>
           ${t.concluida && t.duracao_real_min ? `<span>levou ${durTxt(t.duracao_real_min)}</span>` : ''}</div>
       </div>
-      ${!t.concluida && t.data === hoje() ? (t.iniciada_em
+      ${!t._rep && !t.concluida && t.data === hoje() ? (t.iniciada_em
         ? `<div class="crono-grupo"><span class="cronometro" data-desde="${t.iniciada_em}" data-acc="${acumulado(t)}">${durTxt(tempoTotal(t))}</span>
             <button class="crono-btn" data-pausar="${t.id}" title="Pausar" aria-label="Pausar">⏸</button>
             <button class="crono-btn" data-editar-tempo="${t.id}" title="Editar tempo" aria-label="Editar tempo">✎</button>
@@ -292,9 +316,9 @@
 
   function desenharHoje(r) {
     const h = hoje();
-    const doDia = tarefas.filter(t => t.data === h).sort((a, b) => (hora5(a.hora) || '99').localeCompare(hora5(b.hora) || '99'));
+    const doDia = doDiaT(h).sort((a, b) => (hora5(a.hora) || '99').localeCompare(hora5(b.hora) || '99'));
     const semDia = tarefas.filter(t => !t.data && !t.concluida);
-    const amanha = somaDias(h, 1), deAmanha = tarefas.filter(t => t.data === amanha);
+    const amanha = somaDias(h, 1), deAmanha = doDiaT(amanha);
     $('#t-conteudo').innerHTML = `
       <div class="cartao">
         <h2>${maiuscula(new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'long' }))}</h2>
@@ -319,10 +343,10 @@
         <button class="btn-secundario" data-ics-semana>📅 Mandar para a agenda do celular</button></div>
       </div>
       <div class="semana">${dias.map(d => {
-        const lista = tarefas.filter(t => t.data === d).sort((a, b) => (hora5(a.hora) || '99').localeCompare(hora5(b.hora) || '99'));
+        const lista = doDiaT(d).sort((a, b) => (hora5(a.hora) || '99').localeCompare(hora5(b.hora) || '99'));
         const carga = cargaDia(d, r), folga = !ehDiaDeTrabalho(d);
         return `<section class="dia-sem ${d === h ? 'hoje' : ''} ${folga ? 'folga' : ''}">
-          <header><strong>${nomeDia(d)}</strong><small>${folga ? 'folga' : `${durTxt(carga)} de ${durTxt(r.capacidade)}`}</small></header>
+          <header><strong>${nomeDia(d)}</strong><small>${window.Feriados && Feriados.de(d) ? '🎉 ' + Feriados.de(d).nome : folga ? 'folga' : `${durTxt(carga)} de ${durTxt(r.capacidade)}`}</small></header>
           ${folga ? '' : barraCarga(carga, r.capacidade)}
           <div class="dia-lista">${lista.map(t => `<button class="t-chip ${t.concluida ? 'feita' : ''}" data-editar="${t.id}"><b>${hora5(t.hora) || '--'}</b> ${cat(t).emoji} ${esc(t.titulo)}</button>`).join('') || `<p class="coluna-vazia">${folga ? 'Descanso ✦' : 'Livre'}</p>`}</div>
           <button class="add-dia" data-nova-tarefa="${d}" aria-label="Nova tarefa em ${nomeDia(d)}">+</button>
@@ -450,6 +474,10 @@
           </div>
           <div class="sugestoes" id="sugestoes"></div>
           <div class="previa-prazo" id="previa-dia"></div>
+          <div class="grade-campos" style="margin-top:12px">
+            <label class="campo"><span>Repetir</span><select name="repetir">${[['', 'Não repete'], ['diario', 'Todo dia'], ['dias_uteis', 'Dias úteis (seg a sex)'], ['semanal', 'Toda semana'], ['mensal', 'Todo mês']].map(([v, n]) => `<option value="${v}" ${(t.repetir || '') === v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+            <label class="campo"><span>Até (opcional)</span><input type="date" name="repetir_ate" value="${t.repetir_ate || ''}"></label>
+          </div>
           <label class="campo"><span>Me lembrar</span><select name="lembrete_min">${[[0, 'Na hora'], [10, '10 min antes'], [15, '15 min antes'], [30, '30 min antes'], [60, '1 hora antes'], [120, '2 horas antes'], [1440, '1 dia antes']].map(([v, n]) => `<option value="${v}" ${t.lembrete_min == v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
         </fieldset>
         <fieldset><legend>Anotações</legend><label class="campo largo"><textarea name="notas" rows="2" placeholder="Roteiro, look, cenário, referências...">${esc(t.notas || '')}</textarea></label></fieldset>
@@ -480,7 +508,7 @@
       const prev = dlg.querySelector('#previa-dia');
       if (!f.data.value) { prev.className = 'previa-prazo'; prev.textContent = 'Sem dia definido: a tarefa fica em "Sem horário ainda" até você reservar.'; return; }
       const carga = cargaDia(f.data.value, r, t.id) + durR, cap = r.capacidade;
-      const conflito = f.hora.value && tarefas.find(x => x.id !== t.id && x.data === f.data.value && x.hora && !x.concluida && minutos(f.hora.value) < minutos(x.hora) + duracaoReal(x, r) && minutos(f.hora.value) + durR > minutos(x.hora));
+      const conflito = f.hora.value && f.data.value && doDiaT(f.data.value).find(x => x.id !== t.id && x.hora && !x.concluida && minutos(f.hora.value) < minutos(x.hora) + duracaoReal(x, r) && minutos(f.hora.value) + durR > minutos(x.hora));
       const folga = !ehDiaDeTrabalho(f.data.value);
       if (conflito) { prev.className = 'previa-prazo atraso'; prev.innerHTML = `Esse horário bate com <strong>${esc(conflito.titulo)}</strong> (${hora5(conflito.hora)}).`; }
       else if (carga > cap) { prev.className = 'previa-prazo atraso'; prev.innerHTML = `Com essa, ${nomeDia(f.data.value).toLowerCase()} fica com <strong>${durTxt(carga)}</strong>, acima do seu ritmo de ${durTxt(cap)}. Veja as sugestões acima.`; }
@@ -505,7 +533,7 @@
       if (!confirm('Excluir esta tarefa?')) return;
       const { error } = await sb.from('tarefas').delete().eq('id', t.id);
       if (error) return toast('Não consegui excluir agora.', true);
-      tarefas = tarefas.filter(x => x.id !== t.id); dlg.close(); desenhar(); toast('Tarefa excluída.');
+      tarefas = tarefas.filter(x => x.id !== t.id); dlg.close(); desenhar(); toast('Excluído.'); document.dispatchEvent(new CustomEvent('oug:tarefas'));
     });
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -515,8 +543,10 @@
       const dur = parseInt(f.duracao_min.value, 10);
       if (!(dur >= 5 && dur <= 720)) return erro('A duração precisa ficar entre 5 minutos e 12 horas.');
       if (f.hora.value && !f.data.value) return erro('Escolha também o dia.');
+      if (f.repetir.value && !f.data.value) return erro('Escolha o dia em que começa a repetir.');
       const dados = { titulo, categoria: f.categoria.value || 'outro', marca_id: f.marca_id ? (f.marca_id.value || null) : (t.marca_id || null),
-        duracao_min: dur, data: f.data.value || null, hora: f.hora.value || null, lembrete_min: Number(f.lembrete_min.value), notas: f.notas.value.trim() || null };
+        duracao_min: dur, data: f.data.value || null, hora: f.hora.value || null, lembrete_min: Number(f.lembrete_min.value), notas: f.notas.value.trim() || null,
+        repetir: f.repetir.value || null, repetir_ate: f.repetir.value ? (f.repetir_ate.value || null) : null };
       const btn = dlg.querySelector('#tf-salvar'); btn.disabled = true;
       try {
         await salvarTarefa(nova ? null : t.id, dados);
@@ -616,7 +646,7 @@
     const r = ritmo(), mover = [];
     for (let i = 0; i < 7; i++) {
       const d = somaDias(hoje(), i);
-      const lista = tarefas.filter(t => t.data === d && !t.concluida).sort((a, b) => (hora5(b.hora) || '99').localeCompare(hora5(a.hora) || '99'));
+      const lista = doDiaT(d).filter(t => !t._rep && !t.concluida && !LIVRES.includes(t.categoria)).sort((a, b) => (hora5(b.hora) || '99').localeCompare(hora5(a.hora) || '99'));
       let carga = cargaDia(d, r);
       for (const t of lista) { if (carga <= r.capacidade) break; mover.push(t); carga -= duracaoReal(t, r); }
     }
@@ -661,7 +691,7 @@
     try {
       await salvarTarefa(id, dados); desenhar();
       if (feito) {
-        const pend = tarefas.filter(x => x.data === hoje() && !x.concluida).length;
+        const pend = doDiaT(hoje()).filter(x => !x.concluida && !x._rep).length;
         toast(pend ? `${G.t('Arrasou', 'Mandou bem')}, ${G.apelido()}! Faltam ${pend} hoje ✦` : `Dia concluído! Você é incrível, ${G.apelido()} ✦`);
       }
     } catch (e) { console.error(e); toast('Não consegui salvar agora.', true); }
@@ -733,6 +763,13 @@
     pronto: () => carregado,
     configurado: () => !!prefs,
     lista: () => tarefas,
+    doDia: (iso) => doDiaT(iso),
+    categorias: CATEGORIAS,
+    LIVRES,
+    abrir(id) { const t = tarefas.find(x => x.id === id); if (t) abrirTarefa(t); },
+    // Abre "nova" sem trocar de aba (usado pela Agenda)
+    novaAqui(dados) { abrirTarefa(null, dados && dados.data || null, dados); },
+    exportar(lista) { baixarICS(lista); },
     // Usada por Conteúdo: abre "nova tarefa" já preenchida (ex.: "Gravar: ...")
     novaCom(dados) { document.querySelector('[data-tab="aba-tarefas"]').click(); if (prefs) abrirTarefa(null, null, dados); },
     saudacao: saudacaoHora

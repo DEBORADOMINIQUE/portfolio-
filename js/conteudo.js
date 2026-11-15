@@ -270,6 +270,7 @@
     aoAbrir() { desenhar(); },
     lista: () => itens,
     // Usada pelo Assistente: abre "nova ideia" já preenchida
+    abrir(id) { const c = itens.find(x => x.id === id); if (c) abrirFicha(c); },
     novaCom(dados) { document.querySelector('[data-tab="aba-conteudo"]').click(); abrirFicha(null, dados); }
   };
 })();

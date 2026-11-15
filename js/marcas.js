@@ -927,6 +927,7 @@
     // Usada pelo Financeiro: marcar como recebido, nota fiscal etc.
     async atualizar(id, dados) { const salvo = await salvar(id, dados); if (raiz) desenhar(); return salvo; },
     // Usada pelo Simulador: abre a ficha de nova marca já com entregas e valor
+    abrir(id) { const m = marcas.find(x => x.id === id); if (m) abrirFicha(m); },
     novaCom(dados, opcoes) { const o = opcoes || {}; document.querySelector('[data-tab="aba-marcas"]').click(); abrirFicha({ etapa: 'negociando', prazo_tipo: 'corridos', historico: [], acordo: [], ...dados, _nova: true }, o.foco, o.aoSalvar); },
     FECHADAS,
     // Usada pela Prospecção: quando uma abordagem é aprovada, vira parceria no funil

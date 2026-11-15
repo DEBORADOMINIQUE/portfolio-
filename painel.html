@@ -25,17 +25,19 @@
   <!-- Supabase por CDN e depois a autenticação compartilhada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script src="js/auth.js?v=3"></script>
-  <script src="js/marcas.js?v=10"></script>
-  <script src="js/tarefas.js?v=8"></script>
+  <script src="js/marcas.js?v=11"></script>
+  <script src="js/tarefas.js?v=9"></script>
   <script src="js/prospeccao.js?v=9"></script>
   <script src="js/financeiro.js?v=6"></script>
   <script src="js/simulador.js?v=9"></script>
-  <script src="js/conteudo.js?v=5"></script>
+  <script src="js/conteudo.js?v=6"></script>
   <script src="js/assistente.js?v=5"></script>
   <script src="js/crescimento.js?v=4"></script>
   <script src="js/primeiros.js?v=3"></script>
   <script src="js/comparativo.js?v=2"></script>
   <script src="js/perfil.js?v=1"></script>
+  <script src="js/feriados.js?v=1"></script>
+  <script src="js/agenda.js?v=2"></script>
   <script src="js/tema.js?v=3"></script>
   <link rel="stylesheet" href="css/conteudo.css?v=6">
   <link rel="stylesheet" href="css/financeiro.css?v=5">
@@ -246,6 +248,7 @@
   </style>
   <link rel="stylesheet" href="css/tema-y2k.css?v=6">
   <link rel="stylesheet" href="css/perfil.css?v=3">
+  <link rel="stylesheet" href="css/agenda.css?v=2">
   <script src="js/glitter.js?v=4" defer></script>
 </head>
 <body>
@@ -268,6 +271,10 @@
         Portfólio
       </button>
       <div class="menu-grupo">Trabalho</div>
+      <button class="aba" data-tab="aba-agenda" data-titulo="Agenda">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/><circle cx="8" cy="15" r="1"/><circle cx="12" cy="15" r="1"/><circle cx="16" cy="15" r="1"/></svg>
+        Agenda
+      </button>
       <button class="aba" data-tab="aba-prospeccao" data-titulo="Prospecção">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg>
         Prospecção
@@ -363,6 +370,7 @@
     </section>
 
     <section class="painel-aba" id="aba-comparativo"></section>
+    <section class="painel-aba" id="aba-agenda"></section>
 
     <!-- ===== Aba 2: Portfólio ===== -->
     <section class="painel-aba" id="aba-portfolio">
@@ -651,7 +659,10 @@
     window.addEventListener('popstate', () => {
       if (!voltar()) { const ini = document.querySelector('.aba[data-tab="aba-principal"]'); if (ini && !ini.classList.contains('ativa')) mostrarAba(ini); }
     });
+    // Endereço com #agenda, #marcas... abre direto nessa aba
+    const abaInicial = (location.hash || '').replace('#', '');
     history.replaceState({ aba: 'aba-principal' }, '', location.pathname + location.search);
+    setTimeout(() => { const b = abaInicial && document.querySelector(`.aba[data-tab="aba-${abaInicial}"]`); if (b && b.style.display !== 'none') irPara(b); }, 0);
 
     function mostrarAba(botao) {
         document.querySelectorAll('.painel-aba').forEach(p => p.classList.remove('ativo'));
@@ -668,6 +679,7 @@
         if (botao.dataset.tab === 'aba-conteudo') Conteudo.aoAbrir();
         if (botao.dataset.tab === 'aba-principal') { Crescimento.desenhar(); PrimeirosPassos.desenhar(); }
         if (botao.dataset.tab === 'aba-comparativo') Comparativo.aoAbrir();
+        if (botao.dataset.tab === 'aba-agenda') Agenda.aoAbrir();
         window.scrollTo({ top: 0 });
     }
     document.querySelectorAll('.aba').forEach(botao => botao.addEventListener('click', () => irPara(botao)));
@@ -699,6 +711,7 @@
     PrimeirosPassos.iniciar($('primeiros-passos'));
     Comparativo.iniciar($('aba-comparativo'));
     Perfil.iniciar();
+    Agenda.iniciar($('aba-agenda'));
     // Modo escuro
     const rotuloTema = () => { $('btn-tema').textContent = Tema.escuro() ? '☀️ Modo claro' : '🌙 Modo escuro'; };
     rotuloTema();
