@@ -105,3 +105,23 @@
 .nivel-chips button.ativo { background: var(--gel); color: #fff; border-color: transparent; box-shadow: var(--gel-sombra); }
 .nivel-desc { font-size: .92rem; margin-bottom: 6px; }
 .nivel-desc b { color: var(--vinho); }
+
+/* Financeiro v2: entradas e saídas */
+.f-topo { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.f-topo .f-mes { margin: 0; }
+#f-lancamentos { margin: 16px 0; }
+#f-lancamentos .f-cab { flex-wrap: wrap; }
+.l-toggle { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; clear: both; }
+.l-pergunta { font-weight: 700; margin: 14px 0 8px; }
+.l-fim { display: flex; flex-direction: column; gap: 10px; }
+.l-fim .check-mini { font-size: .95rem; color: var(--ameixa); flex-wrap: wrap; }
+.l-num { width: 80px; font: inherit; border: 1px solid var(--borda); border-radius: 10px; padding: 6px 8px; background: var(--branco); color: var(--ameixa); }
+.l-data { font: inherit; border: 1px solid var(--borda); border-radius: 10px; padding: 6px 8px; background: var(--branco); color: var(--ameixa); }
+#l-previa { margin-top: 12px; }
+#l-previa:empty { display: none; }
+.f-valor.ok { color: var(--lima-texto); }
+.l-fim .check-mini { align-items: center; }
+.l-fim .check-mini .l-num { width: 84px; height: auto; accent-color: auto; }
+.l-fim .check-mini .l-data { width: auto; height: auto; }
+.l-fim .check-mini .data-linha { width: auto; display: inline-flex; }
+.f-vezes { display: block; font-family: var(--texto); font-size: .78rem; font-weight: 600; color: var(--suave); text-align: right; }

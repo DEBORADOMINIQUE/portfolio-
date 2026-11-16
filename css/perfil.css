@@ -93,3 +93,19 @@ body { line-height: 1.6; letter-spacing: .005em; -webkit-font-smoothing: antiali
 /* Cor do texto de apoio um pouco mais escura: mais contraste, menos esforço */
 :root:not([data-theme="dark"]) { --suave: #6a4560; }
 .letra-escolha { margin-bottom: 6px; }
+/* Raquel no estilo masculino: fundo verde e letra escura */
+:root[data-genero="masculino"] .assistente-fab { background: var(--gel) !important; color: #1f2e00 !important; box-shadow: var(--gel-sombra), 0 0 0 3px #ff2d9b, 0 14px 30px -10px rgba(60,90,0,.55); border-radius: 12px; text-shadow: none; }
+:root[data-genero="masculino"] .assistente-fab span { color: #ff2d9b; }
+/* Dados da conta e segurança */
+.conta-dados { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; clear: both; font-size: .98rem; }
+.conta-dados dt { color: var(--suave); }
+.conta-dados dd { word-break: break-word; }
+.conta-dados dd small { display: block; color: var(--lilas-texto); font-size: .85rem; }
+.conta-linha { display: flex; gap: 8px; clear: both; flex-wrap: wrap; }
+.conta-linha input { flex: 1; min-width: 180px; font: inherit; border: 1px solid var(--borda); border-radius: 10px; padding: 10px 12px; background: var(--branco); color: var(--ameixa); }
+.aut-ok { background: var(--lima-claro); color: var(--lima-texto); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; clear: both; }
+.aut-passos { clear: both; padding-left: 20px; display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.aut-qr { display: flex; justify-content: center; background: #fff; border-radius: 16px; padding: 14px; margin-bottom: 10px; border: 1px solid var(--borda); }
+.aut-qr img { width: 200px; height: 200px; }
+.campo-codigo { text-align: center; font-size: 1.4rem !important; letter-spacing: .35em; font-weight: 700; }
+code { background: var(--creme); padding: 2px 6px; border-radius: 6px; word-break: break-all; }

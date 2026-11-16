@@ -24,25 +24,27 @@
 
   <!-- Supabase por CDN e depois a autenticação compartilhada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-  <script src="js/auth.js?v=3"></script>
+  <script src="js/auth.js?v=4"></script>
+  <script src="js/campos.js?v=1"></script>
   <script src="js/marcas.js?v=13"></script>
   <script src="js/tarefas.js?v=11"></script>
   <script src="js/prospeccao.js?v=9"></script>
-  <script src="js/financeiro.js?v=6"></script>
+  <script src="js/financeiro.js?v=8"></script>
   <script src="js/simulador.js?v=9"></script>
   <script src="js/conteudo.js?v=8"></script>
   <script src="js/assistente.js?v=5"></script>
   <script src="js/crescimento.js?v=4"></script>
   <script src="js/primeiros.js?v=3"></script>
   <script src="js/comparativo.js?v=2"></script>
-  <script src="js/perfil.js?v=2"></script>
+  <script src="js/perfil.js?v=3"></script>
+  <script src="js/conta.js?v=1"></script>
   <script src="js/feriados.js?v=1"></script>
   <script src="js/agenda.js?v=7"></script>
   <script src="js/tema.js?v=4"></script>
   <link rel="stylesheet" href="css/conteudo.css?v=6">
-  <link rel="stylesheet" href="css/financeiro.css?v=5">
+  <link rel="stylesheet" href="css/financeiro.css?v=7">
   <link rel="stylesheet" href="css/prospeccao.css?v=3">
-  <link rel="stylesheet" href="css/tarefas.css?v=4">
+  <link rel="stylesheet" href="css/tarefas.css?v=6">
   <link rel="stylesheet" href="css/marcas.css?v=7">
 
   <style>
@@ -213,6 +215,10 @@
     .btn.zap { background: #e3efe6; color: var(--verde); }
     .btn.zap:hover { background: #d2e6d8; }
 
+    .ult-titulo { font-family: var(--titulo); font-size: 1rem; margin: 18px 0 8px; color: var(--ameixa); }
+    .ult-cliques { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+    .ult-cliques li { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; border-bottom: 1px dashed var(--borda); font-size: .92rem; }
+    .ult-cliques small { color: var(--suave); white-space: nowrap; }
     .vazio { text-align: center; padding: 28px 12px; color: var(--suave); font-size: .92rem; font-style: italic; }
     .carregando { color: var(--suave); font-size: .9rem; padding: 20px 0; }
 
@@ -247,7 +253,7 @@
     }
   </style>
   <link rel="stylesheet" href="css/tema-y2k.css?v=6">
-  <link rel="stylesheet" href="css/perfil.css?v=5">
+  <link rel="stylesheet" href="css/perfil.css?v=8">
   <link rel="stylesheet" href="css/agenda.css?v=6">
   <script src="js/glitter.js?v=4" defer></script>
 </head>
@@ -587,8 +593,19 @@
 
       // 6.2 Botões mais clicados
       const cliques = eventos.filter(e => e.event_type === 'button_click');
-      const rankBotoes = contar(cliques, c => legivel(c.event_name));
-      $('bloco-botoes').innerHTML = rankBotoes.length ? barrasHTML(rankBotoes) : vazio('Nenhum clique registrado ainda.');
+      // Nome que a pessoa reconhece: o texto do botão + a parte do site onde ele fica
+      const LUGARES = { inicio: 'Capa', topo: 'Menu do topo', menu: 'Menu', sobre: 'Sobre', destaques: 'Destaques', trabalhos: 'Trabalhos', fotos: 'Fotos', servicos: 'Serviços',
+        numeros: 'Números', pacotes: 'Pacotes', montador: 'Montar proposta', contato: 'Contato', whatsFixo: 'Botão flutuante do WhatsApp', orcamentoFixo: 'Botão flutuante de orçamento',
+        avisoPacotes: 'Aviso de pacotes', ctaFotos: 'Fotos', resumoEnviar: 'Montar proposta', persBotao: 'Pacote personalizado', capaEmail: 'Capa', casalVideo: 'Vídeo em casal' };
+      const nomeBotao = (c) => {
+        const m = c.metadata || {}, rot = String(m.label || '').trim();
+        const base = c.event_name === 'contact_form_submit' ? 'Enviar mensagem (formulário)' : rot ? `“${rot}”` : legivel(c.event_name);
+        const lugar = m.secao ? (LUGARES[m.secao] || legivel(m.secao)) : '';
+        return lugar ? `${base} · ${lugar}` : base;
+      };
+      const rankBotoes = contar(cliques, nomeBotao);
+      const ultimos = cliques.slice(0, 12).map(c => `<li><span>${esc(nomeBotao(c))}</span><small>${new Date(c.created_at).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}</small></li>`).join('');
+      $('bloco-botoes').innerHTML = rankBotoes.length ? barrasHTML(rankBotoes) + `<h3 class="ult-titulo">Últimos cliques</h3><ul class="ult-cliques">${ultimos}</ul>` : vazio('Nenhum clique registrado ainda.');
 
       // 6.3 Cliques para contato (só event_name começando com contact_)
       const contato = cliques.filter(c => String(c.event_name || '').startsWith('contact_'));

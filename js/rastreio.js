@@ -57,7 +57,8 @@
     else if (href.startsWith('mailto:')) nome = 'contact_email';
     else if (href.includes('instagram.com')) nome = 'contact_instagram';
     else nome = (el.closest('#menu') ? 'menu_' : '') + nomeDoBotao(el);
-    evento('button_click', nome, { label: (el.textContent || '').trim().slice(0, 80), href: href.slice(0, 200) });
+    const sec = el.closest('section[id], header[id], footer[id], nav[id], [data-secao]');
+    evento('button_click', nome, { label: (el.getAttribute('aria-label') || el.textContent || '').replace(/[↗↓→]/g, '').replace(/\s+/g, ' ').trim().slice(0, 80), href: href.slice(0, 200), secao: el.id || (sec && (sec.dataset.secao || sec.id)) || '' });
   }, true);
 
   window.Rastreio = {

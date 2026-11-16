@@ -138,3 +138,6 @@
 .data-linha input { flex: 1; min-width: 0; }
 .limpar-data { flex-shrink: 0; width: 42px; height: 42px; border-radius: 10px; border: 1px solid var(--borda); background: var(--branco); color: var(--suave); font-size: .95rem; }
 .limpar-data:hover { color: var(--vinho); border-color: var(--vinho); }
+/* ✕ das datas (campos.js): esconde junto quando a data está escondida */
+.data-linha:has(input[hidden]) { display: none; }
+.campo .data-linha { width: 100%; }

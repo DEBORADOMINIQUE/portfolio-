@@ -70,6 +70,10 @@
           <div class="dias-escolha letra-escolha">${[['normal', 'Normal'], ['grande', 'Grande'], ['extra', 'Extra grande']].map(([v, n]) => `<label><input type="radio" name="letra" value="${v}" ${Tema.letra() === v ? 'checked' : ''}><span>${n}</span></label>`).join('')}</div>
           <small class="desc">Muda na hora, para você ver como fica.</small>
         </fieldset>
+        <fieldset><legend>Conta e segurança</legend>
+          <p class="desc">E-mail, senha, telefone e o Google Authenticator.</p>
+          <button type="button" class="btn-secundario" data-abrir-conta>🔐 Dados da conta e segurança</button>
+        </fieldset>
         <fieldset><legend>Brilhos e glitter</legend>
           <label class="check grande"><input type="checkbox" name="brilho" ${G.brilho() ? 'checked' : ''}><span>Glitter no mouse e chuva de brilho ao concluir tarefas</span></label>
         </fieldset>
@@ -78,6 +82,7 @@
     </form>`;
     const f = dlg.querySelector('form');
     dlg.querySelectorAll('[data-fechar]').forEach(b => b.addEventListener('click', () => dlg.close()));
+    const bc = dlg.querySelector('[data-abrir-conta]'); if (bc) bc.addEventListener('click', () => { dlg.close(); Conta.abrir(); });
     dlg.oncancel = null;
     const previa = () => { dlg.querySelector('#perfil-previa').innerHTML = avatar({ nome: f.nome.value, foto }, 'avatar grande'); dlg.querySelector('#perfil-tirar').hidden = !foto; };
     dlg.querySelector('#perfil-arquivo').addEventListener('change', async (e) => {

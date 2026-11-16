@@ -24,7 +24,7 @@
 
   <!-- Supabase por CDN e depois a autenticação compartilhada -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-  <script src="js/auth.js?v=3"></script>
+  <script src="js/auth.js?v=4"></script>
 
   <style>
     /* ===== Design system: as mesmas cores e fontes do portfólio ===== */
@@ -95,11 +95,16 @@
     .botao:active { transform: translateY(1px); }
     .botao:disabled { opacity: .7; cursor: wait; }
     .voltar { display: block; margin: 18px auto 0; }
+    .aceite a, .rodape a { color: var(--vinho); font-weight: 600; }
+    .troca { text-align: center; margin-top: 16px; font-size: .95rem; color: var(--suave); }
+    .aceite { display: flex; gap: 8px; align-items: flex-start; font-weight: 400; font-size: .88rem; line-height: 1.4; margin: 4px 0 18px; }
+    .aceite input { width: 18px; height: 18px; margin: 2px 0 0; flex-shrink: 0; accent-color: var(--vinho); }
+    .campo-codigo { text-align: center; font-size: 1.6rem !important; letter-spacing: .4em; font-weight: 700; }
     .rodape { text-align: center; color: var(--suave); font-size: .78rem; margin-top: 24px; }
   </style>
   <script src="js/tema.js?v=4"></script>
   <link rel="stylesheet" href="css/tema-y2k.css?v=6">
-  <link rel="stylesheet" href="css/perfil.css?v=3">
+  <link rel="stylesheet" href="css/perfil.css?v=5">
   <script src="js/glitter.js?v=3" defer></script>
 </head>
 <body>
@@ -119,6 +124,28 @@
       <input id="senha" type="password" autocomplete="current-password" required placeholder="Sua senha">
       <div class="linha"><button type="button" class="link" id="ir-recuperar">Esqueci minha senha</button></div>
       <button type="submit" class="botao" id="btn-entrar">Entrar</button>
+      <p class="troca">Ainda não tem conta? <button type="button" class="link" id="ir-cadastro">Cadastre-se</button></p>
+    </form>
+
+    <!-- Cadastro -->
+    <form id="form-cadastro" novalidate>
+      <label for="cad-email">E-mail</label>
+      <input id="cad-email" type="email" autocomplete="email" required placeholder="voce@email.com">
+      <label for="cad-senha">Crie uma senha</label>
+      <input id="cad-senha" type="password" autocomplete="new-password" minlength="6" required placeholder="Pelo menos 6 caracteres">
+      <label for="cad-senha2">Repita a senha</label>
+      <input id="cad-senha2" type="password" autocomplete="new-password" minlength="6" required placeholder="A mesma senha">
+      <label class="aceite"><input type="checkbox" id="cad-aceite"> <span>Li e aceito os <a href="termos.html" target="_blank">Termos de uso</a> e a <a href="privacidade.html" target="_blank">Política de privacidade</a>.</span></label>
+      <button type="submit" class="botao" id="btn-cadastrar">Criar minha conta</button>
+      <p class="troca">Já tem conta? <button type="button" class="link" data-voltar>Entrar</button></p>
+    </form>
+
+    <!-- Código do autenticador -->
+    <form id="form-codigo" novalidate>
+      <label for="codigo">Código de 6 números</label>
+      <input id="codigo" inputmode="numeric" autocomplete="one-time-code" maxlength="7" required placeholder="000000" class="campo-codigo">
+      <button type="submit" class="botao" id="btn-codigo">Confirmar</button>
+      <p class="troca"><button type="button" class="link" id="sair-codigo">Entrar com outra conta</button></p>
     </form>
 
     <!-- 2. Esqueci minha senha -->
@@ -126,7 +153,7 @@
       <label for="email-rec">E-mail da sua conta</label>
       <input id="email-rec" type="email" autocomplete="email" required placeholder="voce@email.com">
       <button type="submit" class="botao" id="btn-recuperar">Enviar link de recuperação</button>
-      <button type="button" class="link voltar" id="voltar-login">Voltar para o login</button>
+      <button type="button" class="link voltar" id="voltar-login" data-voltar>Voltar para o login</button>
     </form>
 
     <!-- 3. Nova senha (aparece quando você abre o link do e-mail) -->
@@ -136,15 +163,17 @@
       <button type="submit" class="botao" id="btn-nova">Salvar nova senha</button>
     </form>
 
-    <p class="rodape">Área privada. Só quem tem acesso consegue entrar.<br><a href="termos.html" target="_blank">Termos de uso</a> · <a href="privacidade.html" target="_blank">Privacidade</a></p>
+    <p class="rodape">Organização para criadoras e criadores UGC.<br><a href="termos.html" target="_blank">Termos de uso</a> · <a href="privacidade.html" target="_blank">Privacidade</a></p>
   </main>
 
   <script>
     const $ = (id) => document.getElementById(id);
     const textos = {
-      login: ['Acesso restrito', 'Faça login para ver os números do seu portfólio.'],
+      login: ['Que bom te ver ✦', 'Entre para organizar seu trabalho como UGC.'],
       recuperar: ['Recuperar senha', 'Digite seu e-mail e enviaremos um link para criar uma senha nova.'],
-      nova: ['Crie uma senha nova', 'Escolha a nova senha para entrar no painel.']
+      nova: ['Crie uma senha nova', 'Escolha a nova senha para entrar no painel.'],
+      cadastro: ['Crie sua conta', 'Prospecção, marcas, agenda e finanças do seu UGC num lugar só.'],
+      codigo: ['Confirme que é você', 'Abra o Google Authenticator (ou outro app autenticador) e digite o código do UGC Organized.']
     };
 
     function aviso(tipo, msg) {
@@ -154,7 +183,7 @@
 
     // Troca qual formulário aparece no cartão
     function trocarTela(nome) {
-      ['login', 'recuperar', 'nova'].forEach(n => $('form-' + n).classList.toggle('ativo', n === nome));
+      ['login', 'recuperar', 'nova', 'cadastro', 'codigo'].forEach(n => $('form-' + n).classList.toggle('ativo', n === nome));
       $('titulo').textContent = textos[nome][0];
       $('subtitulo').textContent = textos[nome][1];
       aviso();
@@ -174,10 +203,14 @@
 
     (async () => {
       if (veioDaRecuperacao) { trocarTela('nova'); return; }
-      // Já tem sessão ativa? Vai direto para o painel.
+      // Já tem sessão ativa? Vai direto para o painel (ou pede o código do autenticador).
       try {
-        if (await Auth.sessaoAtual()) window.location.replace(Auth.pagina('painel'));
+        if (await Auth.sessaoAtual()) {
+          if (await Auth.precisaCodigo()) { trocarTela('codigo'); $('codigo').focus(); }
+          else window.location.replace(Auth.pagina('painel'));
+        }
       } catch (e) { /* sem conexão: continua na tela de login */ }
+      if (location.hash === '#cadastro') trocarTela('cadastro');
     })();
 
     $('ir-recuperar').addEventListener('click', () => {
@@ -185,7 +218,36 @@
       $('email-rec').value = $('email').value;
       $('email-rec').focus();
     });
-    $('voltar-login').addEventListener('click', () => trocarTela('login'));
+    document.querySelectorAll('[data-voltar]').forEach(b => b.addEventListener('click', () => trocarTela('login')));
+    $('ir-cadastro').addEventListener('click', () => { trocarTela('cadastro'); $('cad-email').value = $('email').value; $('cad-email').focus(); });
+    $('sair-codigo').addEventListener('click', async () => { await Auth.client.auth.signOut(); trocarTela('login'); });
+
+    // Cadastro
+    $('form-cadastro').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = $('cad-email').value.trim(), s1 = $('cad-senha').value, s2 = $('cad-senha2').value;
+      if (!email || !s1) return aviso('erro', 'Preencha o e-mail e a senha.');
+      if (s1.length < 6) return aviso('erro', 'A senha precisa ter pelo menos 6 caracteres.');
+      if (s1 !== s2) return aviso('erro', 'As duas senhas não estão iguais.');
+      if (!$('cad-aceite').checked) return aviso('erro', 'Para criar a conta, aceite os Termos de uso e a Política de privacidade.');
+      aviso(); carregando($('btn-cadastrar'), true, 'Criando...');
+      try {
+        const r = await Auth.cadastrar(email, s1);
+        if (r.precisaConfirmar) { trocarTela('login'); $('email').value = email; aviso('ok', 'Conta criada! Enviamos um link de confirmação para o seu e-mail. Clique nele e depois entre aqui. Confira também o spam.'); }
+        else window.location.replace(Auth.pagina('painel'));
+      } catch (err) { aviso('erro', err.message); }
+      carregando($('btn-cadastrar'), false);
+    });
+
+    // Código do autenticador
+    $('form-codigo').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const c = $('codigo').value.replace(/\D/g, '');
+      if (c.length !== 6) return aviso('erro', 'Digite os 6 números do código.');
+      aviso(); carregando($('btn-codigo'), true, 'Confirmando...');
+      try { await Auth.confirmarCodigo(c); window.location.replace(Auth.pagina('painel')); }
+      catch (err) { aviso('erro', err.message); carregando($('btn-codigo'), false); $('codigo').select(); }
+    });
 
     // Envio do login
     $('form-login').addEventListener('submit', async (e) => {
@@ -197,6 +259,7 @@
       carregando($('btn-entrar'), true, 'Entrando...');
       try {
         await Auth.login(email, senha);
+        if (await Auth.precisaCodigo()) { carregando($('btn-entrar'), false); trocarTela('codigo'); $('codigo').focus(); return; }
         window.location.replace(Auth.pagina('painel'));
       } catch (err) {
         aviso('erro', err.message);
