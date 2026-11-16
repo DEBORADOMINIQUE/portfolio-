@@ -6,7 +6,7 @@
    seu jeito" (ex.: "dentista amanhã 15h").
    ========================================================= */
 (function () {
-  const H0 = 5, H1 = 24, PX = 56;           // grade de horários: 05h às 24h, 56px por hora
+  const H0 = 5, H1 = 24, PX = 68;           // grade de horários: 05h às 24h, 56px por hora
   let raiz, sel = null, busca = '', arrastando = null;
   const ler = (k, p) => { try { return localStorage.getItem(k) || p; } catch (e) { return p; } };
   const gravar = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
@@ -199,9 +199,9 @@
       const evs = arrumar(eventos(iso));
       return `<div class="ag-col ${iso === h ? 'hoje' : ''}" data-ag-col="${iso}" style="height:${(H1 - H0) * PX}px">
         ${evs.map(e => { const top = Math.max(0, (e.ini - H0 * 60) / 60 * PX), alt = Math.max(22, (e.fim - e.ini) / 60 * PX - 2);
-          return `<button class="ag-bloco ${e.tipo} ${e.feito ? 'feito' : ''} ${alt < 40 ? 'curto' : ''}" style="top:${top}px;height:${alt}px;left:calc(${e.lane / e.lanes * 100}% + 2px);width:calc(${100 / e.lanes}% - 4px)"
+          return `<button class="ag-bloco ${e.tipo} ${e.feito ? 'feito' : ''} ${alt < 50 ? 'curto' : ''}" style="top:${top}px;height:${alt}px;left:calc(${e.lane / e.lanes * 100}% + 2px);width:calc(${100 / e.lanes}% - 4px)"
             data-ag-abrir-ev="${iso}|${esc(e.titulo)}" ${e.movel ? `draggable="true" data-ag-arrasta="${e.id}" data-ag-dur="${e.dur}"` : ''}>
-            <b>${e.hora}</b> ${e.emoji} ${esc(e.titulo)}${alt >= 44 && e.sub ? `<small>${esc(e.sub)}</small>` : ''}</button>`; }).join('')}
+            <b>${e.hora}</b> ${e.emoji} ${esc(e.titulo)}${alt >= 80 && e.sub ? `<small>${esc(e.sub)}</small>` : ''}</button>`; }).join('')}
         ${iso === h && minAgora >= H0 * 60 ? `<div class="ag-agora" style="top:${(minAgora - H0 * 60) / 60 * PX}px"></div>` : ''}
       </div>`;
     }).join('');
@@ -268,7 +268,7 @@
       <div class="agenda ${visao === 'mes' ? 'com-lado' : ''}">${corpo}${visao === 'mes' ? lado() : ''}</div>`;
     raiz._ev = {};
     const r = raiz.querySelector('#ag-rolagem');
-    if (r) r.scrollTop = topo != null ? topo : (7 - H0) * PX; // abre mostrando a partir das 7h
+    if (r) r.scrollTop = topo != null ? topo : (7 - H0) * PX - 14; // abre mostrando a partir das 7h
     if (busca) { const b = raiz.querySelector('#ag-busca'); b.focus(); b.setSelectionRange(b.value.length, b.value.length); }
   }
 

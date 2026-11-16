@@ -113,3 +113,21 @@
   .ag-visoes { width: 100%; } .ag-visoes .vis-btn { flex: 1; }
 }
 .ver-agenda { padding: 9px 16px; font-size: .9rem; }
+
+/* Mais legível: textos da Agenda maiores e com mais respiro */
+.ag-ev { font-size: .86rem; padding: 4px 7px; }
+.ag-fer, .ag-mais { font-size: .82rem; }
+.ag-dia { min-height: 124px; }
+.ag-dia .num { font-size: 1rem; width: 32px; height: 32px; }
+.ag-bloco { font-size: .95rem; padding: 6px 9px; border-radius: 10px; }
+.ag-bloco small { font-size: .82rem; }
+.ag-chip { font-size: .88rem; padding: 5px 9px; }
+.ag-hora-lbl { font-size: .85rem; }
+.ag-diatodo-lbl { font-size: .8rem; }
+.ag-col { background-image: repeating-linear-gradient(to bottom, var(--borda) 0 1px, transparent 1px 68px), repeating-linear-gradient(to bottom, transparent 0 34px, rgba(227,212,184,.35) 34px 35px, transparent 35px 68px); }
+.ag-txt b { font-size: 1.05rem; } .ag-txt small { font-size: .9rem; }
+.ag-hora { font-size: .92rem; min-width: 60px; }
+.ag-nav h2 { font-size: 1.45rem; }
+.ag-filtros button { font-size: .95rem; padding: 8px 16px; }
+.ag-col-cab small { font-size: .85rem; } .ag-col-cab b { font-size: 1.5rem; width: 46px; height: 46px; }
+@media (max-width: 700px) { .ag-sem:not(.ag-umdia) .ag-bloco { font-size: .74rem; } .ag-dia { min-height: 62px; } }

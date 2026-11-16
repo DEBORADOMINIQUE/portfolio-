@@ -77,9 +77,9 @@
    LEGIBILIDADE · tamanho da letra (Meu perfil) e conforto
    Tudo no app usa rem, então mudar a base aumenta o app todo.
    ========================================================= */
-html { font-size: 16px; }
-html[data-letra="grande"] { font-size: 17.5px; }
-html[data-letra="extra"] { font-size: 19px; }
+html { font-size: 17px; }
+html[data-letra="grande"] { font-size: 18.5px; }
+html[data-letra="extra"] { font-size: 20.5px; }
 body { line-height: 1.6; letter-spacing: .005em; -webkit-font-smoothing: antialiased; }
 /* Os textos que eram miudinhos ganham um mínimo confortável */
 .desc, small, .t-meta, .chip, .hoje-abrir small, .f-corpo small, .s-item small, .numero .extra,
