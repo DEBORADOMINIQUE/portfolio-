@@ -887,10 +887,10 @@
       <div class="marcas-ferramentas">
         <div class="visoes" role="tablist">
           <button class="vis-btn ativo" data-vis="funil">Funil</button>
-          <button class="vis-btn" data-vis="calendario">Calendário</button>
           <button class="vis-btn" data-vis="feedbacks">Feedbacks</button>
           <button class="vis-btn" data-vis="banco">Banco de marcas</button>
         </div>
+        <button class="btn-secundario ver-agenda" data-ver-agenda="marca">📅 Ver na Agenda</button>
         <input type="search" class="busca" id="m-busca" placeholder="Buscar marca..." aria-label="Buscar marca">
       </div>
       <div id="m-visao"><p class="carregando">Carregando suas marcas...</p></div>`;
@@ -910,7 +910,7 @@
       }
       if (alvo.matches('[data-nova]')) return abrirFicha(null);
       if (alvo.matches('[data-avancar]')) { e.stopPropagation(); return moverPara(alvo.dataset.avancar, alvo.dataset.para); }
-      if (alvo.matches('.vis-btn')) { visao = alvo.dataset.vis; return desenhar(); }
+      if (alvo.matches('.vis-btn')) { if (alvo.dataset.vis === 'calendario' && window.Agenda) return Agenda.abrirEm('mes'); visao = alvo.dataset.vis; return desenhar(); }
       if (alvo.matches('.cal-nav')) { mesCal.setMonth(mesCal.getMonth() + Number(alvo.dataset.mes)); return desenharCalendario(); }
       const id = alvo.dataset.abrir || alvo.dataset.id;
       const m = marcas.find(x => x.id === id);

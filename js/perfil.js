@@ -66,6 +66,10 @@
           </div>
           <small class="desc">Feminino: rosa em destaque, brilhos e "Deusa" nas comemorações. Masculino: o mesmo verde e rosa num visual mais sóbrio, sem glitter, e "Craque" nas comemorações.</small>
         </fieldset>
+        <fieldset><legend>Tamanho da letra</legend>
+          <div class="dias-escolha letra-escolha">${[['normal', 'Normal'], ['grande', 'Grande'], ['extra', 'Extra grande']].map(([v, n]) => `<label><input type="radio" name="letra" value="${v}" ${Tema.letra() === v ? 'checked' : ''}><span>${n}</span></label>`).join('')}</div>
+          <small class="desc">Muda na hora, para você ver como fica.</small>
+        </fieldset>
         <fieldset><legend>Brilhos e glitter</legend>
           <label class="check grande"><input type="checkbox" name="brilho" ${G.brilho() ? 'checked' : ''}><span>Glitter no mouse e chuva de brilho ao concluir tarefas</span></label>
         </fieldset>
@@ -84,11 +88,14 @@
     f.nome.addEventListener('input', previa);
     // Trocou o gênero? Sugere o brilho padrão de cada estilo (ela pode mudar)
     f.querySelectorAll('input[name="genero"]').forEach(r => r.addEventListener('change', () => { f.brilho.checked = r.value !== 'masculino'; }));
+    const letraAntes = Tema.letra();
+    f.querySelectorAll('input[name="letra"]').forEach(r => r.addEventListener('change', () => Tema.letra(r.value)));
+    dlg.querySelectorAll('[data-fechar]').forEach(b => b.addEventListener('click', () => Tema.letra(letraAntes)));
     f.addEventListener('submit', async (e) => {
       e.preventDefault();
       const genero = f.querySelector('input[name="genero"]:checked').value, brilho = f.brilho.checked;
       try {
-        await Tarefas.salvarPrefsParcial({ foto, nome: f.nome.value.trim(), genero, brilho });
+        await Tarefas.salvarPrefsParcial({ foto, nome: f.nome.value.trim(), genero, brilho, letra: Tema.letra() });
         Tema.aplicarPerfil(genero, brilho);
         dlg.close(); desenhar();
         document.dispatchEvent(new CustomEvent('oug:nome'));
@@ -105,6 +112,7 @@
       const esperar = (n = 0) => {
         if (window.Tarefas && Tarefas.pronto()) {
           const p = Tarefas.prefs();
+          if (p.letra) Tema.letra(p.letra);
           if (p.genero) Tema.aplicarPerfil(p.genero, p.brilho !== undefined ? p.brilho !== false : p.genero !== 'masculino');
           desenhar(); return;
         }

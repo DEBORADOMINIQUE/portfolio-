@@ -122,3 +122,19 @@
 .crono-btn.fim { background: var(--lima-gel); border-color: transparent; color: #2f4a00; }
 :root[data-genero="masculino"] .crono-btn { border-radius: 10px; }
 @media (max-width: 560px) { .crono-grupo { margin-left: 96px; justify-content: flex-start; } }
+
+/* Repetir: dias da semana (igual despertador) */
+.rep-dias { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.rep-dias[hidden], .rep-ate[hidden], .rep-ate input[hidden] { display: none; }
+.rep-dias input { position: absolute; opacity: 0; pointer-events: none; }
+.rep-dias span { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--borda); background: var(--branco); font-weight: 800; color: var(--suave); cursor: pointer; }
+.rep-dias input:checked + span { background: var(--gel); color: #fff; border-color: transparent; box-shadow: var(--gel-sombra); }
+.rep-dias input:focus-visible + span { outline: 2px solid var(--vinho); outline-offset: 2px; }
+.rep-ate { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 10px; }
+.rep-ate input[type="date"] { font: inherit; border: 1px solid var(--borda); border-radius: 10px; padding: 8px 10px; background: var(--branco); color: var(--ameixa); }
+
+/* Campo de data com botão de limpar (no Safari não dá para apagar digitando) */
+.data-linha { display: flex; gap: 6px; align-items: center; }
+.data-linha input { flex: 1; min-width: 0; }
+.limpar-data { flex-shrink: 0; width: 42px; height: 42px; border-radius: 10px; border: 1px solid var(--borda); background: var(--branco); color: var(--suave); font-size: .95rem; }
+.limpar-data:hover { color: var(--vinho); border-color: var(--vinho); }

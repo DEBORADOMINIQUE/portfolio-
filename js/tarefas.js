@@ -157,6 +157,8 @@
     if (t.repetir === 'dias_uteis') return ds > 0 && ds < 6;
     if (t.repetir === 'semanal') return ds === d0.getDay();
     if (t.repetir === 'mensal') return d.getDate() === d0.getDate();
+    if (t.repetir === 'anual') return d.getDate() === d0.getDate() && d.getMonth() === d0.getMonth();
+    if (t.repetir === 'personalizado') return String(t.repetir_dias || '').split(',').filter(Boolean).map(Number).includes(ds);
     return false;
   }
   // Tudo o que acontece num dia (inclui as repetições, como cópias marcadas com _rep)
@@ -233,7 +235,9 @@
   function regraICS(t) {
     if (!t.repetir) return '';
     const ate = t.repetir_ate ? `;UNTIL=${t.repetir_ate.replace(/-/g, '')}T235959` : '';
-    return { diario: 'RRULE:FREQ=DAILY', dias_uteis: 'RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR', semanal: 'RRULE:FREQ=WEEKLY', mensal: 'RRULE:FREQ=MONTHLY' }[t.repetir] + ate;
+    const SIG = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    const pers = 'RRULE:FREQ=WEEKLY;BYDAY=' + String(t.repetir_dias || '').split(',').filter(Boolean).map(n => SIG[Number(n)]).join(',');
+    return { diario: 'RRULE:FREQ=DAILY', dias_uteis: 'RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR', semanal: 'RRULE:FREQ=WEEKLY', mensal: 'RRULE:FREQ=MONTHLY', anual: 'RRULE:FREQ=YEARLY', personalizado: pers }[t.repetir] + ate;
   }
   function linkGoogle(t) {
     const fimMin = minutos(t.hora) + t.duracao_min;
@@ -469,14 +473,25 @@
         </fieldset>
         <fieldset id="sec-horario"><legend>Qual dia e horário você quer reservar?</legend>
           <div class="grade-campos">
-            <label class="campo"><span>Dia</span><input type="date" name="data" value="${t.data || ''}"></label>
-            <label class="campo"><span>Horário</span><input type="time" name="hora" value="${hora5(t.hora)}"></label>
+            <label class="campo"><span>Dia</span><div class="data-linha"><input type="date" name="data" value="${t.data || ''}"><button type="button" class="limpar-data" data-limpar="data" aria-label="Tirar o dia" title="Tirar o dia">✕</button></div></label>
+            <label class="campo"><span>Horário</span><select name="hora">${(() => {
+              const atual = hora5(t.hora), opts = ['<option value="">Sem horário (dia todo)</option>'];
+              for (let m = 5 * 60; m < 24 * 60; m += 15) opts.push(hhmm(m));
+              if (atual && !opts.includes(atual)) opts.push(atual);
+              return opts.map(v => v.startsWith('<') ? v : `<option value="${v}" ${v === atual ? 'selected' : ''}>${v}</option>`).sort((a, b) => a.startsWith('<option value=""') ? -1 : b.startsWith('<option value=""') ? 1 : a.localeCompare(b)).join('');
+            })()}</select></label>
           </div>
           <div class="sugestoes" id="sugestoes"></div>
           <div class="previa-prazo" id="previa-dia"></div>
           <div class="grade-campos" style="margin-top:12px">
-            <label class="campo"><span>Repetir</span><select name="repetir">${[['', 'Não repete'], ['diario', 'Todo dia'], ['dias_uteis', 'Dias úteis (seg a sex)'], ['semanal', 'Toda semana'], ['mensal', 'Todo mês']].map(([v, n]) => `<option value="${v}" ${(t.repetir || '') === v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
-            <label class="campo"><span>Até (opcional)</span><input type="date" name="repetir_ate" value="${t.repetir_ate || ''}"></label>
+            <label class="campo largo"><span>Repetir</span><select name="repetir">${[['', 'Não repete'], ['diario', 'Todo dia'], ['dias_uteis', 'Dias úteis (seg a sex)'], ['semanal', 'Toda semana'], ['mensal', 'Todo mês'], ['anual', 'Todo ano'], ['personalizado', 'Personalizar dias da semana']].map(([v, n]) => `<option value="${v}" ${(t.repetir || '') === v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
+          </div>
+          <div class="rep-dias" id="rep-dias" ${t.repetir === 'personalizado' ? '' : 'hidden'}>
+            ${['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((l, i) => `<label title="${['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'][i]}"><input type="checkbox" name="rep_dia" value="${i}" ${String(t.repetir_dias || '').split(',').includes(String(i)) ? 'checked' : ''}><span>${l}</span></label>`).join('')}
+          </div>
+          <div class="rep-ate" id="rep-ate" ${t.repetir ? '' : 'hidden'}>
+            <label class="check-mini"><input type="checkbox" name="tem_ate" ${t.repetir_ate ? 'checked' : ''}> Parar de repetir em uma data</label>
+            <input type="date" name="repetir_ate" value="${t.repetir_ate || ''}" ${t.repetir_ate ? '' : 'hidden'}>
           </div>
           <label class="campo"><span>Me lembrar</span><select name="lembrete_min">${[[0, 'Na hora'], [10, '10 min antes'], [15, '15 min antes'], [30, '30 min antes'], [60, '1 hora antes'], [120, '2 horas antes'], [1440, '1 dia antes']].map(([v, n]) => `<option value="${v}" ${t.lembrete_min == v ? 'selected' : ''}>${n}</option>`).join('')}</select></label>
         </fieldset>
@@ -521,7 +536,20 @@
       if (!durMexida) f.duracao_min.value = r.tempoReal[i.value] || CATEGORIAS[i.value].min;
       atualizar();
     }));
-    ['data', 'hora'].forEach(n => f[n].addEventListener('input', atualizar));
+    ['data', 'hora'].forEach(n => { f[n].addEventListener('input', atualizar); f[n].addEventListener('change', atualizar); });
+    const ajustarRepetir = () => {
+      dlg.querySelector('#rep-dias').hidden = f.repetir.value !== 'personalizado';
+      dlg.querySelector('#rep-ate').hidden = !f.repetir.value;
+      f.repetir_ate.hidden = !f.tem_ate.checked;
+      // Personalizar: já marca o dia da semana da data escolhida
+      if (f.repetir.value === 'personalizado' && !dlg.querySelector('input[name="rep_dia"]:checked') && f.data.value) {
+        const c = dlg.querySelector(`input[name="rep_dia"][value="${deISO(f.data.value).getDay()}"]`); if (c) c.checked = true;
+      }
+    };
+    f.repetir.addEventListener('change', ajustarRepetir);
+    // ✕ ao lado da data: no Safari não dá para apagar uma data digitando
+    dlg.querySelectorAll('[data-limpar]').forEach(b => b.addEventListener('click', () => { f[b.dataset.limpar].value = ''; f[b.dataset.limpar].dispatchEvent(new Event('input')); }));
+    f.tem_ate.addEventListener('change', () => { if (!f.tem_ate.checked) f.repetir_ate.value = ''; ajustarRepetir(); });
     dlg.querySelector('#sugestoes').addEventListener('click', (e) => { const b = e.target.closest('.sug'); if (!b) return; f.data.value = b.dataset.sd; f.hora.value = b.dataset.sh; atualizar(); });
     atualizar();
 
@@ -544,9 +572,13 @@
       if (!(dur >= 5 && dur <= 720)) return erro('A duração precisa ficar entre 5 minutos e 12 horas.');
       if (f.hora.value && !f.data.value) return erro('Escolha também o dia.');
       if (f.repetir.value && !f.data.value) return erro('Escolha o dia em que começa a repetir.');
+      const diasRep = [...dlg.querySelectorAll('input[name="rep_dia"]:checked')].map(c => c.value);
+      if (f.repetir.value === 'personalizado' && !diasRep.length) return erro('Marque pelo menos um dia da semana para repetir.');
+      if (f.tem_ate.checked && f.repetir_ate.value && f.data.value && f.repetir_ate.value < f.data.value) return erro('A data de parar precisa ser depois do começo.');
       const dados = { titulo, categoria: f.categoria.value || 'outro', marca_id: f.marca_id ? (f.marca_id.value || null) : (t.marca_id || null),
         duracao_min: dur, data: f.data.value || null, hora: f.hora.value || null, lembrete_min: Number(f.lembrete_min.value), notas: f.notas.value.trim() || null,
-        repetir: f.repetir.value || null, repetir_ate: f.repetir.value ? (f.repetir_ate.value || null) : null };
+        repetir: f.repetir.value || null, repetir_ate: f.repetir.value && f.tem_ate.checked ? (f.repetir_ate.value || null) : null,
+        repetir_dias: f.repetir.value === 'personalizado' ? diasRep.join(',') : null };
       const btn = dlg.querySelector('#tf-salvar'); btn.disabled = true;
       try {
         await salvarTarefa(nova ? null : t.id, dados);
@@ -711,7 +743,7 @@
       </div>
       <div class="cartao ritmo" id="t-ritmo"></div>
       <div class="marcas-ferramentas">
-        <div class="visoes"><button class="vis-btn ativo" data-tvis="hoje">Hoje</button><button class="vis-btn" data-tvis="semana">Semana</button><button class="vis-btn" data-tvis="ritmo">Meu ritmo</button></div>
+        <div class="visoes"><button class="vis-btn ativo" data-tvis="hoje">Hoje</button><button class="vis-btn" data-tvis="ritmo">Meu ritmo</button></div><button class="btn-secundario ver-agenda" data-ver-agenda="tudo">📅 Ver na Agenda</button>
       </div>
       <div id="t-conteudo"><p class="carregando">Carregando suas tarefas...</p></div>`;
     raiz.addEventListener('click', (e) => {
@@ -722,7 +754,7 @@
       if (a.matches('[data-comecar]')) return comecar(a.dataset.comecar);
       if (a.matches('[data-pausar]')) return pausar(a.dataset.pausar);
       if (a.matches('[data-editar-tempo]')) return editarTempo(a.dataset.editarTempo);
-      if (a.matches('[data-tvis]')) { visao = a.dataset.tvis; return desenhar(); }
+      if (a.matches('[data-tvis]')) { if (a.dataset.tvis === 'semana' && window.Agenda) return Agenda.abrirEm('semana'); visao = a.dataset.tvis; return desenhar(); }
       if (a.matches('[data-plano]')) return abrirPlano();
       if (a.matches('[data-reagendar-atrasadas]')) return reagendarAtrasadas();
       if (a.matches('[data-equilibrar]')) return equilibrarSemana();
@@ -768,6 +800,13 @@
     LIVRES,
     abrir(id) { const t = tarefas.find(x => x.id === id); if (t) abrirTarefa(t); },
     // Abre "nova" sem trocar de aba (usado pela Agenda)
+    // Arrastar na Agenda: muda dia e horário
+    equilibrar: () => equilibrarSemana(),
+    async mover(id, data, hora) {
+      const t = tarefas.find(x => x.id === id); if (!t) return;
+      try { await salvarTarefa(id, { data, hora }); desenhar(); toast(`Movido para ${nomeDia(data)}${hora ? ', ' + hora : ''} ✦`); }
+      catch (e) { console.error(e); toast('Não consegui mover agora.', true); }
+    },
     novaAqui(dados) { abrirTarefa(null, dados && dados.data || null, dados); },
     exportar(lista) { baixarICS(lista); },
     // Usada por Conteúdo: abre "nova tarefa" já preenchida (ex.: "Gravar: ...")

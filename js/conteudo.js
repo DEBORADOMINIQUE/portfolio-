@@ -235,13 +235,13 @@
     raiz.innerHTML = `
       <div class="marcas-barra"><p class="saudacao">Da ideia ao post, sem perder nada.</p><button class="btn-primario" data-cnovo>+ Nova ideia</button></div>
       <div class="numeros quatro" id="c-numeros"></div>
-      <div class="marcas-ferramentas"><div class="visoes"><button class="vis-btn ativo" data-cvis="planner">Planner</button><button class="vis-btn" data-cvis="calendario">Calendário</button><button class="vis-btn" data-cvis="roteiros">Roteiros</button></div></div>
+      <div class="marcas-ferramentas"><div class="visoes"><button class="vis-btn ativo" data-cvis="planner">Planner</button><button class="vis-btn" data-cvis="roteiros">Roteiros</button></div><button class="btn-secundario ver-agenda" data-ver-agenda="post">📅 Ver na Agenda</button></div>
       <div id="c-visao"><p class="carregando">Carregando seus conteúdos...</p></div>`;
     raiz.addEventListener('click', (e) => {
       const a = e.target.closest('[data-cnovo], [data-cvis], [data-cavancar], [data-cabrir], [data-ccopiar], [data-cmes], [data-cdia], .card-marca[data-cid]');
       if (!a) return;
       if (a.matches('[data-cnovo]')) return abrirFicha(null);
-      if (a.matches('[data-cvis]')) { visao = a.dataset.cvis; return desenhar(); }
+      if (a.matches('[data-cvis]')) { if (a.dataset.cvis === 'calendario' && window.Agenda) return Agenda.abrirEm('mes'); visao = a.dataset.cvis; return desenhar(); }
       if (a.matches('[data-cavancar]')) { e.stopPropagation(); return mover(a.dataset.cavancar, a.dataset.para); }
       if (a.matches('[data-cmes]')) { mesCal.setMonth(mesCal.getMonth() + Number(a.dataset.cmes)); return desenharCalendario(); }
       if (a.matches('[data-ccopiar]')) { const c = itens.find(x => x.id === a.dataset.ccopiar); return navigator.clipboard.writeText(textoRoteiro(c)).then(() => toast('Roteiro copiado ✦')); }

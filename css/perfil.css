@@ -72,3 +72,24 @@
 .btn-voltar[hidden] { display: none; }
 :root[data-genero="masculino"] .btn-voltar { border-radius: 10px; }
 @media (max-width: 560px) { .btn-voltar span { display: none; } .btn-voltar { padding: 0 10px; } }
+
+/* =========================================================
+   LEGIBILIDADE · tamanho da letra (Meu perfil) e conforto
+   Tudo no app usa rem, então mudar a base aumenta o app todo.
+   ========================================================= */
+html { font-size: 16px; }
+html[data-letra="grande"] { font-size: 17.5px; }
+html[data-letra="extra"] { font-size: 19px; }
+body { line-height: 1.6; letter-spacing: .005em; -webkit-font-smoothing: antialiased; }
+/* Os textos que eram miudinhos ganham um mínimo confortável */
+.desc, small, .t-meta, .chip, .hoje-abrir small, .f-corpo small, .s-item small, .numero .extra,
+.coluna header small, .ag-txt small, .entregaveis, .tag-data, .prazo, .valor-tag, .legenda, .sem,
+.usuario-email, .perfil-txt small, .links-legais, .menu-grupo { font-size: max(.8rem, 13px) !important; }
+.numero .rotulo, .ritmo-rotulo { font-size: max(.74rem, 12.5px) !important; }
+.aba { font-size: 1rem; padding-top: 13px; padding-bottom: 13px; }
+.campo span, label.rot { font-size: .9rem; }
+.campo input, .campo select, .campo textarea { font-size: 1rem; }
+.cartao h2 { font-size: 1.2rem; }
+/* Cor do texto de apoio um pouco mais escura: mais contraste, menos esforço */
+:root:not([data-theme="dark"]) { --suave: #6a4560; }
+.letra-escolha { margin-bottom: 6px; }

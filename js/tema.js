@@ -8,6 +8,7 @@
   const genero = ler('oug_genero');
   if (genero) raiz.dataset.genero = genero;
   if (ler('oug_brilho') === 'nao') raiz.dataset.semBrilho = '1';
+  raiz.dataset.letra = ler('oug_letra') || 'grande';   // normal | grande | extra
 
   window.Tema = {
     alternar() {
@@ -17,6 +18,7 @@
       return escuro;
     },
     escuro: () => raiz.getAttribute('data-theme') === 'dark',
+    letra(v) { if (v) { raiz.dataset.letra = v; gravar('oug_letra', v); } return raiz.dataset.letra; },
     // Aplica gênero e brilho vindos do perfil (banco) e guarda no aparelho
     aplicarPerfil(g, brilho) {
       if (g) { raiz.dataset.genero = g; gravar('oug_genero', g); }
