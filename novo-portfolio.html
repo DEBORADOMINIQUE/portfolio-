@@ -130,6 +130,18 @@
   .pessoal { text-align: center; margin: 26px auto 0; color: var(--suave); font-style: italic; font-family: var(--titulo); font-size: 1.1rem; }
   @media (min-width: 860px) { .porque-grade { grid-template-columns: 1fr 1fr 1.1fr; grid-template-rows: auto auto; } .porque-foto { grid-column: 3; grid-row: 1 / 3; } .porque-grade .largo { grid-column: 1 / 3; } }
 
+  /* Papo: conversa marca x Débora */
+  .papo-grade { display: grid; gap: 22px; align-items: center; }
+  @media (min-width: 860px) { .papo-grade { grid-template-columns: 1.25fr .9fr; gap: 48px; } }
+  .papo { display: flex; flex-direction: column; gap: 10px; }
+  .balao-p { position: relative; margin: 0; max-width: 84%; padding: 13px 18px; border-radius: 22px; font-size: 1rem; line-height: 1.45; box-shadow: 0 10px 22px -14px rgba(26, 16, 12, .5); }
+  .balao-p.marca { align-self: flex-start; background: #fff; color: var(--texto); border-bottom-left-radius: 6px; font-weight: 600; }
+  .balao-p.eu { align-self: flex-end; background: var(--vinho); color: var(--creme-claro); border-bottom-right-radius: 6px; margin-bottom: 8px; }
+  .balao-p.marca::before { content: "Marca"; display: block; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--suave); font-weight: 600; margin-bottom: 2px; }
+  .balao-p.eu::before { content: "Débora"; display: block; font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dourado); font-weight: 600; margin-bottom: 2px; }
+  .papo-grade .porque-foto { grid-column: auto; grid-row: auto; min-height: 0; height: 100%; max-height: 620px; }
+  @media (max-width: 859px) { .papo-grade .porque-foto { height: 440px; } .balao-p { max-width: 90%; } }
+
   /* Trabalhos */
   .filtros { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 6px; margin: 0 0 24px; justify-content: flex-start; }
   .filtros::-webkit-scrollbar { display: none; }
@@ -192,6 +204,7 @@
   @media (min-width: 860px) { .passos { grid-template-columns: repeat(3, 1fr); } }
   .passo { background: rgba(241, 230, 207, .07); border: 1px solid rgba(241, 230, 207, .16); border-radius: var(--raio); padding: 24px; }
   .passo .num { background: var(--dourado); color: var(--marrom); }
+  .passo-n { display: block; font-family: var(--titulo); font-style: italic; font-size: 3.2rem; line-height: 1; color: var(--dourado); margin-bottom: 10px; }
   .passo h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--creme-claro); }
   .passo p { margin: 0; color: var(--claro-suave); font-size: .95rem; }
 
@@ -261,7 +274,7 @@
     <a class="logo" href="#inicio">Débora Dominique</a>
     <nav class="menu" aria-label="Navegação">
       <a href="#trabalhos">Trabalhos</a>
-      <a href="#porque">Por que eu</a>
+      <a href="#porque">Papo rápido</a>
       <a href="#resultados">Resultados</a>
       <a href="#pacotes">Pacotes</a>
       <a href="#duvidas">Dúvidas</a>
@@ -284,7 +297,6 @@
       <h1>Oi, marca! Eu sou a <em>Débora</em>.</h1>
       <p class="frase">Crio vídeos e fotos UGC com a minha rotina de verdade, do jeito que eu indicaria o seu produto para uma amiga. É assim que a sua cliente confia e compra.</p>
       <a class="botao botao-vinho botao-capa" data-whats="Olá, Débora! Vi o seu portfólio e quero um orçamento de UGC.">Entrar em contato</a>
-      <p class="capa-nota">Mais de 20 marcas trabalhadas</p>
     </div>
   </section>
 
@@ -314,16 +326,21 @@
   <section id="porque">
     <div class="caixa">
       <div class="cabeca aparecer">
-        <span class="rotulo">Diferencial</span>
-        <h2>Por que trabalhar <em>comigo</em></h2>
+        <span class="rotulo">Papo rápido</span>
+        <h2>O que toda marca <em>me pergunta</em></h2>
       </div>
-      <div class="porque-grade">
-        <div class="cartao aparecer"><span class="num">#01</span><h3>10 anos em beleza</h3><p>Sei mostrar textura, aplicação e resultado do jeito que a cliente entende.</p></div>
-        <div class="cartao aparecer"><span class="num">#02</span><h3>Gancho nos 3 primeiros segundos</h3><p>O roteiro chega pronto e você aprova antes de eu gravar.</p></div>
+      <div class="papo-grade">
+        <div class="papo">
+          <p class="balao-p marca aparecer">Você entende do meu produto?</p>
+          <p class="balao-p eu aparecer">Foram mais de 10 anos trabalhando com beleza. Sei mostrar textura, aplicação e resultado do jeito que a cliente entende. ✨</p>
+          <p class="balao-p marca aparecer">E se ninguém parar para ver?</p>
+          <p class="balao-p eu aparecer">O gancho fica nos 3 primeiros segundos, e você aprova o roteiro antes de eu gravar. 🎬</p>
+          <p class="balao-p marca aparecer">Quem faz o vídeo?</p>
+          <p class="balao-p eu aparecer">Eu, do roteiro à edição: equipamento próprio, 4K, trilha licenciada e até 2 ajustes. 🤍</p>
+        </div>
         <div class="porque-foto aparecer"><img src="img/sobre-nova.jpg" alt="Débora Dominique gargalhando, sentada numa poltrona" loading="lazy"></div>
-        <div class="cartao largo aparecer"><span class="num">#03</span><h3>Do roteiro à edição, comigo</h3><p>Equipamento próprio, vídeo em 4K, trilha licenciada e até 2 ajustes inclusos.</p></div>
       </div>
-      <p class="pessoal aparecer">Mineira, 32 anos, casada com o Pedro e com três gatos que adoram aparecer nos vídeos.</p>
+      <p class="pessoal aparecer">Mineira de BH, 32 anos, casada com o Pedro e mãe da Pedrita, do Alemão e do Dom, meus gatos que adoram aparecer nos vídeos. No resto do tempo: yoga, treino, perfume e um bom livro de suspense.</p>
     </div>
   </section>
 
@@ -387,13 +404,13 @@
   <section class="escuro" id="processo">
     <div class="caixa">
       <div class="cabeca aparecer">
-        <span class="rotulo">Processo</span>
-        <h2>Da ideia à entrega <em>em 3 passos</em></h2>
+        <span class="rotulo">Como funciona</span>
+        <h2>Simples assim, <em>em 3 passos</em></h2>
       </div>
       <div class="passos">
-        <div class="passo aparecer"><span class="num" style="display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.1em;padding:4px 12px;border-radius:6px;margin-bottom:14px">#01</span><h3>Planejamento</h3><p>Entendo o objetivo da sua marca e mando a ideia e o roteiro para você aprovar.</p></div>
-        <div class="passo aparecer"><span class="num" style="display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.1em;padding:4px 12px;border-radius:6px;margin-bottom:14px">#02</span><h3>Produção</h3><p>Gravo com a minha rotina como cenário e edito com trilha licenciada.</p></div>
-        <div class="passo aparecer"><span class="num" style="display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.1em;padding:4px 12px;border-radius:6px;margin-bottom:14px">#03</span><h3>Entrega</h3><p>Você revisa, eu faço até 2 ajustes e entrego em até 10 dias corridos.</p></div>
+        <div class="passo aparecer"><span class="passo-n">1</span><h3>Você me conta</h3><p>O produto, o objetivo e o prazo. Eu mando a ideia e o roteiro para você aprovar.</p></div>
+        <div class="passo aparecer"><span class="passo-n">2</span><h3>Eu gravo</h3><p>Com a minha rotina como cenário, do jeito que eu indicaria para uma amiga.</p></div>
+        <div class="passo aparecer"><span class="passo-n">3</span><h3>Você aprova</h3><p>Até 2 ajustes inclusos e entrega em até 10 dias corridos.</p></div>
       </div>
     </div>
   </section>
@@ -516,9 +533,9 @@ const VIDEOS = [
 ];
 
 const PACOTES = [
-  { nome: 'Essencial', preco: '620', para: 'Ideal para as primeiras parcerias ou para testar conteúdo.', itens: ['2 vídeos UGC', '2 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'] },
-  { nome: 'Presença', preco: '900', para: 'Para marcas que querem presença contínua e conteúdo variado.', destaque: 'Mais escolhido', itens: ['3 vídeos UGC', '3 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'] },
-  { nome: 'Experiência', preco: '1.450', para: 'Campanha completa para quem busca impacto máximo.', itens: ['5 vídeos UGC', '5 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'], presente: 'Automação ManyChat de presente: o link de compra chega sozinho para quem comenta.' }
+  { nome: 'Primeiro encontro', preco: '620', para: 'Ideal para as primeiras parcerias ou para testar conteúdo.', itens: ['2 vídeos UGC', '2 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'] },
+  { nome: 'Rotina', preco: '900', para: 'Para marcas que querem presença contínua e conteúdo variado.', destaque: 'Mais escolhido', itens: ['3 vídeos UGC', '3 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'] },
+  { nome: 'Parceria completa', preco: '1.450', para: 'Campanha completa para quem busca impacto máximo.', itens: ['5 vídeos UGC', '5 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'], presente: 'Automação ManyChat de presente: o link de compra chega sozinho para quem comenta.' }
 ];
 
 const DUVIDAS = [
