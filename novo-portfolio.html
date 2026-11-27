@@ -78,10 +78,10 @@
   .marcas { padding: 44px 0 20px; }
   .marcas p { text-align: center; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--suave); margin: 0 0 18px; }
   .esteira { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
-  .esteira ul { display: flex; gap: 18px; width: max-content; margin: 0; padding: 6px 0; list-style: none; animation: rolar 38s linear infinite; }
-  .esteira li { position: relative; width: 92px; height: 92px; border-radius: 50%; overflow: hidden; background: #fff; border: 1px solid rgba(110, 20, 35, .15); flex-shrink: 0; display: grid; place-items: center; font-size: .8rem; font-weight: 600; text-align: center; padding: 6px; }
-  .esteira li img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
-  .esteira li::after { content: "✓"; position: absolute; top: 2px; right: 2px; width: 24px; height: 24px; border-radius: 50%; background: var(--vinho); color: #fff; font-size: .75rem; display: grid; place-items: center; border: 2px solid var(--creme-claro); }
+  .esteira ul { display: flex; gap: 18px; width: max-content; margin: 0; padding: 10px 0 6px; list-style: none; animation: rolar 38s linear infinite; }
+  .esteira li { position: relative; width: 92px; height: 92px; border-radius: 50%; flex-shrink: 0; display: grid; place-items: center; font-size: .8rem; font-weight: 600; text-align: center; background: var(--vinho); color: #fff; box-shadow: 0 8px 18px -12px rgba(26, 16, 12, .6); }
+  .esteira li img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: block; }
+  .esteira li::after { content: "✓"; position: absolute; top: -4px; right: -4px; width: 26px; height: 26px; z-index: 1; border-radius: 50%; background: var(--vinho); color: #fff; font-size: .75rem; display: grid; place-items: center; border: 2px solid var(--creme-claro); }
   @keyframes rolar { to { transform: translateX(-50%); } }
   @media (prefers-reduced-motion: reduce) { .esteira ul { animation: none; flex-wrap: wrap; width: auto; justify-content: center; } }
 
@@ -162,6 +162,15 @@
   .pacote.destaque { border-color: var(--vinho); }
   .pacote .faixa { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--vinho); color: #fff; font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: 5px 14px; border-radius: 999px; white-space: nowrap; }
   .pacote h3 { font-size: 1.5rem; }
+  .preco { margin: 12px 0 2px; font-family: var(--titulo); color: var(--vinho); line-height: 1; }
+  .preco small { font-family: var(--corpo); font-size: .9rem; font-weight: 600; margin-right: 4px; vertical-align: top; position: relative; top: 8px; }
+  .preco strong { font-size: 2.6rem; font-weight: 600; }
+  .avulsos { margin-top: 34px; text-align: center; }
+  .avulsos h3 { font-size: 1.25rem; margin-bottom: 14px; }
+  .avulsos ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (min-width: 860px) { .avulsos ul { grid-template-columns: repeat(5, 1fr); } }
+  .avulsos li { background: #fff; border-radius: 16px; padding: 14px 10px; box-shadow: 0 10px 24px -20px rgba(26, 16, 12, .5); font-size: .85rem; color: var(--suave); }
+  .avulsos li b { display: block; font-family: var(--titulo); font-size: 1.25rem; color: var(--vinho); font-weight: 600; margin-top: 4px; }
   .pacote .para { margin: 6px 0 16px; color: var(--suave); font-size: .92rem; }
   .pacote ul { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; flex: 1; }
   .pacote li { padding-left: 26px; position: relative; font-size: .95rem; }
@@ -354,9 +363,19 @@
       <div class="cabeca aparecer">
         <span class="rotulo">Pacotes</span>
         <h2>Escolha um <em>ponto de partida</em></h2>
-        <p>Cada proposta é feita sob medida. Escolha o que mais combina e eu te mando os detalhes.</p>
+        <p>Escolha o pacote e me chama no WhatsApp: a mensagem já vai com o nome dele.</p>
       </div>
       <div class="pacotes" id="listaPacotes"></div>
+      <div class="avulsos aparecer">
+        <h3>Ou monte do seu jeito</h3>
+        <ul>
+          <li>Vídeo UGC<b>R$ 350</b></li>
+          <li>Foto UGC<b>R$ 70</b></li>
+          <li>Collab no meu Instagram<b>R$ 700</b></li>
+          <li>Vídeo em casal<b>R$ 700</b></li>
+          <li>Uso em anúncios<b>a partir de R$ 250</b></li>
+        </ul>
+      </div>
       <p class="outro aparecer">Precisa de outra combinação, collab ou uso em anúncios? <a data-whats="Olá, Débora! Vi seu portfólio e quero uma proposta personalizada para a minha marca." href="#">Me chama que eu monto.</a></p>
     </div>
   </section>
@@ -445,16 +464,15 @@ const VIDEOS = [
 ];
 
 const PACOTES = [
-  { nome: 'Essencial', para: 'Para testar UGC pela primeira vez.', itens: ['1 vídeo UGC', '3 fotos UGC', 'Roteiro aprovado antes', 'Até 2 ajustes'] },
-  { nome: 'Conteúdo completo', para: 'Vídeo e foto para site, redes e anúncios.', destaque: 'Mais escolhido', itens: ['2 vídeos UGC', '6 fotos UGC', 'Roteiro aprovado antes', 'Até 2 ajustes'] },
-  { nome: 'Venda no automático', para: 'Conteúdo, alcance e link de compra juntos.', itens: ['1 vídeo UGC', 'Collab no meu Instagram', 'Automação ManyChat com o link', 'Teste antes de divulgar'] }
+  { nome: 'Essencial', preco: '499', para: 'Para testar UGC pela primeira vez.', itens: ['1 vídeo UGC', '3 fotos UGC', 'Roteiro aprovado antes', 'Até 2 ajustes'] },
+  { nome: 'Conteúdo completo', preco: '990', para: 'Vídeo e foto para site, redes e anúncios.', destaque: 'Mais escolhido', itens: ['2 vídeos UGC', '6 fotos UGC', 'Roteiro aprovado antes', 'Até 2 ajustes'] },
+  { nome: 'Venda no automático', preco: '1.000', para: 'Conteúdo, alcance e link de compra juntos.', itens: ['1 vídeo UGC', 'Collab no meu Instagram', 'Automação ManyChat com o link', 'Teste antes de divulgar'] }
 ];
 
 const DUVIDAS = [
-  { p: 'Quanto custa?', r: 'Depende do formato, da quantidade e de como o conteúdo vai ser usado. Me conta o que precisa (e a verba, se já tiver) que eu monto a proposta.' },
+  { p: 'Os valores incluem uso em anúncios?', r: 'Os pacotes incluem o uso orgânico (redes, site e marketplace). Anúncios pagos, exclusividade e mais tempo de uso entram à parte, a partir de R$ 250.' },
   { p: 'Qual o prazo?', r: 'Até 10 dias corridos depois de receber o produto. Tem data de campanha? Me avisa no início.' },
   { p: 'Você escreve o roteiro?', r: 'Sim. Eu proponho e você aprova antes de eu gravar. Se você já tiver um roteiro, eu gravo a partir dele.' },
-  { p: 'Posso usar em anúncios?', r: 'Pode. Licença para anúncios, exclusividade e tempo de uso entram na proposta.' },
   { p: 'Você grava fora de casa?', r: 'Sim: restaurantes, lojas, clínicas e passeios em BH, e também em viagens.' }
 ];
 
@@ -500,7 +518,7 @@ desenharGaleria();
 // Pacotes (sem preço: o valor é combinado na conversa)
 $('listaPacotes').innerHTML = PACOTES.map((p) => `<div class="pacote aparecer ${p.destaque ? 'destaque' : ''}">
   ${p.destaque ? `<span class="faixa">${esc(p.destaque)}</span>` : ''}
-  <h3>${esc(p.nome)}</h3><p class="para">${esc(p.para)}</p>
+  <h3>${esc(p.nome)}</h3><p class="preco"><small>R$</small><strong>${esc(p.preco)}</strong></p><p class="para">${esc(p.para)}</p>
   <ul>${p.itens.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
   <a class="botao ${p.destaque ? 'botao-vinho' : 'botao-borda'}" data-whats="${esc(`Olá, Débora! Vi seu portfólio e quero uma proposta do pacote ${p.nome}.`)}">Pedir proposta</a>
 </div>`).join('');
