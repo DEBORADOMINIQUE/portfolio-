@@ -208,6 +208,7 @@
   .pacote li { padding-left: 26px; position: relative; font-size: .95rem; }
   .pacote li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--vinho); font-weight: 700; }
   .pacote .botao { width: 100%; }
+  .selo-uso { display: inline-block; margin-top: 14px !important; background: #fff; border: 1px solid var(--dourado); color: var(--vinho) !important; border-radius: 999px; padding: 8px 18px; font-size: .9rem; font-weight: 600; }
   .presente { display: flex; gap: 10px; align-items: flex-start; margin: -8px 0 20px; padding: 12px 14px; border-radius: 14px; background: #fbf1dc; border: 1px dashed var(--dourado); font-size: .88rem; color: var(--texto); line-height: 1.4; }
   .presente span { font-weight: 500; }
   .outro { text-align: center; margin: 26px 0 0; color: var(--suave); }
@@ -395,6 +396,7 @@
         <span class="rotulo">Pacotes</span>
         <h2>Escolha um <em>ponto de partida</em></h2>
         <p>Escolha o pacote e me chama no WhatsApp: a mensagem já vai com o nome dele.</p>
+        <p class="selo-uso">✓ Direito de uso de todos os vídeos UGC por 6 meses já incluso em todos os pacotes, inclusive em anúncios.</p>
       </div>
       <div class="pacotes" id="listaPacotes"></div>
       <div class="avulsos aparecer">
@@ -502,13 +504,13 @@ const VIDEOS = [
 ];
 
 const PACOTES = [
-  { nome: 'Essencial', preco: '620', para: 'Ideal para as primeiras parcerias ou para testar conteúdo.', itens: ['2 vídeos UGC', '2 fotos UGC', 'Roteiro', 'Gravação + edição', 'Uso em anúncios por 3 meses'] },
-  { nome: 'Presença', preco: '900', para: 'Para marcas que querem presença contínua e conteúdo variado.', destaque: 'Mais escolhido', itens: ['3 vídeos UGC', '3 fotos UGC', 'Roteiro', 'Gravação + edição', 'Uso em anúncios por 6 meses'] },
-  { nome: 'Experiência', preco: '1.450', para: 'Campanha completa para quem busca impacto máximo.', itens: ['5 vídeos UGC', '5 fotos UGC', 'Roteiro', 'Gravação + edição', 'Uso em anúncios por 6 meses'], presente: 'Automação ManyChat de presente: o link de compra chega sozinho para quem comenta.' }
+  { nome: 'Essencial', preco: '620', para: 'Ideal para as primeiras parcerias ou para testar conteúdo.', itens: ['2 vídeos UGC', '2 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'] },
+  { nome: 'Presença', preco: '900', para: 'Para marcas que querem presença contínua e conteúdo variado.', destaque: 'Mais escolhido', itens: ['3 vídeos UGC', '3 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'] },
+  { nome: 'Experiência', preco: '1.450', para: 'Campanha completa para quem busca impacto máximo.', itens: ['5 vídeos UGC', '5 fotos UGC', 'Roteiro', 'Gravação + edição', 'Direito de uso por 6 meses'], presente: 'Automação ManyChat de presente: o link de compra chega sozinho para quem comenta.' }
 ];
 
 const DUVIDAS = [
-  { p: 'Os pacotes incluem uso em anúncios?', r: 'Sim: 3 meses no Essencial e 6 meses no Presença e no Experiência. Mais tempo de uso ou exclusividade entram à parte.' },
+  { p: 'Os pacotes incluem direito de uso?', r: 'Sim. Todos os pacotes já incluem 6 meses de direito de uso dos vídeos, inclusive em anúncios. Mais tempo ou exclusividade entram à parte.' },
   { p: 'Qual o prazo?', r: 'Até 10 dias corridos depois de receber o produto. Tem data de campanha? Me avisa no início.' },
   { p: 'Você escreve o roteiro?', r: 'Sim. Eu proponho e você aprova antes de eu gravar. Se você já tiver um roteiro, eu gravo a partir dele.' },
   { p: 'Você grava fora de casa?', r: 'Sim: restaurantes, lojas, clínicas e passeios em BH, e também em viagens.' }
