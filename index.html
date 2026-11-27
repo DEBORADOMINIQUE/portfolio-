@@ -473,7 +473,7 @@
         <figure class="foto aparecer"><img src="img/ugc-natureface.jpg" alt="Débora de roupão segurando um sérum Nature Face perto do rosto" loading="lazy"><figcaption>Nature Face · Mostrar o detalhe</figcaption></figure>
         <figure class="foto aparecer"><img src="img/ugc-doseday-caixa.jpg" alt="Débora em roupa de treino mostrando o pacote do DoseDay Beauty Coffee e a caixa" loading="lazy"><figcaption>DoseDay · Criar vontade</figcaption></figure>
         <figure class="foto aparecer"><img src="img/ugc-doseday.jpg" alt="Débora sorrindo e segurando o pacote do DoseDay Beauty Coffee" loading="lazy"><figcaption>DoseDay · Gerar confiança</figcaption></figure>
-        <figure class="foto aparecer"><img src="img/ugcVontade.jpg" alt="Débora brindando com um drinque num restaurante" loading="lazy"><figcaption>Experiência</figcaption></figure>
+        <figure class="foto aparecer"><img src="img/ugcVontade.jpg" alt="Débora brindando com um drinque num restaurante" loading="lazy" style="object-position:50% 85%"><figcaption>Experiência</figcaption></figure>
         <figure class="foto aparecer"><img src="img/ugcHoomy.jpg" alt="Débora abraçando um travesseiro Hoomy" loading="lazy"><figcaption>Hoomy · Na rotina</figcaption></figure>
       </div>
     </div>
@@ -664,7 +664,7 @@ $('filtros').addEventListener('click', (e) => { const b = e.target.closest('[dat
 // Foto que ilustra cada nicho (e o enquadramento dela no bloco)
 const FOTO_NICHO = {
   'Moda': ['img/moda.jpg', '65% 42%'], 'Beleza': ['img/ugc-natureface.jpg', '50% 22%'], 'Bem-estar': ['img/ugc-doseday.jpg', '50% 30%'],
-  'Experiências': ['img/ugcVontade.jpg', '50% 35%'], 'Casa': ['img/ugcHoomy.jpg', '50% 40%'], 'Negócios e apps': ['img/negocios.jpg', '55% 52%']
+  'Experiências': ['img/ugcVontade.jpg', '50% 55%'], 'Casa': ['img/ugcHoomy.jpg', '50% 40%'], 'Negócios e apps': ['img/negocios.jpg', '55% 52%']
 };
 $('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const [foto, foco] = FOTO_NICHO[n] || [`img/videos/${(VIDEOS.find((v) => v.nicho === n) || {}).youtube}.jpg`, '50% 20%']; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
   return `<button type="button" data-ir-nicho="${esc(n)}"><img src="${foto}" alt="" loading="lazy" style="object-position:${foco}"><span class="an-nome">${esc(n)}</span><span class="an-qtd">${qtd} ${qtd === 1 ? 'vídeo' : 'vídeos'} →</span></button>`; }).join('');
