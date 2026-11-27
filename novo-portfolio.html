@@ -61,38 +61,45 @@
 
   /* Capa: foto na tela inteira, texto por cima (troque a foto em img/capa.jpg; ajuste --foco para enquadrar o rosto) */
   .capa { --foco: 50% 22%; position: relative; min-height: calc(100svh - 64px); display: flex; align-items: center; padding: 56px 0; overflow: hidden; background: linear-gradient(180deg, #e5dccc 0%, #dcd6cc 55%, #d6d2ca 100%); }
-  .capa-fundo { position: absolute; top: -4%; right: 0; height: 128%; width: auto; max-width: none; -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 14%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 14%, #000 34%); }
-  @media (min-width: 761px) and (max-aspect-ratio: 13/10) { .capa-fundo { right: -12%; } }
+  .capa-midia { position: absolute; top: -4%; right: 0; height: 128%; aspect-ratio: 3213 / 5712; }
+  .capa-fundo { width: 100%; height: 100%; object-fit: cover; -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 14%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 14%, #000 34%); }
   .capa-veu { display: none; }
   .capa-texto { position: relative; z-index: 1; }
-  .capa h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); font-weight: 500; color: #5a2a1e; max-width: 620px; }
+  .capa h1 { font-size: clamp(2.3rem, 4.6vw, 4.2rem); font-weight: 500; color: #5a2a1e; max-width: min(620px, 46vw); }
   .capa h1 em { color: var(--vinho); }
-  .capa .frase { font-size: 1.1rem; color: var(--suave); margin: 22px 0 30px; max-width: 420px; }
+  .capa .frase { font-size: 1.1rem; color: var(--suave); margin: 22px 0 30px; max-width: min(420px, 40vw); }
   .botao-capa { min-height: 58px; padding: 0 40px; letter-spacing: .14em; text-transform: uppercase; font-weight: 500; }
   .capa-nota { margin: 12px 0 0; font-size: .85rem; color: var(--suave); padding-left: 20px; }
-  .pilula { position: absolute; z-index: 1; border: 1px solid rgba(255, 255, 255, .55); background: rgba(110, 20, 35, .72); backdrop-filter: blur(6px); color: #fff; border-radius: 999px; padding: 12px 26px; font-size: .85rem; letter-spacing: .16em; text-transform: uppercase; }
-  .p1 { right: 6%; top: 20%; }
-  .p2 { right: 30%; top: 40%; }
-  .p3 { right: 4%; top: 58%; }
-  .p4 { right: 24%; bottom: 10%; }
-  .pilula { animation: flutuar 5s ease-in-out infinite; }
-  .p2 { animation-delay: -1.2s; } .p3 { animation-delay: -2.5s; } .p4 { animation-delay: -3.7s; }
-  @keyframes flutuar { 50% { transform: translateY(-8px); } }
-  @media (prefers-reduced-motion: reduce) { .pilula { animation: none; } }
+
+  /* Balões de conversa (posição em % da foto, longe do rosto) */
+  .balao { position: absolute; z-index: 2; max-width: 78%; white-space: nowrap; padding: 11px 17px; border-radius: 20px; font-size: .95rem; font-weight: 500; line-height: 1.25; box-shadow: 0 10px 24px -10px rgba(26, 16, 12, .45), 0 2px 4px rgba(26, 16, 12, .08); animation: flutuar 5s ease-in-out infinite; }
+  .balao::after { content: ""; position: absolute; bottom: 0; width: 14px; height: 14px; }
+  .balao.recebido { background: #fff; color: var(--texto); border-bottom-left-radius: 6px; }
+  .balao.recebido::after { left: -6px; background: #fff; clip-path: polygon(100% 0, 100% 100%, 0 100%); }
+  .balao.enviado { background: var(--vinho); color: #fff; border-bottom-right-radius: 6px; }
+  .balao.enviado::after { right: -6px; background: var(--vinho); clip-path: polygon(0 0, 100% 100%, 0 100%); }
+  .p1 { top: 12%; left: 58%; }
+  .p2 { top: 24%; left: 2%; animation-delay: -1.2s; }
+  .p3 { top: 47%; right: 1%; animation-delay: -2.5s; }
+  .p4 { top: 63%; left: 0; animation-delay: -3.7s; }
+  @media (min-width: 761px) and (max-width: 1250px) { .capa-midia { right: -6%; } .p1 { left: 36%; } .p3 { right: 20%; top: 50%; } }
+  @keyframes flutuar { 50% { transform: translateY(-7px); } }
+  @media (prefers-reduced-motion: reduce) { .balao { animation: none; } }
+
   @media (max-width: 760px) {
     .capa { display: block; min-height: 0; padding: 0 0 30px; background: var(--creme-claro); }
-    .capa-fundo { position: relative; inset: auto; right: auto; width: 100%; height: 62svh; min-height: 420px; object-fit: cover; object-position: 50% 18%; -webkit-mask-image: linear-gradient(180deg, #000 80%, transparent 100%); mask-image: linear-gradient(180deg, #000 80%, transparent 100%); }
-    .capa-veu { display: none; }
+    .capa-midia { position: relative; top: auto; right: auto; width: 100%; height: 62svh; min-height: 420px; aspect-ratio: auto; }
+    .capa-fundo { object-position: 50% 18%; -webkit-mask-image: linear-gradient(180deg, #000 80%, transparent 100%); mask-image: linear-gradient(180deg, #000 80%, transparent 100%); }
     .capa-texto { margin-top: -10px; }
-    .capa h1 { font-size: 2.2rem; }
-    .capa .frase { margin: 14px 0 22px; }
+    .capa h1 { font-size: 2.2rem; max-width: none; }
+    .capa .frase { margin: 14px 0 22px; max-width: none; }
     .botao-capa { width: 100%; }
     .capa-nota { text-align: center; padding: 0; }
-    .pilula { padding: 8px 15px; font-size: .68rem; letter-spacing: .12em; }
-    .p1 { top: 22px; right: 14px; left: auto; bottom: auto; }
-    .p2 { top: 70px; left: 14px; right: auto; bottom: auto; }
-    .p3 { top: 118px; right: 14px; left: auto; bottom: auto; }
-    .p4 { top: 166px; left: 14px; right: auto; bottom: auto; }
+    .balao { font-size: .78rem; padding: 8px 13px; border-radius: 16px; }
+    .p1 { top: 4%; left: auto; right: 5%; }
+    .p2 { top: 14%; left: 5%; }
+    .p3 { top: auto; bottom: 26%; right: 5%; }
+    .p4 { top: auto; bottom: 14%; left: 5%; }
   }
   .mini-numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 26px auto 0; padding: 0; list-style: none; max-width: 720px; }
   .mini-numeros li { background: #fff; border-radius: 16px; padding: 14px 12px; text-align: center; box-shadow: 0 10px 24px -18px rgba(26, 16, 12, .5); }
@@ -256,7 +263,13 @@
 
 <main>
   <section class="capa" id="inicio">
-    <img class="capa-fundo" src="img/capa-nova.jpg" alt="Débora Dominique sentada numa poltrona, olhando para a câmera">
+    <div class="capa-midia">
+      <img class="capa-fundo" src="img/capa-nova.jpg" alt="Débora Dominique sentada numa poltrona, olhando para a câmera">
+      <span class="balao recebido p1">+10 anos em beleza ✨</span>
+      <span class="balao enviado p2">Rotina fitness &amp; yoga 🧘‍♀️</span>
+      <span class="balao recebido p3">Mineira de BH ☕</span>
+      <span class="balao enviado p4">Mãe de 3 gatos 🐾</span>
+    </div>
     <div class="capa-veu" aria-hidden="true"></div>
     <div class="caixa capa-texto">
       <h1>Prazer, eu sou a <em>Débora Dominique</em>, criadora de conteúdo UGC.</h1>
@@ -264,10 +277,6 @@
       <a class="botao botao-vinho botao-capa" data-whats="Olá, Débora! Vi o seu portfólio e quero um orçamento de UGC.">Entrar em contato</a>
       <p class="capa-nota">Mais de 20 marcas trabalhadas</p>
     </div>
-    <span class="pilula p1">+10 anos em beleza</span>
-    <span class="pilula p2">Rotina fitness &amp; yoga</span>
-    <span class="pilula p3">Mineira de BH</span>
-    <span class="pilula p4">Mãe de 3 gatos</span>
   </section>
 
   <ul class="mini-numeros caixa">
