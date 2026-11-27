@@ -60,8 +60,9 @@
   @media (max-width: 860px) { .menu { display: none; } }
 
   /* Capa: foto na tela inteira, texto por cima (troque a foto em img/capa.jpg; ajuste --foco para enquadrar o rosto) */
-  .capa { --foco: 50% 22%; position: relative; min-height: calc(100svh - 64px); display: flex; align-items: center; padding: 56px 0; overflow: hidden; background: #e3dcce; }
-  .capa-fundo { position: absolute; top: 0; right: 5%; height: 118%; width: auto; max-width: none; object-fit: cover; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 85%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 85%, transparent 100%); }
+  .capa { --foco: 50% 22%; position: relative; min-height: calc(100svh - 64px); display: flex; align-items: center; padding: 56px 0; overflow: hidden; background: linear-gradient(180deg, #e5dccc 0%, #dcd6cc 55%, #d6d2ca 100%); }
+  .capa-fundo { position: absolute; top: -4%; right: 0; height: 128%; width: auto; max-width: none; -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 14%, #000 34%); mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.35) 14%, #000 34%); }
+  @media (min-width: 761px) and (max-aspect-ratio: 13/10) { .capa-fundo { right: -12%; } }
   .capa-veu { display: none; }
   .capa-texto { position: relative; z-index: 1; }
   .capa h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); font-weight: 500; color: #5a2a1e; max-width: 620px; }
