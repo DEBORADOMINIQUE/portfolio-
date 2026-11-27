@@ -60,9 +60,9 @@
   @media (max-width: 860px) { .menu { display: none; } }
 
   /* Capa: foto na tela inteira, texto por cima (troque a foto em img/capa.jpg; ajuste --foco para enquadrar o rosto) */
-  .capa { --foco: 70% 30%; position: relative; min-height: calc(100svh - 64px); display: flex; align-items: center; padding: 56px 0; overflow: hidden; background: var(--marrom); }
-  .capa-fundo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: var(--foco); }
-  .capa-veu { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(247, 240, 225, .96) 0%, rgba(247, 240, 225, .85) 32%, rgba(247, 240, 225, .25) 55%, rgba(247, 240, 225, 0) 70%); }
+  .capa { --foco: 50% 22%; position: relative; min-height: calc(100svh - 64px); display: flex; align-items: center; padding: 56px 0; overflow: hidden; background: #e3dcce; }
+  .capa-fundo { position: absolute; top: 0; right: 5%; height: 118%; width: auto; max-width: none; object-fit: cover; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 85%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 22%, #000 85%, transparent 100%); }
+  .capa-veu { display: none; }
   .capa-texto { position: relative; z-index: 1; }
   .capa h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); font-weight: 500; color: #5a2a1e; max-width: 620px; }
   .capa h1 em { color: var(--vinho); }
@@ -79,16 +79,19 @@
   @keyframes flutuar { 50% { transform: translateY(-8px); } }
   @media (prefers-reduced-motion: reduce) { .pilula { animation: none; } }
   @media (max-width: 760px) {
-    .capa { min-height: 88svh; align-items: flex-end; padding: 40px 0 34px; }
-    .capa-veu { background: linear-gradient(0deg, rgba(247, 240, 225, .97) 0%, rgba(247, 240, 225, .9) 38%, rgba(247, 240, 225, .15) 62%, rgba(247, 240, 225, 0) 75%); }
+    .capa { display: block; min-height: 0; padding: 0 0 30px; background: var(--creme-claro); }
+    .capa-fundo { position: relative; inset: auto; right: auto; width: 100%; height: 62svh; min-height: 420px; object-fit: cover; object-position: 50% 18%; -webkit-mask-image: linear-gradient(180deg, #000 80%, transparent 100%); mask-image: linear-gradient(180deg, #000 80%, transparent 100%); }
+    .capa-veu { display: none; }
+    .capa-texto { margin-top: -10px; }
+    .capa h1 { font-size: 2.2rem; }
     .capa .frase { margin: 14px 0 22px; }
     .botao-capa { width: 100%; }
     .capa-nota { text-align: center; padding: 0; }
     .pilula { padding: 8px 15px; font-size: .68rem; letter-spacing: .12em; }
-    .p1 { top: 9%; right: 14px; left: auto; bottom: auto; }
-    .p2 { top: 17%; left: 14px; right: auto; bottom: auto; }
-    .p3 { top: 25%; right: 14px; left: auto; bottom: auto; }
-    .p4 { top: 33%; left: 14px; right: auto; bottom: auto; }
+    .p1 { top: 22px; right: 14px; left: auto; bottom: auto; }
+    .p2 { top: 70px; left: 14px; right: auto; bottom: auto; }
+    .p3 { top: 118px; right: 14px; left: auto; bottom: auto; }
+    .p4 { top: 166px; left: 14px; right: auto; bottom: auto; }
   }
   .mini-numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 26px auto 0; padding: 0; list-style: none; max-width: 720px; }
   .mini-numeros li { background: #fff; border-radius: 16px; padding: 14px 12px; text-align: center; box-shadow: 0 10px 24px -18px rgba(26, 16, 12, .5); }
@@ -250,7 +253,7 @@
 
 <main>
   <section class="capa" id="inicio">
-    <img class="capa-fundo" src="img/capa.jpg" alt="Débora Dominique sorrindo">
+    <img class="capa-fundo" src="img/capa-nova.jpg" alt="Débora Dominique sentada numa poltrona, olhando para a câmera">
     <div class="capa-veu" aria-hidden="true"></div>
     <div class="caixa capa-texto">
       <h1>Prazer, eu sou a <em>Débora Dominique</em>, criadora de conteúdo UGC.</h1>
@@ -296,7 +299,7 @@
       <div class="porque-grade">
         <div class="cartao aparecer"><span class="num">#01</span><h3>10 anos em beleza</h3><p>Sei mostrar textura, aplicação e resultado do jeito que a cliente entende.</p></div>
         <div class="cartao aparecer"><span class="num">#02</span><h3>Gancho nos 3 primeiros segundos</h3><p>O roteiro chega pronto e você aprova antes de eu gravar.</p></div>
-        <div class="porque-foto aparecer"><img src="img/sobre.jpg" alt="Débora Dominique sentada num sofá vermelho, de vestido preto, olhando para a câmera" loading="lazy"></div>
+        <div class="porque-foto aparecer"><img src="img/sobre-nova.jpg" alt="Débora Dominique gargalhando, sentada numa poltrona" loading="lazy"></div>
         <div class="cartao largo aparecer"><span class="num">#03</span><h3>Do roteiro à edição, comigo</h3><p>Equipamento próprio, vídeo em 4K, trilha licenciada e até 2 ajustes inclusos.</p></div>
       </div>
       <p class="pessoal aparecer">Mineira, 32 anos, casada com o Pedro e com três gatos que adoram aparecer nos vídeos.</p>
