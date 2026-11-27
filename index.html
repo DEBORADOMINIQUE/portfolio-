@@ -153,6 +153,18 @@
   .papo-grade .porque-foto { grid-column: auto; grid-row: auto; min-height: 0; height: 100%; max-height: 620px; }
   @media (max-width: 859px) { .papo-grade .porque-foto { height: 440px; } .balao-p { max-width: 90%; } }
 
+  /* Destaque da galeria */
+  .destaque { display: grid; gap: 24px; align-items: center; margin: 0 auto 44px; max-width: 900px; }
+  .destaque .video-capa { aspect-ratio: 9 / 16; max-height: 560px; margin: 0 auto; box-shadow: 0 24px 50px -18px rgba(0, 0, 0, .7); }
+  .destaque .marca-bola { width: 64px; height: 64px; }
+  .destaque-txt h3 { font-size: clamp(1.7rem, 3.4vw, 2.4rem); color: var(--creme-claro); margin-bottom: 12px; }
+  .destaque-txt h3 em { color: var(--dourado); }
+  .destaque-txt p { color: var(--claro-suave); margin: 0 0 16px; }
+  .destaque-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; padding: 0; }
+  .destaque-tags li { border: 1px solid rgba(241, 230, 207, .3); border-radius: 999px; padding: 5px 14px; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dourado); }
+  @media (min-width: 760px) { .destaque { grid-template-columns: 300px 1fr; gap: 48px; } }
+  @media (max-width: 759px) { .destaque .video { max-width: 280px; margin: 0 auto; display: block; } .destaque-txt { text-align: center; } .destaque-tags { justify-content: center; } }
+
   /* Trabalhos */
   .filtros { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 6px; margin: 0 0 24px; justify-content: flex-start; }
   .filtros::-webkit-scrollbar { display: none; }
@@ -343,6 +355,18 @@
         <span class="rotulo">Portfólio</span>
         <h2>Escolha o nicho e <em>dê o play</em></h2>
       </div>
+      <div class="destaque aparecer">
+        <button class="video" type="button" data-video="vJNWhG0pbqE" data-titulo="Rejuv · React com médico">
+          <div class="video-capa"><img src="img/videos/vJNWhG0pbqE.jpg" alt="Débora em vídeo react para a Rejuv" loading="lazy"><span class="marca-bola"><img src="img/logos/rejuv.jpg" alt=""></span><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>
+        </button>
+        <div class="destaque-txt">
+          <span class="rotulo">Em destaque</span>
+          <h3>Rejuv <em>voltou a me contratar</em></h3>
+          <p>Vídeo react com médico, feito para anúncio. É a segunda parceria com a marca: quem testa, volta.</p>
+          <ul class="destaque-tags"><li>Anúncio</li><li>React</li><li>2ª parceria</li></ul>
+          <a class="botao botao-dourado" data-whats="Olá, Débora! Vi o vídeo da Rejuv no seu portfólio e quero um vídeo assim para a minha marca.">Quero um vídeo assim</a>
+        </div>
+      </div>
       <div class="filtros" id="filtros" role="group" aria-label="Filtrar por nicho"></div>
       <div class="galeria" id="galeria"></div>
       <div class="ver-mais"><button class="botao botao-borda" type="button" id="verMais" style="color:var(--creme)">Ver mais vídeos</button></div>
@@ -364,7 +388,7 @@
           <p class="balao-p marca aparecer">Quem faz o vídeo?</p>
           <p class="balao-p eu aparecer">Eu, do roteiro à edição: equipamento próprio, 4K, trilha licenciada e até 2 ajustes. 🤍</p>
         </div>
-        <div class="porque-foto aparecer"><img src="img/sobre-nova.jpg" alt="Débora Dominique gargalhando, sentada numa poltrona" loading="lazy"></div>
+        <div class="porque-foto aparecer"><img src="img/caneca.jpg" alt="Débora rindo no sofá, segurando uma caneca escrita ai mona então tá" loading="lazy"></div>
       </div>
       <p class="pessoal aparecer">Mineira de BH, 32 anos, casada com o Pedro e mãe da Pedrita, do Alemão, do Dom e do Naruto, meus quatro gatos que adoram aparecer nos vídeos.<br>No resto do tempo: yoga, treino, perfume e um bom livro de suspense.</p>
     </div>
@@ -535,7 +559,6 @@ const LOGO = Object.fromEntries(MARCAS.map((m) => [m.nome, m.logo]));
 
 // "formato" aparece embaixo de cada vídeo: é o que a marca procura (problema x solução, review...)
 const VIDEOS = [
-  { nicho: 'Bem-estar', titulo: 'React com médico · 2ª parceria', marca: 'Rejuv', formato: 'Anúncio · React', youtube: 'vJNWhG0pbqE' },
   { nicho: 'Moda', titulo: 'Recebidos Black Friday', marca: 'Kaisan', formato: 'Anúncio · Unboxing', youtube: 'ccJmGl4K-B8' },
   { nicho: 'Moda', titulo: 'Looks fitness Black Friday', marca: 'Kaisan', formato: 'Provador', youtube: 'c0vTg_vd7ls' },
   { nicho: 'Beleza', titulo: 'Comparativo de perfumes', marca: 'WePink', formato: 'Comparativo', youtube: 'hnvOJXSc0QI' },
@@ -547,7 +570,7 @@ const VIDEOS = [
   { nicho: 'Negócios e apps', titulo: 'Cursos online', marca: 'Edune', formato: 'Collab', youtube: 'Nq430QknurE' },
   { nicho: 'Beleza', titulo: 'Comparativo de perfume', marca: 'WePink', formato: 'Comparativo', youtube: 'MVcUDSwgCNU' },
   { nicho: 'Casa', titulo: 'Toalha', marca: 'Hoomy', formato: 'Review', youtube: 'adYP_45ZoYY' },
-  { nicho: 'Casa', titulo: 'Luminária de chão', marca: '', formato: 'Review', youtube: '-QeGW8zUIPA' },
+  { nicho: 'Casa', titulo: 'Luminária de chão', marca: 'Mercado Livre', formato: 'Afiliada · Review', youtube: '-QeGW8zUIPA' },
   { nicho: 'Bem-estar', titulo: 'Chá para TPM', marca: 'Leão', formato: 'Problema x solução', youtube: 'pk0FLv2-NYM' },
   { nicho: 'Bem-estar', titulo: 'Beauty coffee', marca: 'DoseDay', formato: 'Rotina', youtube: 'sMExq3hlOH4' },
   { nicho: 'Moda', titulo: 'Relógio', marca: 'Saint Germain', formato: 'Review', youtube: 'dYL8_a_19Xs' },
