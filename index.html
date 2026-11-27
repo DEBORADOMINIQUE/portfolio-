@@ -661,13 +661,27 @@ function filtrar(n) {
 }
 $('filtros').addEventListener('click', (e) => { const b = e.target.closest('[data-nicho]'); if (b) filtrar(b.dataset.nicho); });
 // Atalhos logo depois da capa: escolhe o nicho e desce direto para os vídeos
-// Foto que ilustra cada nicho (e o enquadramento dela no bloco)
+// Foto que ilustra cada nicho: [arquivo, onde começa o topo da cabeça (0 a 1), onde fica o rosto na largura (0 a 1)]
+// O enquadramento é calculado na hora, para a cabeça nunca ser cortada em nenhum tamanho de tela
 const FOTO_NICHO = {
-  'Moda': ['img/moda.jpg', '50% 28%'], 'Beleza': ['img/ugc-natureface.jpg', '50% 20%'], 'Bem-estar': ['img/ugc-doseday.jpg', '70% 28%'],
-  'Experiências': ['img/ugcVontade.jpg', '50% 40%'], 'Casa': ['img/casa.jpg', '50% 18%'], 'Negócios e apps': ['img/negocios.jpg', '50% 52%']
+  'Moda': ['img/moda.jpg', 0.2, 0.66], 'Beleza': ['img/ugc-natureface.jpg', 0.16, 0.52], 'Bem-estar': ['img/bemestar.jpg', 0.04, 0.6],
+  'Experiências': ['img/ugcVontade.jpg', 0.26, 0.55], 'Casa': ['img/casa.jpg', 0.04, 0.5], 'Negócios e apps': ['img/negocios.jpg', 0.39, 0.42]
 };
-$('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const [foto, foco] = FOTO_NICHO[n] || [`img/videos/${(VIDEOS.find((v) => v.nicho === n) || {}).youtube}.jpg`, '50% 20%']; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
-  return `<button type="button" data-ir-nicho="${esc(n)}"><img src="${foto}" alt="" loading="lazy" style="object-position:${foco}"><span class="an-nome">${esc(n)}</span><span class="an-qtd">${qtd} ${qtd === 1 ? 'vídeo' : 'vídeos'} →</span></button>`; }).join('');
+$('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const [foto, topo, x] = FOTO_NICHO[n] || [`img/videos/${(VIDEOS.find((v) => v.nicho === n) || {}).youtube}.jpg`, 0.15, 0.5]; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
+  return `<button type="button" data-ir-nicho="${esc(n)}"><img src="${foto}" alt="" loading="lazy" data-topo="${topo}" data-x="${x}"><span class="an-nome">${esc(n)}</span><span class="an-qtd">${qtd} ${qtd === 1 ? 'vídeo' : 'vídeos'} →</span></button>`; }).join('');
+// Enquadra cada foto: um respiro acima da cabeça e o rosto do lado oposto ao texto
+function enquadrarNichos() {
+  document.querySelectorAll('#atalhosNicho img').forEach((img) => {
+    if (!img.naturalWidth) return;
+    const W = img.clientWidth, T = img.clientHeight, k = Math.max(W / img.naturalWidth, T / img.naturalHeight);
+    const Ws = img.naturalWidth * k, Hs = img.naturalHeight * k, celular = innerWidth <= 760;
+    const offY = Math.min(Math.max(+img.dataset.topo * Hs - T * 0.08, 0), Hs - T);
+    const offX = Math.min(Math.max(+img.dataset.x * Ws - W * (celular ? 0.5 : 0.66), 0), Ws - W);
+    img.style.objectPosition = `${-offX}px ${-offY}px`;
+  });
+}
+document.querySelectorAll('#atalhosNicho img').forEach((img) => img.addEventListener('load', enquadrarNichos));
+addEventListener('resize', enquadrarNichos); enquadrarNichos();
 $('atalhosNicho').addEventListener('click', (e) => {
   const b = e.target.closest('[data-ir-nicho]'); if (!b) return;
   filtrar(b.dataset.irNicho);
