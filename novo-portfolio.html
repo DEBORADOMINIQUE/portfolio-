@@ -664,7 +664,7 @@ $('filtros').addEventListener('click', (e) => { const b = e.target.closest('[dat
 // Foto que ilustra cada nicho (e o enquadramento dela no bloco)
 const FOTO_NICHO = {
   'Moda': ['img/moda.jpg', '65% 42%'], 'Beleza': ['img/ugc-natureface.jpg', '50% 22%'], 'Bem-estar': ['img/ugc-doseday.jpg', '50% 30%'],
-  'Experiências': ['img/ugcVontade.jpg', '50% 55%'], 'Casa': ['img/ugcHoomy.jpg', '50% 40%'], 'Negócios e apps': ['img/negocios.jpg', '55% 52%']
+  'Experiências': ['img/ugcVontade.jpg', '50% 55%'], 'Casa': ['img/casa.jpg', '50% 22%'], 'Negócios e apps': ['img/negocios.jpg', '55% 52%']
 };
 $('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const [foto, foco] = FOTO_NICHO[n] || [`img/videos/${(VIDEOS.find((v) => v.nicho === n) || {}).youtube}.jpg`, '50% 20%']; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
   return `<button type="button" data-ir-nicho="${esc(n)}"><img src="${foto}" alt="" loading="lazy" style="object-position:${foco}"><span class="an-nome">${esc(n)}</span><span class="an-qtd">${qtd} ${qtd === 1 ? 'vídeo' : 'vídeos'} →</span></button>`; }).join('');
