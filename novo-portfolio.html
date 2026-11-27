@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DÉBORA DOMINIQUE | UGC CREATOR</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Débora Dominique, UGC Creator em Belo Horizonte: vídeos e fotos reais que vendem, para marcas de beleza, bem-estar, moda, casa e experiências.">
+<meta name="theme-color" content="#2a1a14">
+<link rel="icon" type="image/svg+xml" href="img/icone.svg">
+<link rel="apple-touch-icon" href="img/icone-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --vinho: #6e1423; --vinho-escuro: #3d0b14;
+    --creme: #f1e6cf; --creme-claro: #f7f0e1; --dourado: #c9a86a;
+    --marrom: #2a1a14; --marrom-profundo: #1a100c;
+    --texto: #2a1a14; --suave: #5b463b; --claro: #f1e6cf; --claro-suave: rgba(241, 230, 207, .78);
+    --raio: 24px; --largura: 1160px;
+    --sombra: 0 24px 50px -20px rgba(26, 16, 12, .45);
+    --titulo: "Playfair Display", Georgia, serif;
+    --corpo: "Inter", system-ui, -apple-system, sans-serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  body { margin: 0; font-family: var(--corpo); font-size: 1rem; line-height: 1.6; color: var(--texto); background: var(--creme-claro); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  .caixa { width: min(var(--largura), 100% - 32px); margin-inline: auto; }
+  section { padding: 76px 0; }
+  .escuro { background: var(--marrom); color: var(--claro); }
+  .rotulo { display: inline-block; font-size: .72rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--vinho); border: 1px solid currentColor; border-radius: 999px; padding: 6px 14px; margin: 0 0 14px; }
+  .escuro .rotulo { color: var(--dourado); }
+  h1, h2, h3 { font-family: var(--titulo); font-weight: 600; line-height: 1.12; margin: 0; }
+  h2 { font-size: clamp(1.9rem, 4.6vw, 2.9rem); }
+  h2 em, h1 em { font-style: italic; font-weight: 500; color: var(--vinho); }
+  .escuro h2 em { color: var(--dourado); }
+  .cabeca { text-align: center; max-width: 640px; margin: 0 auto 40px; }
+  .cabeca p { margin: 12px 0 0; color: var(--suave); }
+  .escuro .cabeca p { color: var(--claro-suave); }
+
+  /* Botões */
+  .botao { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; padding: 0 26px; border-radius: 999px; font-weight: 600; font-size: .95rem; text-decoration: none; border: 1.5px solid transparent; cursor: pointer; transition: transform .2s, background .2s; font-family: var(--corpo); }
+  .botao:hover { transform: translateY(-2px); }
+  .botao-vinho { background: var(--vinho); color: var(--creme-claro); }
+  .botao-dourado { background: var(--dourado); color: var(--marrom); }
+  .botao-borda { border-color: currentColor; background: transparent; }
+  .botao svg { width: 18px; height: 18px; fill: currentColor; }
+
+  /* Topo */
+  .topo { position: sticky; top: 0; z-index: 20; background: rgba(247, 240, 225, .92); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(110, 20, 35, .1); }
+  .topo .caixa { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; }
+  .logo { font-family: var(--titulo); font-weight: 600; font-size: 1.15rem; text-decoration: none; letter-spacing: .02em; }
+  .menu { display: flex; gap: 22px; font-size: .9rem; }
+  .menu a { text-decoration: none; color: var(--suave); }
+  .menu a:hover { color: var(--vinho); }
+  .topo .botao { min-height: 40px; padding: 0 18px; font-size: .85rem; }
+  @media (max-width: 860px) { .menu { display: none; } }
+
+  /* Capa */
+  .capa { padding: 40px 0 0; }
+  .capa-grade { display: grid; gap: 28px; align-items: center; }
+  .capa h1 { font-size: clamp(2.3rem, 7vw, 4rem); }
+  .capa .frase { font-size: 1.1rem; color: var(--suave); margin: 18px 0 24px; max-width: 460px; }
+  .capa-botoes { display: flex; flex-wrap: wrap; gap: 10px; }
+  .capa-foto { position: relative; border-radius: var(--raio); overflow: hidden; aspect-ratio: 4 / 5; box-shadow: var(--sombra); background: linear-gradient(160deg, #8a1c30, #2a1a14); }
+  .capa-foto img { width: 100%; height: 100%; object-fit: cover; }
+  .selo { position: absolute; left: 16px; bottom: 16px; background: var(--vinho); color: var(--creme-claro); border-radius: 999px; padding: 10px 18px; font-weight: 600; font-size: .9rem; letter-spacing: .04em; box-shadow: var(--sombra); }
+  .mini-numeros { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 28px 0 0; padding: 0; list-style: none; }
+  .mini-numeros li { background: #fff; border-radius: 16px; padding: 14px 12px; text-align: center; box-shadow: 0 10px 24px -18px rgba(26, 16, 12, .5); }
+  .mini-numeros strong { display: block; font-family: var(--titulo); font-size: 1.5rem; color: var(--vinho); line-height: 1.1; }
+  .mini-numeros span { font-size: .78rem; color: var(--suave); line-height: 1.3; display: block; margin-top: 4px; }
+  @media (min-width: 860px) { .capa { padding-top: 56px; } .capa-grade { grid-template-columns: 1.05fr .95fr; gap: 56px; } }
+
+  /* Faixa de marcas */
+  .marcas { padding: 44px 0 20px; }
+  .marcas p { text-align: center; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--suave); margin: 0 0 18px; }
+  .esteira { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+  .esteira ul { display: flex; gap: 18px; width: max-content; margin: 0; padding: 6px 0; list-style: none; animation: rolar 38s linear infinite; }
+  .esteira li { position: relative; width: 92px; height: 92px; border-radius: 50%; overflow: hidden; background: #fff; border: 1px solid rgba(110, 20, 35, .15); flex-shrink: 0; display: grid; place-items: center; font-size: .8rem; font-weight: 600; text-align: center; padding: 6px; }
+  .esteira li img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .esteira li::after { content: "✓"; position: absolute; top: 2px; right: 2px; width: 24px; height: 24px; border-radius: 50%; background: var(--vinho); color: #fff; font-size: .75rem; display: grid; place-items: center; border: 2px solid var(--creme-claro); }
+  @keyframes rolar { to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) { .esteira ul { animation: none; flex-wrap: wrap; width: auto; justify-content: center; } }
+
+  /* Por que eu */
+  .porque-grade { display: grid; gap: 16px; }
+  .cartao { background: #fff; border-radius: var(--raio); padding: 26px; box-shadow: 0 14px 30px -22px rgba(26, 16, 12, .5); }
+  .cartao .num { display: inline-block; background: var(--vinho); color: #fff; font-size: .75rem; font-weight: 600; letter-spacing: .1em; padding: 4px 12px; border-radius: 6px; margin-bottom: 14px; }
+  .cartao h3 { font-size: 1.3rem; margin-bottom: 8px; }
+  .cartao p { margin: 0; color: var(--suave); font-size: .95rem; }
+  .porque-foto { border-radius: var(--raio); overflow: hidden; min-height: 320px; box-shadow: var(--sombra); }
+  .porque-foto img { width: 100%; height: 100%; object-fit: cover; }
+  .pessoal { text-align: center; margin: 26px auto 0; color: var(--suave); font-style: italic; font-family: var(--titulo); font-size: 1.1rem; }
+  @media (min-width: 860px) { .porque-grade { grid-template-columns: 1fr 1fr 1.1fr; grid-template-rows: auto auto; } .porque-foto { grid-column: 3; grid-row: 1 / 3; } .porque-grade .largo { grid-column: 1 / 3; } }
+
+  /* Trabalhos */
+  .filtros { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 6px; margin: 0 0 24px; justify-content: flex-start; }
+  .filtros::-webkit-scrollbar { display: none; }
+  .filtros button { flex-shrink: 0; border: 1.5px solid rgba(241, 230, 207, .35); background: transparent; color: var(--claro); border-radius: 999px; padding: 9px 18px; font: 600 .88rem var(--corpo); cursor: pointer; }
+  .filtros button[aria-pressed="true"] { background: var(--dourado); color: var(--marrom); border-color: transparent; }
+  @media (min-width: 860px) { .filtros { justify-content: center; flex-wrap: wrap; } }
+  .galeria { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (min-width: 700px) { .galeria { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 1000px) { .galeria { grid-template-columns: repeat(4, 1fr); gap: 18px; } }
+  .video { border: 0; padding: 0; background: none; color: inherit; text-align: left; cursor: pointer; font-family: var(--corpo); }
+  .video-capa { position: relative; aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; background: #3d0b14; }
+  .video-capa img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+  .video:hover .video-capa img { transform: scale(1.04); }
+  .video-capa::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(26, 16, 12, .75)); }
+  .play { position: absolute; z-index: 1; top: 50%; left: 50%; width: 48px; height: 48px; margin: -24px 0 0 -24px; border-radius: 50%; background: rgba(247, 240, 225, .9); display: grid; place-items: center; }
+  .play svg { width: 20px; height: 20px; fill: var(--vinho); margin-left: 3px; }
+  .marca-bola { position: absolute; z-index: 1; top: 10px; left: 10px; width: 46px; height: 46px; border-radius: 50%; overflow: hidden; background: #fff; border: 2px solid #fff; display: grid; place-items: center; font-size: .6rem; font-weight: 700; color: var(--vinho); text-align: center; line-height: 1.1; padding: 3px; }
+  .marca-bola img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .video-nome { position: absolute; z-index: 1; left: 12px; right: 12px; bottom: 10px; color: #fff; font-size: .82rem; font-weight: 600; line-height: 1.3; }
+  .formato { display: block; margin-top: 8px; text-align: center; font-size: .72rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--dourado); }
+  .ver-mais { text-align: center; margin-top: 28px; }
+
+  /* Resultados */
+  .numeros-grade { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  @media (min-width: 860px) { .numeros-grade { grid-template-columns: repeat(4, 1fr); } }
+  .numero { background: #fff; border-radius: var(--raio); padding: 22px 18px; text-align: center; box-shadow: 0 14px 30px -22px rgba(26, 16, 12, .5); }
+  .numero strong { display: block; font-family: var(--titulo); font-size: clamp(1.7rem, 4.5vw, 2.4rem); color: var(--vinho); line-height: 1.05; }
+  .numero span { display: block; margin-top: 8px; font-size: .85rem; color: var(--suave); line-height: 1.35; }
+  .numero small { display: block; margin-top: 8px; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dourado); font-weight: 600; }
+  .depoimentos { display: grid; gap: 16px; margin-top: 18px; }
+  @media (min-width: 860px) { .depoimentos { grid-template-columns: 1fr 1fr; } }
+  .depoimento { margin: 0; background: var(--vinho); color: var(--creme-claro); border-radius: var(--raio); padding: 26px; display: flex; flex-direction: column; gap: 16px; }
+  .depoimento blockquote { margin: 0; font-family: var(--titulo); font-size: 1.12rem; line-height: 1.5; }
+  .depoimento figcaption { display: flex; align-items: center; gap: 12px; font-size: .85rem; color: var(--claro-suave); }
+  .depoimento figcaption img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; background: #fff; }
+  .depoimento b { color: var(--creme-claro); display: block; }
+
+  /* Casal */
+  .casal { display: grid; gap: 22px; align-items: center; background: #fff; border-radius: var(--raio); padding: 18px; box-shadow: 0 14px 30px -22px rgba(26, 16, 12, .5); }
+  .casal .video-capa { aspect-ratio: 9 / 12; }
+  .casal h3 { font-size: 1.6rem; margin-bottom: 8px; }
+  .casal p { margin: 0 0 18px; color: var(--suave); }
+  @media (min-width: 760px) { .casal { grid-template-columns: 280px 1fr; padding: 22px 34px 22px 22px; } }
+
+  /* Fotos UGC */
+  .fotos { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  @media (min-width: 860px) { .fotos { grid-template-columns: repeat(4, 1fr); gap: 16px; } }
+  .foto { margin: 0; position: relative; border-radius: 18px; overflow: hidden; aspect-ratio: 4 / 5; }
+  .foto img { width: 100%; height: 100%; object-fit: cover; }
+  .foto figcaption { position: absolute; left: 10px; bottom: 10px; background: rgba(247, 240, 225, .94); color: var(--vinho); border-radius: 999px; padding: 5px 12px; font-size: .75rem; font-weight: 600; letter-spacing: .06em; }
+
+  /* Processo */
+  .passos { display: grid; gap: 14px; counter-reset: p; }
+  @media (min-width: 860px) { .passos { grid-template-columns: repeat(3, 1fr); } }
+  .passo { background: rgba(241, 230, 207, .07); border: 1px solid rgba(241, 230, 207, .16); border-radius: var(--raio); padding: 24px; }
+  .passo .num { background: var(--dourado); color: var(--marrom); }
+  .passo h3 { font-size: 1.3rem; margin-bottom: 8px; color: var(--creme-claro); }
+  .passo p { margin: 0; color: var(--claro-suave); font-size: .95rem; }
+
+  /* Pacotes */
+  .pacotes { display: grid; gap: 16px; align-items: stretch; }
+  @media (min-width: 860px) { .pacotes { grid-template-columns: repeat(3, 1fr); } }
+  .pacote { position: relative; background: #fff; border-radius: var(--raio); padding: 28px 24px; display: flex; flex-direction: column; box-shadow: 0 14px 30px -22px rgba(26, 16, 12, .5); border: 2px solid transparent; }
+  .pacote.destaque { border-color: var(--vinho); }
+  .pacote .faixa { position: absolute; top: -13px; left: 50%; transform: translateX(-50%); background: var(--vinho); color: #fff; font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: 5px 14px; border-radius: 999px; white-space: nowrap; }
+  .pacote h3 { font-size: 1.5rem; }
+  .pacote .para { margin: 6px 0 16px; color: var(--suave); font-size: .92rem; }
+  .pacote ul { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; flex: 1; }
+  .pacote li { padding-left: 26px; position: relative; font-size: .95rem; }
+  .pacote li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--vinho); font-weight: 700; }
+  .pacote .botao { width: 100%; }
+  .outro { text-align: center; margin: 26px 0 0; color: var(--suave); }
+  .outro a { color: var(--vinho); font-weight: 600; }
+
+  /* Dúvidas */
+  .duvidas { max-width: 760px; margin: 0 auto; display: grid; gap: 10px; }
+  .duvidas details { background: #fff; border-radius: 16px; padding: 4px 20px; box-shadow: 0 10px 24px -20px rgba(26, 16, 12, .5); }
+  .duvidas summary { cursor: pointer; list-style: none; font-weight: 600; padding: 14px 28px 14px 0; position: relative; }
+  .duvidas summary::-webkit-details-marker { display: none; }
+  .duvidas summary::after { content: "+"; position: absolute; right: 0; top: 10px; font-size: 1.4rem; color: var(--vinho); font-weight: 400; }
+  .duvidas details[open] summary::after { content: "−"; }
+  .duvidas p { margin: 0 0 16px; color: var(--suave); }
+
+  /* Contato */
+  .contato { text-align: center; }
+  .contato .botoes { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-top: 26px; }
+  .rodape { background: var(--marrom-profundo); color: var(--claro-suave); text-align: center; font-size: .85rem; padding: 26px 16px 90px; }
+  .rodape a { color: var(--dourado); }
+
+  /* WhatsApp fixo */
+  .whats-fixo { position: fixed; right: 16px; bottom: 16px; z-index: 30; width: 56px; height: 56px; border-radius: 50%; background: #25d366; display: grid; place-items: center; box-shadow: var(--sombra); }
+  .whats-fixo svg { width: 28px; height: 28px; fill: #fff; }
+
+  /* Player */
+  .player { border: 0; padding: 0; background: transparent; width: min(420px, 92vw); max-height: 92vh; }
+  .player::backdrop { background: rgba(26, 16, 12, .85); }
+  .player-topo { display: flex; justify-content: space-between; align-items: center; color: var(--creme-claro); margin-bottom: 8px; gap: 12px; font-size: .9rem; }
+  .player-topo button { border: 0; background: rgba(247, 240, 225, .15); color: #fff; width: 38px; height: 38px; border-radius: 50%; font-size: 1.4rem; cursor: pointer; flex-shrink: 0; }
+  .player-video { aspect-ratio: 9 / 16; border-radius: 18px; overflow: hidden; background: #000; max-height: calc(92vh - 50px); margin: 0 auto; }
+  .player-video iframe { width: 100%; height: 100%; border: 0; }
+
+  .aparecer { opacity: 0; transform: translateY(18px); transition: opacity .6s, transform .6s; }
+  .aparecer.visivel { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .aparecer { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+
+<header class="topo">
+  <div class="caixa">
+    <a class="logo" href="#inicio">Débora Dominique</a>
+    <nav class="menu" aria-label="Navegação">
+      <a href="#trabalhos">Trabalhos</a>
+      <a href="#porque">Por que eu</a>
+      <a href="#resultados">Resultados</a>
+      <a href="#pacotes">Pacotes</a>
+      <a href="#duvidas">Dúvidas</a>
+    </nav>
+    <a class="botao botao-vinho" data-whats="Olá, Débora! Vi o seu portfólio e quero conversar sobre um projeto de UGC.">Pedir orçamento</a>
+  </div>
+</header>
+
+<main>
+  <section class="capa" id="inicio">
+    <div class="caixa capa-grade">
+      <div>
+        <p class="rotulo">UGC Creator · Belo Horizonte</p>
+        <h1>Prazer, eu sou a <em>Débora</em>.</h1>
+        <p class="frase">Vídeos e fotos com cara de gente de verdade, para a sua marca ganhar a confiança de quem compra.</p>
+        <div class="capa-botoes">
+          <a class="botao botao-vinho" data-whats="Olá, Débora! Vi o seu portfólio e quero um orçamento de UGC.">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+            Pedir orçamento
+          </a>
+          <a class="botao botao-borda" href="#trabalhos">Ver trabalhos</a>
+        </div>
+        <ul class="mini-numeros">
+          <li><strong>+10</strong><span>anos trabalhando com beleza</span></li>
+          <li><strong>88,8%</strong><span>do meu público é feminino</span></li>
+          <li><strong>10 dias</strong><span>prazo máximo de entrega</span></li>
+        </ul>
+      </div>
+      <div class="capa-foto">
+        <img src="img/capa.jpg" alt="Débora Dominique sorrindo, sentada num sofá vermelho sob um letreiro neon">
+        <span class="selo">Beleza · Bem-estar · Lifestyle</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="marcas">
+    <p>Marcas que já confiaram no meu trabalho</p>
+    <div class="esteira"><ul id="esteira"></ul></div>
+  </div>
+
+  <section id="trabalhos" class="escuro">
+    <div class="caixa">
+      <div class="cabeca aparecer">
+        <span class="rotulo">Portfólio</span>
+        <h2>Escolha o nicho e <em>dê o play</em></h2>
+      </div>
+      <div class="filtros" id="filtros" role="group" aria-label="Filtrar por nicho"></div>
+      <div class="galeria" id="galeria"></div>
+      <div class="ver-mais"><button class="botao botao-borda" type="button" id="verMais" style="color:var(--creme)">Ver mais vídeos</button></div>
+    </div>
+  </section>
+
+  <section id="porque">
+    <div class="caixa">
+      <div class="cabeca aparecer">
+        <span class="rotulo">Diferencial</span>
+        <h2>Por que trabalhar <em>comigo</em></h2>
+      </div>
+      <div class="porque-grade">
+        <div class="cartao aparecer"><span class="num">#01</span><h3>10 anos em beleza</h3><p>Sei mostrar textura, aplicação e resultado do jeito que a cliente entende.</p></div>
+        <div class="cartao aparecer"><span class="num">#02</span><h3>Gancho nos 3 primeiros segundos</h3><p>O roteiro chega pronto e você aprova antes de eu gravar.</p></div>
+        <div class="porque-foto aparecer"><img src="img/sobre.jpg" alt="Débora Dominique sentada num sofá vermelho, de vestido preto, olhando para a câmera" loading="lazy"></div>
+        <div class="cartao largo aparecer"><span class="num">#03</span><h3>Do roteiro à edição, comigo</h3><p>Equipamento próprio, vídeo em 4K, trilha licenciada e até 2 ajustes inclusos.</p></div>
+      </div>
+      <p class="pessoal aparecer">Mineira, 32 anos, casada com o Pedro e com três gatos que adoram aparecer nos vídeos.</p>
+    </div>
+  </section>
+
+  <section id="resultados" style="padding-top:0">
+    <div class="caixa">
+      <div class="cabeca aparecer">
+        <span class="rotulo">Métricas</span>
+        <h2>Resultados que <em>falam por mim</em></h2>
+      </div>
+      <div class="numeros-grade">
+        <div class="numero aparecer"><strong>+65 mil</strong><span>views no Instagram</span><small>Parksnet · Snowland</small></div>
+        <div class="numero aparecer"><strong>2.245</strong><span>compartilhamentos no mesmo vídeo</span><small>Parksnet · Snowland</small></div>
+        <div class="numero aparecer"><strong>+60</strong><span>seguidores novos com um único vídeo</span><small>Oásis da Vida Day Spa</small></div>
+        <div class="numero aparecer"><strong>+1M</strong><span>views em uma série minha</span><small>Conteúdo próprio</small></div>
+      </div>
+      <div class="depoimentos">
+        <figure class="depoimento aparecer">
+          <blockquote>"Seu conteúdo é muito bem feito, dá pra ver o cuidado na edição, na estética e principalmente no jeito que você comunica, tudo fica natural, leve e alinhado com a nossa marca."</blockquote>
+          <figcaption><img src="img/logos/glowden.jpg" alt=""><span><b>Glowden</b>Parceria de UGC</span></figcaption>
+        </figure>
+        <figure class="depoimento aparecer">
+          <blockquote>"Já ganhamos mais de 60 seguidores vindo do vídeo. Realmente, faz a diferença ter um vídeo profissional, chama mais atenção e todo mundo vem seguir!!!"</blockquote>
+          <figcaption><img src="img/logos/oasis.jpg" alt=""><span><b>Oásis da Vida Day Spa</b>Vídeo impulsionado nos stories</span></figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="caixa">
+      <div class="casal aparecer">
+        <button class="video" type="button" data-video="Y6ZI7AHrTJY" data-titulo="Minimal Club · vídeo em casal">
+          <div class="video-capa"><img src="img/videos/Y6ZI7AHrTJY.jpg" alt="Débora na varanda mostrando a caixa da Minimal Club" loading="lazy"><span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span></div>
+        </button>
+        <div>
+          <span class="rotulo">Vídeo em casal</span>
+          <h3>Sua marca também pode aparecer <em>a dois</em></h3>
+          <p>O Pedro grava comigo quando o produto combina com casal, presente ou rotina a dois.</p>
+          <a class="botao botao-vinho" data-whats="Olá, Débora! Vi seu portfólio e quero saber sobre um vídeo em casal, com você e o Pedro.">Quero um vídeo em casal</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:0">
+    <div class="caixa">
+      <div class="cabeca aparecer">
+        <span class="rotulo">Fotos UGC</span>
+        <h2>Foto de estúdio mostra. <em>Foto UGC vende.</em></h2>
+        <p>Para anúncio, site, marketplace e redes.</p>
+      </div>
+      <div class="fotos">
+        <figure class="foto aparecer"><img src="img/ugcScroll.jpg" alt="Mão aplicando um produto capilar em spray" loading="lazy"><figcaption>Parar o scroll</figcaption></figure>
+        <figure class="foto aparecer"><img src="img/ugcDetalhe.jpg" alt="Close de dois frascos dourados de óleo capilar perto do rosto" loading="lazy"><figcaption>Mostrar o detalhe</figcaption></figure>
+        <figure class="foto aparecer"><img src="img/ugcVontade.jpg" alt="Débora brindando com um drinque num restaurante" loading="lazy"><figcaption>Criar vontade</figcaption></figure>
+        <figure class="foto aparecer"><img src="img/ugcHoomy.jpg" alt="Débora abraçando um travesseiro Hoomy" loading="lazy"><figcaption>Gerar confiança</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="escuro" id="processo">
+    <div class="caixa">
+      <div class="cabeca aparecer">
+        <span class="rotulo">Processo</span>
+        <h2>Da ideia à entrega <em>em 3 passos</em></h2>
+      </div>
+      <div class="passos">
+        <div class="passo aparecer"><span class="num" style="display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.1em;padding:4px 12px;border-radius:6px;margin-bottom:14px">#01</span><h3>Planejamento</h3><p>Entendo o objetivo da sua marca e mando a ideia e o roteiro para você aprovar.</p></div>
+        <div class="passo aparecer"><span class="num" style="display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.1em;padding:4px 12px;border-radius:6px;margin-bottom:14px">#02</span><h3>Produção</h3><p>Gravo com a minha rotina como cenário e edito com trilha licenciada.</p></div>
+        <div class="passo aparecer"><span class="num" style="display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.1em;padding:4px 12px;border-radius:6px;margin-bottom:14px">#03</span><h3>Entrega</h3><p>Você revisa, eu faço até 2 ajustes e entrego em até 10 dias corridos.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pacotes">
+    <div class="caixa">
+      <div class="cabeca aparecer">
+        <span class="rotulo">Pacotes</span>
+        <h2>Escolha um <em>ponto de partida</em></h2>
+        <p>Cada proposta é feita sob medida. Escolha o que mais combina e eu te mando os detalhes.</p>
+      </div>
+      <div class="pacotes" id="listaPacotes"></div>
+      <p class="outro aparecer">Precisa de outra combinação, collab ou uso em anúncios? <a data-whats="Olá, Débora! Vi seu portfólio e quero uma proposta personalizada para a minha marca." href="#">Me chama que eu monto.</a></p>
+    </div>
+  </section>
+
+  <section id="duvidas" style="padding-top:0">
+    <div class="caixa">
+      <div class="cabeca aparecer">
+        <span class="rotulo">Dúvidas</span>
+        <h2>Perguntas <em>rápidas</em></h2>
+      </div>
+      <div class="duvidas" id="listaDuvidas"></div>
+    </div>
+  </section>
+
+  <section class="escuro contato" id="contato">
+    <div class="caixa aparecer">
+      <span class="rotulo">Contato</span>
+      <h2>Vamos criar o vídeo <em>da sua marca?</em></h2>
+      <div class="botoes">
+        <a class="botao botao-dourado" data-whats="Olá, Débora! Vi o seu portfólio e quero conversar sobre um projeto de UGC.">Falar no WhatsApp</a>
+        <a class="botao botao-borda" href="mailto:contato@deboradominique.com?subject=Projeto%20de%20UGC" style="color:var(--creme)">contato@deboradominique.com</a>
+        <a class="botao botao-borda" href="midia-kit-debora-dominique.pdf" target="_blank" rel="noopener" style="color:var(--creme)">Baixar mídia kit</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="rodape">
+  Débora Dominique · UGC Creator em Belo Horizonte · <a href="https://www.instagram.com/deboradominique_/" target="_blank" rel="noopener">@deboradominique_</a>
+</footer>
+
+<a class="whats-fixo" data-whats="Olá, Débora! Vi o seu portfólio e quero conversar sobre um projeto de UGC." aria-label="Falar comigo no WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
+</a>
+
+<dialog class="player" id="player" aria-labelledby="playerTitulo">
+  <div class="player-topo"><span id="playerTitulo"></span><button type="button" id="playerFechar" aria-label="Fechar vídeo">×</button></div>
+  <div class="player-video" id="playerVideo"></div>
+</dialog>
+
+<script>
+/* =========================================================
+   CONTEÚDO (edite aqui)
+   ========================================================= */
+const WHATSAPP = '5531984042252';
+
+const MARCAS = [
+  { nome: 'Tampax', logo: 'img/logos/tampax.jpg' }, { nome: 'Kaisan', logo: 'img/logos/kaisan.jpg' },
+  { nome: 'Hardyn', logo: 'img/logos/hardyn.jpg' }, { nome: 'Minimal Club', logo: 'img/logos/minimalclub.jpg' },
+  { nome: 'Yogateria', logo: 'img/logos/yogateria.jpg' }, { nome: 'Glowden', logo: 'img/logos/glowden.jpg' },
+  { nome: 'Oásis da Vida', logo: 'img/logos/oasis.jpg' }, { nome: 'DoseDay', logo: 'img/logos/doseday.jpg' },
+  { nome: 'Chez Michou', logo: 'img/logos/chezmichou.jpg' }, { nome: 'Edune', logo: 'img/logos/edune.jpg' }
+];
+const LOGO = Object.fromEntries(MARCAS.map((m) => [m.nome, m.logo]));
+
+// "formato" aparece embaixo de cada vídeo: é o que a marca procura (problema x solução, review...)
+const VIDEOS = [
+  { nicho: 'Moda', titulo: 'Looks fitness Black Friday', marca: 'Kaisan', formato: 'Provador', youtube: 'c0vTg_vd7ls' },
+  { nicho: 'Beleza', titulo: 'Comparativo de perfumes', marca: 'WePink', formato: 'Comparativo', youtube: 'hnvOJXSc0QI' },
+  { nicho: 'Bem-estar', titulo: 'Absorvente interno', marca: 'Tampax', formato: 'Problema x solução', youtube: 'R3kA1pkbpXo' },
+  { nicho: 'Experiências', titulo: 'Snowland Gramado', marca: 'Parksnet', formato: 'Experiência', youtube: 'XNMh7_DjzD4' },
+  { nicho: 'Beleza', titulo: 'Skincare pré-yoga', marca: 'Nature Face', formato: 'Tutorial', youtube: 'r4JxEnoy7UI' },
+  { nicho: 'Casa', titulo: 'Travesseiro', marca: 'Hoomy', formato: 'Review', youtube: 'ufx-9eaCAgM' },
+  { nicho: 'Bem-estar', titulo: 'Beauty coffee', marca: 'DoseDay', formato: 'Rotina', youtube: 'MOTjN6gi-Pw' },
+  { nicho: 'Negócios e apps', titulo: 'Cursos online', marca: 'Edune', formato: 'Collab', youtube: 'Nq430QknurE' },
+  { nicho: 'Beleza', titulo: 'Comparativo de perfume', marca: 'WePink', formato: 'Comparativo', youtube: 'MVcUDSwgCNU' },
+  { nicho: 'Casa', titulo: 'Toalha', marca: 'Hoomy', formato: 'Review', youtube: 'adYP_45ZoYY' },
+  { nicho: 'Casa', titulo: 'Luminária de chão', marca: '', formato: 'Review', youtube: '-QeGW8zUIPA' },
+  { nicho: 'Bem-estar', titulo: 'Chá para TPM', marca: 'Leão', formato: 'Problema x solução', youtube: 'pk0FLv2-NYM' },
+  { nicho: 'Bem-estar', titulo: 'Beauty coffee', marca: 'DoseDay', formato: 'Rotina', youtube: 'sMExq3hlOH4' },
+  { nicho: 'Moda', titulo: 'Relógio', marca: 'Saint Germain', formato: 'Review', youtube: 'dYL8_a_19Xs' },
+  { nicho: 'Moda', titulo: 'Loja de tênis', marca: '', formato: 'Experiência', youtube: 'LXOt1Km0l8U' },
+  { nicho: 'Moda', titulo: 'Loja de tênis', marca: '', formato: 'Experiência', youtube: 'rdqfS2j1AFY' },
+  { nicho: 'Experiências', titulo: 'Restaurante', marca: 'Dom Juan', formato: 'Experiência', youtube: 'K8VOumu1UL4' },
+  { nicho: 'Experiências', titulo: 'Restaurante', marca: 'Escritório do Chef', formato: 'Experiência', youtube: '_uw77bzDcxc' },
+  { nicho: 'Experiências', titulo: 'Restaurante', marca: 'O Pescador', formato: 'Experiência', youtube: 'xkp8hMjhBew' },
+  { nicho: 'Beleza', titulo: 'Clínica de estética', marca: '', formato: 'Experiência', youtube: 'JrArWvjbmLo' },
+  { nicho: 'Beleza', titulo: 'Regeneração de sobrancelhas', marca: '', formato: 'Experiência', youtube: 'kWBKeNaXdzs' },
+  { nicho: 'Beleza', titulo: 'Spa', marca: '', formato: 'Experiência', youtube: 'GOgV317TdoA' },
+  { nicho: 'Beleza', titulo: 'Salão de beleza', marca: '', formato: 'Experiência', youtube: 'jA84uStpzys' },
+  { nicho: 'Negócios e apps', titulo: 'Máquina de cartão', marca: 'Liberty Pay', formato: 'Demonstração', youtube: '0gr2WSWjvS8' },
+  { nicho: 'Negócios e apps', titulo: 'Plataforma de CRM', marca: '', formato: 'Demonstração', youtube: 'jV5QCSwgoME' },
+  { nicho: 'Negócios e apps', titulo: 'Artes para depósitos', marca: 'DS Marketing', formato: 'Demonstração', youtube: 'poU6Iwmuse8' },
+  { nicho: 'Negócios e apps', titulo: 'Monitor', marca: 'LG', formato: 'Review', youtube: 'YTOGsTocHqM' },
+  { nicho: 'Moda', titulo: 'Camiseta em casal', marca: 'Minimal Club', formato: 'Casal', youtube: 'Y6ZI7AHrTJY' }
+];
+
+const PACOTES = [
+  { nome: 'Essencial', para: 'Para testar UGC pela primeira vez.', itens: ['1 vídeo UGC', '3 fotos UGC', 'Roteiro aprovado antes', 'Até 2 ajustes'] },
+  { nome: 'Conteúdo completo', para: 'Vídeo e foto para site, redes e anúncios.', destaque: 'Mais escolhido', itens: ['2 vídeos UGC', '6 fotos UGC', 'Roteiro aprovado antes', 'Até 2 ajustes'] },
+  { nome: 'Venda no automático', para: 'Conteúdo, alcance e link de compra juntos.', itens: ['1 vídeo UGC', 'Collab no meu Instagram', 'Automação ManyChat com o link', 'Teste antes de divulgar'] }
+];
+
+const DUVIDAS = [
+  { p: 'Quanto custa?', r: 'Depende do formato, da quantidade e de como o conteúdo vai ser usado. Me conta o que precisa (e a verba, se já tiver) que eu monto a proposta.' },
+  { p: 'Qual o prazo?', r: 'Até 10 dias corridos depois de receber o produto. Tem data de campanha? Me avisa no início.' },
+  { p: 'Você escreve o roteiro?', r: 'Sim. Eu proponho e você aprova antes de eu gravar. Se você já tiver um roteiro, eu gravo a partir dele.' },
+  { p: 'Posso usar em anúncios?', r: 'Pode. Licença para anúncios, exclusividade e tempo de uso entram na proposta.' },
+  { p: 'Você grava fora de casa?', r: 'Sim: restaurantes, lojas, clínicas e passeios em BH, e também em viagens.' }
+];
+
+/* =========================================================
+   FUNCIONAMENTO
+   ========================================================= */
+const $ = (id) => document.getElementById(id);
+const esc = (t) => String(t || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const linkWhats = (msg) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+const PLAY = '<span class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></span>';
+
+function ligarWhats(raiz) {
+  (raiz || document).querySelectorAll('[data-whats]').forEach((a) => { a.href = linkWhats(a.dataset.whats); a.target = '_blank'; a.rel = 'noopener'; });
+}
+
+// Faixa de marcas (duplicada para rolar sem emenda)
+$('esteira').innerHTML = [...MARCAS, ...MARCAS].map((m, i) => `<li ${i >= MARCAS.length ? 'aria-hidden="true"' : ''}>${m.logo ? `<img src="${m.logo}" alt="${i >= MARCAS.length ? '' : esc(m.nome)}" loading="lazy">` : esc(m.nome)}</li>`).join('');
+
+// Galeria por nicho
+const NICHOS = ['Todos', ...new Set(VIDEOS.map((v) => v.nicho))];
+let nicho = 'Todos', limite = 8;
+function cartaoVideo(v) {
+  const bola = v.marca ? `<span class="marca-bola">${LOGO[v.marca] ? `<img src="${LOGO[v.marca]}" alt="">` : esc(v.marca)}</span>` : '';
+  return `<button class="video" type="button" data-video="${v.youtube}" data-titulo="${esc((v.marca ? v.marca + ' · ' : '') + v.titulo)}" aria-label="Assistir: ${esc(v.titulo)}${v.marca ? ', ' + esc(v.marca) : ''}">
+    <div class="video-capa"><img src="img/videos/${v.youtube}.jpg" alt="" loading="lazy" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/${v.youtube}/oardefault.jpg'">${bola}${PLAY}<span class="video-nome">${esc(v.titulo)}</span></div>
+    <span class="formato">${esc(v.formato)}</span></button>`;
+}
+function desenharGaleria() {
+  const lista = VIDEOS.filter((v) => nicho === 'Todos' || v.nicho === nicho);
+  $('galeria').innerHTML = lista.slice(0, limite).map(cartaoVideo).join('');
+  $('verMais').hidden = lista.length <= limite;
+}
+$('filtros').innerHTML = NICHOS.map((n) => `<button type="button" aria-pressed="${n === nicho}" data-nicho="${esc(n)}">${esc(n)}</button>`).join('');
+$('filtros').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-nicho]'); if (!b) return;
+  nicho = b.dataset.nicho; limite = 8;
+  $('filtros').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+  desenharGaleria();
+});
+$('verMais').addEventListener('click', () => { limite += 8; desenharGaleria(); });
+desenharGaleria();
+
+// Pacotes (sem preço: o valor é combinado na conversa)
+$('listaPacotes').innerHTML = PACOTES.map((p) => `<div class="pacote aparecer ${p.destaque ? 'destaque' : ''}">
+  ${p.destaque ? `<span class="faixa">${esc(p.destaque)}</span>` : ''}
+  <h3>${esc(p.nome)}</h3><p class="para">${esc(p.para)}</p>
+  <ul>${p.itens.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+  <a class="botao ${p.destaque ? 'botao-vinho' : 'botao-borda'}" data-whats="${esc(`Olá, Débora! Vi seu portfólio e quero uma proposta do pacote ${p.nome}.`)}">Pedir proposta</a>
+</div>`).join('');
+
+// Dúvidas
+$('listaDuvidas').innerHTML = DUVIDAS.map((d) => `<details class="aparecer"><summary>${esc(d.p)}</summary><p>${esc(d.r)}</p></details>`).join('');
+
+ligarWhats();
+
+// Player de vídeo
+const player = $('player');
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-video]'); if (!b) return;
+  $('playerTitulo').textContent = b.dataset.titulo;
+  $('playerVideo').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.video}?autoplay=1&rel=0&playsinline=1&modestbranding=1" title="${esc(b.dataset.titulo)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
+  player.showModal();
+});
+$('playerFechar').addEventListener('click', () => player.close());
+player.addEventListener('click', (e) => { if (e.target === player) player.close(); });
+player.addEventListener('close', () => { $('playerVideo').innerHTML = ''; });
+
+// Animação de entrada
+const obs = 'IntersectionObserver' in window ? new IntersectionObserver((es) => es.forEach((x) => { if (x.isIntersecting) { x.target.classList.add('visivel'); obs.unobserve(x.target); } }), { threshold: .12 }) : null;
+document.querySelectorAll('.aparecer').forEach((el) => (obs ? obs.observe(el) : el.classList.add('visivel')));
+</script>
+</body>
+</html>
