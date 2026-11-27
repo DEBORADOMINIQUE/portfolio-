@@ -117,6 +117,20 @@
   .mini-numeros strong { display: block; font-family: var(--titulo); font-size: 1.5rem; color: var(--vinho); line-height: 1.1; }
   .mini-numeros span { font-size: .78rem; color: var(--suave); line-height: 1.3; display: block; margin-top: 4px; }
 
+  /* Atalhos por nicho, logo depois da capa */
+  .atalhos-nicho { margin-top: 28px; text-align: center; }
+  .atalhos-nicho p { margin: 0 0 14px; font-family: var(--titulo); font-size: 1.35rem; color: var(--texto); }
+  .atalhos-nicho p span { display: block; font-family: var(--corpo); font-size: .85rem; color: var(--suave); margin-top: 2px; }
+  .atalhos-lista { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 960px; margin: 0 auto; }
+  .atalhos-lista button { position: relative; overflow: hidden; height: 120px; border: 0; border-radius: 18px; padding: 0 22px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; color: #fff; background: var(--vinho); box-shadow: 0 16px 30px -18px rgba(26, 16, 12, .7); transition: transform .25s; font-family: var(--corpo); }
+  .atalhos-lista button img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 18%; transition: transform .5s; }
+  .atalhos-lista button::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(61, 11, 20, .92) 0%, rgba(110, 20, 35, .7) 55%, rgba(110, 20, 35, .25) 100%); }
+  .atalhos-lista button:hover { transform: translateY(-3px); }
+  .atalhos-lista button:hover img { transform: scale(1.06); }
+  .an-nome { position: relative; z-index: 1; font-family: var(--titulo); font-size: 1.45rem; font-weight: 600; letter-spacing: .02em; }
+  .an-qtd { position: relative; z-index: 1; margin-top: 4px; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dourado); font-weight: 600; }
+  @media (max-width: 760px) { .atalhos-lista { grid-template-columns: 1fr 1fr; gap: 10px; } .atalhos-lista button { height: 96px; padding: 0 14px; } .an-nome { font-size: 1.1rem; } .an-qtd { font-size: .66rem; letter-spacing: .1em; } }
+
   /* Faixa de marcas */
   .marcas { padding: 44px 0 20px; }
   .marcas p { text-align: center; font-size: .8rem; letter-spacing: .18em; text-transform: uppercase; color: var(--suave); margin: 0 0 18px; }
@@ -166,6 +180,7 @@
   @media (max-width: 759px) { .destaque .video { max-width: 280px; margin: 0 auto; display: block; } .destaque-txt { text-align: center; } .destaque-tags { justify-content: center; } }
 
   /* Trabalhos */
+  #filtros { scroll-margin-top: 90px; }
   .filtros { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 6px; margin: 0 0 24px; justify-content: flex-start; }
   .filtros::-webkit-scrollbar { display: none; }
   .filtros button { flex-shrink: 0; border: 1.5px solid rgba(241, 230, 207, .35); background: transparent; color: var(--claro); border-radius: 999px; padding: 9px 18px; font: 600 .88rem var(--corpo); cursor: pointer; }
@@ -337,6 +352,11 @@
       <a class="botao botao-vinho botao-capa" data-whats="Olá, Débora! Vi o seu portfólio e quero um orçamento de UGC.">Entrar em contato</a>
     </div>
   </section>
+
+  <nav class="atalhos-nicho caixa" aria-label="Ver vídeos por nicho">
+    <p>Qual é o seu nicho? <span>Toque e vá direto para os vídeos</span></p>
+    <div class="atalhos-lista" id="atalhosNicho"></div>
+  </nav>
 
   <ul class="mini-numeros caixa">
     <li><strong>10 anos</strong><span>como cabeleireira</span></li>
@@ -633,11 +653,20 @@ function desenharGaleria() {
   $('verMais').hidden = lista.length <= limite;
 }
 $('filtros').innerHTML = NICHOS.map((n) => `<button type="button" aria-pressed="${n === nicho}" data-nicho="${esc(n)}">${esc(n)}</button>`).join('');
-$('filtros').addEventListener('click', (e) => {
-  const b = e.target.closest('[data-nicho]'); if (!b) return;
-  nicho = b.dataset.nicho; limite = 8;
-  $('filtros').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+function filtrar(n) {
+  nicho = n; limite = 8;
+  $('filtros').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x.dataset.nicho === n));
   desenharGaleria();
+}
+$('filtros').addEventListener('click', (e) => { const b = e.target.closest('[data-nicho]'); if (b) filtrar(b.dataset.nicho); });
+// Atalhos logo depois da capa: escolhe o nicho e desce direto para os vídeos
+const CAPA_NICHO = { 'Beleza': 'r4JxEnoy7UI', 'Bem-estar': 'R3kA1pkbpXo', 'Moda': 'ccJmGl4K-B8', 'Experiências': 'XNMh7_DjzD4', 'Casa': 'ufx-9eaCAgM', 'Negócios e apps': 'Nq430QknurE' };
+$('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const yt = CAPA_NICHO[n] || (VIDEOS.find((v) => v.nicho === n) || {}).youtube; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
+  return `<button type="button" data-ir-nicho="${esc(n)}"><img src="img/videos/${yt}.jpg" alt="" loading="lazy"><span class="an-nome">${esc(n)}</span><span class="an-qtd">${qtd} ${qtd === 1 ? 'vídeo' : 'vídeos'} →</span></button>`; }).join('');
+$('atalhosNicho').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-ir-nicho]'); if (!b) return;
+  filtrar(b.dataset.irNicho);
+  $('filtros').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 $('verMais').addEventListener('click', () => { limite += 8; desenharGaleria(); });
 desenharGaleria();
