@@ -666,10 +666,10 @@ $('filtros').addEventListener('click', (e) => { const b = e.target.closest('[dat
 // O enquadramento é calculado na hora, para a cabeça nunca ser cortada em nenhum tamanho de tela
 const FOTO_NICHO = {
   'Moda': ['img/moda.jpg', 0.2, 0.66], 'Beleza': ['img/ugc-natureface.jpg', 0.16, 0.52], 'Bem-estar': ['img/bemestar.jpg', 0.04, 0.6],
-  'Experiências': ['img/ugcVontade.jpg', 0.26, 0.55], 'Casa': ['img/casa.jpg', 0.04, 0.5], 'Negócios e apps': ['img/negocios-larga.jpg', 0.1, 0.7]
+  'Experiências': ['img/ugcVontade.jpg', 0.26, 0.55], 'Casa': ['img/casa-larga.jpg', 0.06, 0.66], 'Negócios e apps': ['img/negocios-larga2.jpg', 0.1, 0.735, 0.8]
 };
-$('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const [foto, topo, x] = FOTO_NICHO[n] || [`img/videos/${(VIDEOS.find((v) => v.nicho === n) || {}).youtube}.jpg`, 0.15, 0.5]; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
-  return `<button type="button" data-ir-nicho="${esc(n)}"><img src="${foto}" alt="" loading="lazy" data-topo="${topo}" data-x="${x}"><span class="an-nome">${esc(n)}</span><span class="an-qtd">Ver vídeos →</span></button>`; }).join('');
+$('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const [foto, topo, x, alvo] = FOTO_NICHO[n] || [`img/videos/${(VIDEOS.find((v) => v.nicho === n) || {}).youtube}.jpg`, 0.15, 0.5]; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
+  return `<button type="button" data-ir-nicho="${esc(n)}"><img src="${foto}" alt="" loading="lazy" data-topo="${topo}" data-x="${x}" data-alvo="${alvo || 0.66}"><span class="an-nome">${esc(n)}</span><span class="an-qtd">Ver vídeos →</span></button>`; }).join('');
 // Enquadra cada foto: um respiro acima da cabeça e o rosto do lado oposto ao texto
 function enquadrarNichos() {
   document.querySelectorAll('#atalhosNicho img').forEach((img) => {
@@ -677,7 +677,7 @@ function enquadrarNichos() {
     const W = img.clientWidth, T = img.clientHeight, k = Math.max(W / img.naturalWidth, T / img.naturalHeight);
     const Ws = img.naturalWidth * k, Hs = img.naturalHeight * k, celular = innerWidth <= 1000;
     const offY = Math.min(Math.max(+img.dataset.topo * Hs - T * 0.08, 0), Hs - T);
-    const offX = Math.min(Math.max(+img.dataset.x * Ws - W * (celular ? 0.5 : 0.66), 0), Ws - W);
+    const offX = Math.min(Math.max(+img.dataset.x * Ws - W * (celular ? 0.5 : +img.dataset.alvo), 0), Ws - W);
     img.style.objectPosition = `${-offX}px ${-offY}px`;
   });
 }
