@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DÉBORA DOMINIQUE | UGC CREATOR</title>
-<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Débora Dominique · UGC Creator em Belo Horizonte">
+<meta property="og:description" content="Vídeos e fotos UGC com rotina de verdade, para marcas de beleza, bem-estar, moda, casa e experiências.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="https://deboradominique.com/">
+<meta property="og:image" content="https://deboradominique.com/img/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<script>if (location.hash === '#roteiro') location.replace('/roteiro');</script>
 <meta name="description" content="Débora Dominique, UGC Creator em Belo Horizonte: vídeos e fotos reais que vendem, para marcas de beleza, bem-estar, moda, casa e experiências.">
 <meta name="theme-color" content="#2a1a14">
 <link rel="icon" type="image/svg+xml" href="img/icone.svg">
@@ -496,6 +503,7 @@
   <div class="player-video" id="playerVideo"></div>
 </dialog>
 
+<script src="js/rastreio.js"></script>
 <script>
 /* =========================================================
    CONTEÚDO (edite aqui)
@@ -634,6 +642,7 @@ const player = $('player');
 document.addEventListener('click', (e) => {
   const b = e.target.closest('[data-video]'); if (!b) return;
   $('playerTitulo').textContent = b.dataset.titulo;
+  if (window.Rastreio) Rastreio.video(b.dataset.video, b.dataset.titulo, b); // conta no painel
   $('playerVideo').innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${b.dataset.video}?autoplay=1&rel=0&playsinline=1&modestbranding=1" title="${esc(b.dataset.titulo)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe>`;
   player.showModal();
 });
