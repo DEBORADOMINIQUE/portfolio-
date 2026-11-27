@@ -256,14 +256,14 @@
 
   /* WhatsApp fixo */
   /* WhatsApp que acompanha a página: alinhado ao conteúdo, com texto, aparece depois da capa e some no contato */
-  .whats-fixo { position: fixed; z-index: 30; right: max(20px, calc(50vw - 580px)); bottom: 24px; display: inline-flex; align-items: center; gap: 10px; padding: 0 22px 0 8px; height: 58px; border-radius: 999px; background: #25d366; color: #fff; font-weight: 600; font-size: .95rem; text-decoration: none; box-shadow: 0 14px 30px -10px rgba(18, 140, 70, .6), 0 4px 10px rgba(0, 0, 0, .15); transition: transform .35s, opacity .35s; }
-  .whats-fixo .wf-icone { width: 44px; height: 44px; border-radius: 50%; background: rgba(255, 255, 255, .18); display: grid; place-items: center; }
-  .whats-fixo svg { width: 26px; height: 26px; fill: #fff; }
-  .whats-fixo:hover { transform: translateY(-3px); }
-  .whats-fixo.escondido { opacity: 0; transform: translateY(24px); pointer-events: none; }
-  .whats-fixo::after { content: ""; position: absolute; inset: 0; border-radius: inherit; box-shadow: 0 0 0 0 rgba(37, 211, 102, .55); animation: chamar 2.6s ease-out 1.2s 3; }
+  .whats-fixo { position: fixed; z-index: 30; right: max(20px, calc(50vw - 580px)); bottom: 28px; width: 62px; height: 62px; border-radius: 50%; background: #25d366; display: grid; place-items: center; text-decoration: none; box-shadow: 0 14px 30px -8px rgba(18, 140, 70, .6), 0 4px 10px rgba(0, 0, 0, .15); transition: transform .35s, opacity .35s; }
+  .whats-fixo .wf-icone { display: grid; place-items: center; }
+  .whats-fixo svg { width: 32px; height: 32px; fill: #fff; }
+  .whats-fixo:hover { transform: scale(1.08); }
+  .whats-fixo.escondido { opacity: 0; transform: translateY(24px) scale(.8); pointer-events: none; }
+  .whats-fixo::after { content: ""; position: absolute; inset: 0; border-radius: 50%; box-shadow: 0 0 0 0 rgba(37, 211, 102, .55); animation: chamar 2.6s ease-out 1.2s 3; }
   @keyframes chamar { 70% { box-shadow: 0 0 0 16px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
-  @media (max-width: 760px) { .whats-fixo { left: 16px; right: 16px; bottom: 14px; justify-content: center; height: 54px; } }
+  @media (max-width: 760px) { .whats-fixo { right: 18px; bottom: 22px; width: 58px; height: 58px; } }
   @media (prefers-reduced-motion: reduce) { .whats-fixo::after { animation: none; } }
 
   /* Player */
@@ -482,7 +482,7 @@
   Débora Dominique · UGC Creator em Belo Horizonte · <a href="https://www.instagram.com/deboradominique_/" target="_blank" rel="noopener">@deboradominique_</a>
 </footer>
 
-<a class="whats-fixo escondido" data-whats="Olá, Débora! Vi o seu portfólio e quero conversar sobre um projeto de UGC." aria-label="Falar comigo no WhatsApp"><span class="wf-icone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></span><span>Bora conversar?</span></a>
+<a class="whats-fixo escondido" data-whats="Olá, Débora! Vi o seu portfólio e quero conversar sobre um projeto de UGC." aria-label="Falar comigo no WhatsApp"><span class="wf-icone"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-3.9-4.7-4.1-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.4.6-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1.1c.2-.3.4-.2.6-.1l2 .9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></span></a>
 
 <dialog class="player" id="player" aria-labelledby="playerTitulo">
   <div class="player-topo"><span id="playerTitulo"></span><button type="button" id="playerFechar" aria-label="Fechar vídeo">×</button></div>
