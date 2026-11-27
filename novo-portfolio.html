@@ -666,7 +666,7 @@ $('filtros').addEventListener('click', (e) => { const b = e.target.closest('[dat
 // O enquadramento é calculado na hora, para a cabeça nunca ser cortada em nenhum tamanho de tela
 const FOTO_NICHO = {
   'Moda': ['img/moda.jpg', 0.2, 0.66], 'Beleza': ['img/ugc-natureface.jpg', 0.16, 0.52], 'Bem-estar': ['img/bemestar.jpg', 0.04, 0.6],
-  'Experiências': ['img/ugcVontade.jpg', 0.26, 0.55], 'Casa': ['img/casa-larga.jpg', 0.06, 0.66], 'Negócios e apps': ['img/negocios-larga2.jpg', 0.1, 0.735, 0.8]
+  'Experiências': ['img/ugcVontade.jpg', 0.26, 0.55], 'Casa': ['img/casa-larga3.jpg', 0.06, 0.66], 'Negócios e apps': ['img/negocios-larga3.jpg', 0.1, 0.735, 0.8]
 };
 $('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const [foto, topo, x, alvo] = FOTO_NICHO[n] || [`img/videos/${(VIDEOS.find((v) => v.nicho === n) || {}).youtube}.jpg`, 0.15, 0.5]; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
   return `<button type="button" data-ir-nicho="${esc(n)}"><img src="${foto}" alt="" loading="lazy" data-topo="${topo}" data-x="${x}" data-alvo="${alvo || 0.66}"><span class="an-nome">${esc(n)}</span><span class="an-qtd">Ver vídeos →</span></button>`; }).join('');
