@@ -122,15 +122,15 @@
   .atalhos-nicho p { margin: 0 0 14px; font-family: var(--titulo); font-size: 1.35rem; color: var(--texto); }
   .atalhos-nicho p span { display: block; font-family: var(--corpo); font-size: .85rem; color: var(--suave); margin-top: 2px; }
   .atalhos-lista { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; max-width: 960px; margin: 0 auto; }
-  .atalhos-lista button { position: relative; overflow: hidden; height: 120px; border: 0; border-radius: 18px; padding: 0 22px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; color: #fff; background: var(--vinho); box-shadow: 0 16px 30px -18px rgba(26, 16, 12, .7); transition: transform .25s; font-family: var(--corpo); }
-  .atalhos-lista button img { position: absolute; top: 0; right: 0; width: 62%; height: 100%; object-fit: cover; transition: transform .5s; }
-  .atalhos-lista button::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--vinho) 0%, var(--vinho) 36%, rgba(110, 20, 35, .55) 52%, rgba(110, 20, 35, 0) 75%); }
+  .atalhos-lista button { position: relative; overflow: hidden; height: 150px; border: 0; border-radius: 18px; padding: 0 22px; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; color: #fff; background: var(--vinho); box-shadow: 0 16px 30px -18px rgba(26, 16, 12, .7); transition: transform .25s; font-family: var(--corpo); }
+  .atalhos-lista button img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s; }
+  .atalhos-lista button::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(61, 11, 20, .82) 0%, rgba(110, 20, 35, .45) 38%, rgba(110, 20, 35, 0) 62%); }
   .atalhos-lista button:hover { transform: translateY(-3px); }
   .atalhos-lista button:hover img { transform: scale(1.06); }
   .an-nome { text-shadow: 0 2px 10px rgba(61, 11, 20, .8); }
   .an-nome { position: relative; z-index: 1; font-family: var(--titulo); font-size: 1.45rem; font-weight: 600; letter-spacing: .02em; }
   .an-qtd { position: relative; z-index: 1; margin-top: 4px; font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; color: var(--dourado); font-weight: 600; }
-  @media (max-width: 760px) { .atalhos-lista button img { width: 55%; } .atalhos-lista { grid-template-columns: 1fr 1fr; gap: 10px; } .atalhos-lista button { height: 96px; padding: 0 14px; } .an-nome { font-size: 1.1rem; } .an-qtd { font-size: .66rem; letter-spacing: .1em; } }
+  @media (max-width: 760px) { .atalhos-lista button::after { background: linear-gradient(0deg, rgba(61, 11, 20, .85) 0%, rgba(110, 20, 35, .25) 55%, rgba(110, 20, 35, 0) 75%); } .atalhos-lista button { justify-content: flex-end; padding-bottom: 12px; } .atalhos-lista { grid-template-columns: 1fr 1fr; gap: 10px; } .atalhos-lista button { height: 120px; padding: 0 14px; } .an-nome { font-size: 1.1rem; } .an-qtd { font-size: .66rem; letter-spacing: .1em; } }
 
   /* Faixa de marcas */
   .marcas { padding: 44px 0 20px; }
@@ -663,8 +663,8 @@ $('filtros').addEventListener('click', (e) => { const b = e.target.closest('[dat
 // Atalhos logo depois da capa: escolhe o nicho e desce direto para os vídeos
 // Foto que ilustra cada nicho (e o enquadramento dela no bloco)
 const FOTO_NICHO = {
-  'Moda': ['img/moda.jpg', '65% 42%'], 'Beleza': ['img/ugc-natureface.jpg', '50% 22%'], 'Bem-estar': ['img/ugc-doseday.jpg', '50% 30%'],
-  'Experiências': ['img/ugcVontade.jpg', '50% 55%'], 'Casa': ['img/casa.jpg', '50% 22%'], 'Negócios e apps': ['img/negocios.jpg', '55% 52%']
+  'Moda': ['img/moda.jpg', '50% 28%'], 'Beleza': ['img/ugc-natureface.jpg', '50% 20%'], 'Bem-estar': ['img/ugc-doseday.jpg', '70% 28%'],
+  'Experiências': ['img/ugcVontade.jpg', '50% 40%'], 'Casa': ['img/casa.jpg', '50% 18%'], 'Negócios e apps': ['img/negocios.jpg', '50% 52%']
 };
 $('atalhosNicho').innerHTML = NICHOS.filter((n) => n !== 'Todos').map((n) => { const [foto, foco] = FOTO_NICHO[n] || [`img/videos/${(VIDEOS.find((v) => v.nicho === n) || {}).youtube}.jpg`, '50% 20%']; const qtd = VIDEOS.filter((v) => v.nicho === n).length;
   return `<button type="button" data-ir-nicho="${esc(n)}"><img src="${foto}" alt="" loading="lazy" style="object-position:${foco}"><span class="an-nome">${esc(n)}</span><span class="an-qtd">${qtd} ${qtd === 1 ? 'vídeo' : 'vídeos'} →</span></button>`; }).join('');
