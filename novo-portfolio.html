@@ -223,6 +223,7 @@
   .avulsos h3 { font-size: 1.25rem; margin-bottom: 14px; }
   .avulsos ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
   @media (min-width: 860px) { .avulsos ul { grid-template-columns: repeat(5, 1fr); } }
+  @media (max-width: 859px) { .avulsos li:last-child:nth-child(odd) { grid-column: 1 / -1; } }
   .avulsos li { background: #fff; border-radius: 16px; padding: 14px 10px; box-shadow: 0 10px 24px -20px rgba(26, 16, 12, .5); font-size: .85rem; color: var(--suave); }
   .avulsos li b { display: block; font-family: var(--titulo); font-size: 1.25rem; color: var(--vinho); font-weight: 600; margin-top: 4px; }
   .pacote .para { margin: 6px 0 16px; color: var(--suave); font-size: .92rem; }
