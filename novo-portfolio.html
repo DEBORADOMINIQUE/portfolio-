@@ -179,9 +179,11 @@
   .numero span { display: block; margin-top: 8px; font-size: .85rem; color: var(--suave); line-height: 1.35; }
   .numero small { display: block; margin-top: 8px; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dourado); font-weight: 600; }
   .depoimentos { display: grid; gap: 16px; margin-top: 18px; }
-  @media (min-width: 860px) { .depoimentos { grid-template-columns: 1fr 1fr; } }
+  @media (min-width: 860px) { .depoimentos { grid-template-columns: repeat(3, 1fr); } }
   .depoimento { margin: 0; background: var(--vinho); color: var(--creme-claro); border-radius: var(--raio); padding: 26px; display: flex; flex-direction: column; gap: 16px; }
+  .estrelas { color: var(--dourado); letter-spacing: .18em; font-size: 1.05rem; margin-bottom: -6px; }
   .depoimento blockquote { margin: 0; font-family: var(--titulo); font-size: 1.12rem; line-height: 1.5; }
+  .depoimento figcaption { margin-top: auto; }
   .depoimento figcaption { display: flex; align-items: center; gap: 12px; font-size: .85rem; color: var(--claro-suave); }
   .depoimento figcaption img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; background: #fff; }
   .depoimento b { color: var(--creme-claro); display: block; }
@@ -359,6 +361,11 @@
         <div class="numero aparecer"><strong>+1M</strong><span>views em uma série minha</span><small>Conteúdo próprio</small></div>
       </div>
       <div class="depoimentos">
+        <figure class="depoimento aparecer">
+          <span class="estrelas" aria-label="5 de 5 estrelas">★★★★★</span>
+          <blockquote>"A Débora é super atenciosa, pontual e responsável, cumpre com os prazos sem problemas, segue o briefing perfeitamente, além de ser super disposta e solicita!"</blockquote>
+          <figcaption><img src="img/logos/kaisan.jpg" alt=""><span><b>Kaisan</b>Trabalharia comigo de novo</span></figcaption>
+        </figure>
         <figure class="depoimento aparecer">
           <blockquote>"Seu conteúdo é muito bem feito, dá pra ver o cuidado na edição, na estética e principalmente no jeito que você comunica, tudo fica natural, leve e alinhado com a nossa marca."</blockquote>
           <figcaption><img src="img/logos/glowden.jpg" alt=""><span><b>Glowden</b>Parceria de UGC</span></figcaption>
