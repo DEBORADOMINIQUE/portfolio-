@@ -196,10 +196,12 @@
   .avulsos li { background: #fff; border-radius: 16px; padding: 14px 10px; box-shadow: 0 10px 24px -20px rgba(26, 16, 12, .5); font-size: .85rem; color: var(--suave); }
   .avulsos li b { display: block; font-family: var(--titulo); font-size: 1.25rem; color: var(--vinho); font-weight: 600; margin-top: 4px; }
   .pacote .para { margin: 6px 0 16px; color: var(--suave); font-size: .92rem; }
-  .pacote ul { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; flex: 1; }
+  .pacote ul { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 8px; align-content: start; flex: 1; }
   .pacote li { padding-left: 26px; position: relative; font-size: .95rem; }
   .pacote li::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--vinho); font-weight: 700; }
   .pacote .botao { width: 100%; }
+  .presente { display: flex; gap: 10px; align-items: flex-start; margin: -8px 0 20px; padding: 12px 14px; border-radius: 14px; background: #fbf1dc; border: 1px dashed var(--dourado); font-size: .88rem; color: var(--texto); line-height: 1.4; }
+  .presente span { font-weight: 500; }
   .outro { text-align: center; margin: 26px 0 0; color: var(--suave); }
   .outro a { color: var(--vinho); font-weight: 600; }
 
@@ -392,7 +394,7 @@
           <li>Foto UGC<b>R$ 70</b></li>
           <li>Collab no meu Instagram<b>R$ 700</b></li>
           <li>Vídeo em casal<b>R$ 700</b></li>
-          <li>Uso em anúncios<b>a partir de R$ 250</b></li>
+          <li>Mais tempo em anúncios<b>a partir de R$ 250</b></li>
         </ul>
       </div>
       <p class="outro aparecer">Precisa de outra combinação, collab ou uso em anúncios? <a data-whats="Olá, Débora! Vi seu portfólio e quero uma proposta personalizada para a minha marca." href="#">Me chama que eu monto.</a></p>
@@ -490,13 +492,13 @@ const VIDEOS = [
 ];
 
 const PACOTES = [
-  { nome: 'Essencial', preco: '499', para: 'Para testar UGC pela primeira vez.', itens: ['1 vídeo UGC', '3 fotos UGC', 'Roteiro aprovado antes', 'Até 2 ajustes'] },
-  { nome: 'Conteúdo completo', preco: '990', para: 'Vídeo e foto para site, redes e anúncios.', destaque: 'Mais escolhido', itens: ['2 vídeos UGC', '6 fotos UGC', 'Roteiro aprovado antes', 'Até 2 ajustes'] },
-  { nome: 'Venda no automático', preco: '1.000', para: 'Conteúdo, alcance e link de compra juntos.', itens: ['1 vídeo UGC', 'Collab no meu Instagram', 'Automação ManyChat com o link', 'Teste antes de divulgar'] }
+  { nome: 'Essencial', preco: '620', para: 'Ideal para as primeiras parcerias ou para testar conteúdo.', itens: ['2 vídeos UGC', '2 fotos UGC', 'Roteiro', 'Gravação + edição', 'Uso em anúncios por 3 meses'] },
+  { nome: 'Presença', preco: '900', para: 'Para marcas que querem presença contínua e conteúdo variado.', destaque: 'Mais escolhido', itens: ['3 vídeos UGC', '3 fotos UGC', 'Roteiro', 'Gravação + edição', 'Uso em anúncios por 6 meses'] },
+  { nome: 'Experiência', preco: '1.450', para: 'Campanha completa para quem busca impacto máximo.', itens: ['5 vídeos UGC', '5 fotos UGC', 'Roteiro', 'Gravação + edição', 'Uso em anúncios por 6 meses'], presente: 'Automação ManyChat de presente: o link de compra chega sozinho para quem comenta.' }
 ];
 
 const DUVIDAS = [
-  { p: 'Os valores incluem uso em anúncios?', r: 'Os pacotes incluem o uso orgânico (redes, site e marketplace). Anúncios pagos, exclusividade e mais tempo de uso entram à parte, a partir de R$ 250.' },
+  { p: 'Os pacotes incluem uso em anúncios?', r: 'Sim: 3 meses no Essencial e 6 meses no Presença e no Experiência. Mais tempo de uso ou exclusividade entram à parte.' },
   { p: 'Qual o prazo?', r: 'Até 10 dias corridos depois de receber o produto. Tem data de campanha? Me avisa no início.' },
   { p: 'Você escreve o roteiro?', r: 'Sim. Eu proponho e você aprova antes de eu gravar. Se você já tiver um roteiro, eu gravo a partir dele.' },
   { p: 'Você grava fora de casa?', r: 'Sim: restaurantes, lojas, clínicas e passeios em BH, e também em viagens.' }
@@ -546,6 +548,7 @@ $('listaPacotes').innerHTML = PACOTES.map((p) => `<div class="pacote aparecer ${
   ${p.destaque ? `<span class="faixa">${esc(p.destaque)}</span>` : ''}
   <h3>${esc(p.nome)}</h3><p class="preco"><small>R$</small><strong>${esc(p.preco)}</strong></p><p class="para">${esc(p.para)}</p>
   <ul>${p.itens.map((i) => `<li>${esc(i)}</li>`).join('')}</ul>
+  ${p.presente ? `<p class="presente">🎁 <span>${esc(p.presente)}</span></p>` : ''}
   <a class="botao ${p.destaque ? 'botao-vinho' : 'botao-borda'}" data-whats="${esc(`Olá, Débora! Vi seu portfólio e quero uma proposta do pacote ${p.nome}.`)}">Pedir proposta</a>
 </div>`).join('');
 
